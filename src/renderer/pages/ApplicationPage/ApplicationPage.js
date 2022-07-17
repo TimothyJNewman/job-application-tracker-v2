@@ -6,13 +6,13 @@ import PdfDisplay from '../../components/PdfDisplay'
 import ApplicationDetails from '../../components/ApplicationDetails'
 
 export default function ApplicationPage() {
-  const [pdfState, setPdfReady] = useState({ isReady: false, url: 'he' })
+  const [pdfState, setPdfUrl] = useState({ isReady: false, url: '' })
   let { id } = useParams()
   return (
     <div className='grid grid-cols-1 md:grid-cols-2'>
       <div className='flex flex-col'>
-        <ApplicationDetails id={id} setPdfReady={setPdfReady} />
-        <CvConstructorPage id={id} setPdfReady={setPdfReady} />
+        <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
+        <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
         <LetterConstructorPage id={id} />
       </div>
       {pdfState.isReady ? (

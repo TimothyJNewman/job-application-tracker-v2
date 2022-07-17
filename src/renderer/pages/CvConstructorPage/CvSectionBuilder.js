@@ -13,6 +13,7 @@ const reducer = (state, action) => {
     if (index) {
       let newInputArray = [...state[name]]
       newInputArray[index] = action.value
+      console.log('new action', action)
       newState[name] = newInputArray
     }
     // for non-array inputs
@@ -24,7 +25,7 @@ const reducer = (state, action) => {
     newState[action.name] = [...newState[action.name], '']
   } else if (action.status === 'removeArrayInput') {
     newState = { ...state }
-    newState[action.name] = newState[action.name].splice(action.index, 1)
+    newState[action.name] = newState[action.name].filter((e, i) => i !== action.index)
   }
   return newState
 }
@@ -43,7 +44,7 @@ const paramsStructure = {
   },
   education: {
     institution: 'shortText',
-    date: 'shortText',
+    date: 'date',
     course: 'shortText',
     location: 'shortText',
   },
@@ -53,25 +54,24 @@ const paramsStructure = {
   experience: {
     company: 'shortText',
     role: 'shortText',
-    date: 'shortText',
+    date: 'date',
     location: 'shortText',
     itemArray: 'shortTextArray',
   },
   project: {
     title: 'shortText',
     skillArray: 'shortTextArray',
-    date: 'shortText',
+    date: 'date',
     itemArray: 'shortTextArray',
   },
   technical: {
     languages: 'shortTextArray',
     tools: 'shortTextArray',
     technologies: 'shortTextArray',
-    title: 'shortText',
   },
   involvement: {
     organisation: 'shortText',
-    date: 'shortText',
+    date: 'date',
     role: 'shortText',
     misc: 'shortText',
     itemArray: 'shortTextArray',
@@ -91,6 +91,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
       longText: '',
       shortTextArray: [''],
       number: 0,
+      date: ['0000-00-00', '0000-00-00'],
     }
     const defaultState = {}
     for (let input in paramsStructure[currentSection]) {
@@ -110,7 +111,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             <input
               autoFocus={autofocus}
               type='text'
-              className='border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
               name={name}
               id={name}
               value={state}
@@ -125,7 +126,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             </label>
             <textarea
               autoFocus={autofocus}
-              className='border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
               name={name}
               id={name}
               value={state}
@@ -136,36 +137,37 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
           return (
             <React.Fragment key={key}>
               <label value={name} htmlFor={name} className='italic my-1 py-1'>
-                {name}
-                <PlusCircleFill
-                  alt='Add new'
-                  className='cursor-pointer inline w-4 h-4 mx-1 mb-1 hover:text-purple-700'
-                  onClick={() => addArrayInput(name)}
-                />
+                <div className='flex items-center'>
+                  {name}
+                  <div
+                    onClick={() => addArrayInput(name)}
+                    className='cursor-pointer px-1 py-2 hover:text-purple-700'>
+                    <PlusCircleFill alt='Add new' className='w-4 h-4' />
+                  </div>
+                </div>
               </label>
-              <span className='flex flex-col'>
+              <div className=''>
                 {Array(multiplicity)
                   .fill(0)
                   .map((e, i) => (
-                    <div className='flex items-center'>
+                    <div key={i} className='flex items-center'>
                       <input
                         autoFocus={autofocus}
-                        key={i}
                         className='grow border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
                         type='text'
-                        name={name + '.' + i}
-                        id={name + '.' + i}
+                        name={`${name}.${i}`}
+                        id={`${name}.${i}`}
                         value={state[i]}
                         onChange={handleInputChange}
                       />
-                      <XCircleFill
-                        alt='Remove Input'
-                        className='cursor-pointer inline w-4 h-4 mx-1 hover:text-red-500'
+                      <div
                         onClick={() => removeArrayInput(name, i)}
-                      />
+                        className='cursor-pointer p-2 hover:text-red-500'>
+                        <XCircleFill alt='Remove Input' className='w-4 h-4' />
+                      </div>
                     </div>
                   ))}
-              </span>
+              </div>
             </React.Fragment>
           )
         },
@@ -176,7 +178,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             </label>
             <input
               autoFocus={autofocus}
-              className='border-4 focus:border-purple-700 my-2 p-1 px-2 outline-none'
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
               type='number'
               name={name}
               id={name}
@@ -190,15 +192,25 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             <label value={name} htmlFor={name} className='italic my-2 py-1'>
               {name}
             </label>
-            <input
-              autoFocus={autofocus}
-              className='border-4 focus:border-purple-700 my-2 p-1 px-2 outline-none'
-              type='number'
-              name={name}
-              id={name}
-              value={state}
-              onChange={handleInputChange}
-            />
+            <div className='mr-6'>
+              <input
+                autoFocus={autofocus}
+                className='border-4 focus:border-purple-700 my-1 mr-2 p-1 px-2 outline-none'
+                type='date'
+                name={`${name}.0`}
+                id={`${name}.0`}
+                value={state[0]}
+                onChange={handleInputChange}
+              />
+              <input
+                className='border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
+                type='date'
+                name={`${name}.1`}
+                id={`${name}.1`}
+                value={state[1]}
+                onChange={handleInputChange}
+              />
+            </div>
           </React.Fragment>
         ),
       }
@@ -257,7 +269,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
               </li>
             ))}
           </ul>
-          <form className='grid grid-cols-2 gap-4'>
+          <form className='grid grid-cols-2 gap-4 relative'>
             {currentSectionJsx}
             <br />
             <input type='submit' onClick={handleSubmit} className='block my-2 ml-auto std-button' />

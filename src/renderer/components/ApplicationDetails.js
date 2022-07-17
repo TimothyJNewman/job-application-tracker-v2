@@ -13,7 +13,7 @@ const defaultState = {
   is_cv_ready: false,
 }
 
-const ApplicationDetails = ({ id, setPdfReady }) => {
+const ApplicationDetails = ({ id, setPdfUrl }) => {
   const [AppsDetails, setAppsDetails] = useState([defaultState])
 
   useEffect(() => {
@@ -22,11 +22,11 @@ const ApplicationDetails = ({ id, setPdfReady }) => {
 
   useEffect(() => {
     if (AppsDetails[0].is_cv_ready) {
-      setPdfReady({ isReady: true, url: AppsDetails[0].cv_url })
+      setPdfUrl({ isReady: true, url: AppsDetails[0].cv_url })
     } else {
-      setPdfReady({ isReady: false, url: '' })
+      setPdfUrl({ isReady: false, url: '' })
     }
-  }, [setPdfReady, id, AppsDetails])
+  }, [setPdfUrl, id, AppsDetails])
 
   return (
     <div className='mx-2 grid col-span-1 md:col-span-2'>
