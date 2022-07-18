@@ -88,8 +88,3 @@ typings/
 # Electron-Forge
 out/
 
-# database and generated files
-user_files/database/*
-user_files/output_files/pdf_files/*
-user_files/output_files/tex_files/*
-
