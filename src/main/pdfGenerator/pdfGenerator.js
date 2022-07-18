@@ -1,5 +1,6 @@
 const latex = require('node-latex')
 const fs = require('fs')
+const { app } = require('electron')
 const path = require('path')
 const Readable = require('stream').Readable
 const getLatex = require('../../main/pdfGenerator/templates/template1')
@@ -13,7 +14,7 @@ const pdfGeneratorHandler = async (event, args) => {
   // save pdf file
   try {
     const output = fs.createWriteStream(
-      path.join(__dirname, `../../user_files/output_files/pdf_files/output${args.id}.pdf`)
+      path.join(app.getPath("userData"), 'output_files/pdf_files', `output${args.id}.pdf`)
     )
     pdf.pipe(output)
   } catch (err) {
@@ -22,7 +23,7 @@ const pdfGeneratorHandler = async (event, args) => {
   // save tex file
   try {
     const input = fs.createWriteStream(
-      path.join(__dirname, `../../user_files/output_files/tex_files/input${args.id}.tex`)
+      path.join(app.getPath("userData"), 'output_files/tex_files', `input${args.id}.tex`)
     )
     Readable.from(latexString).pipe(input)
   } catch (err) {
@@ -31,7 +32,7 @@ const pdfGeneratorHandler = async (event, args) => {
 
   return new Promise((resolve, reject) => {
     pdf.on('error', (err) => reject(err))
-    pdf.on('finish', resolve(`/output_files/pdf_files/output${args.id}.pdf`))
+    pdf.on('finish', resolve(path.join(app.getPath("userData"), 'output_files/pdf_files', `output${args.id}.pdf`)))
   })
 }
 

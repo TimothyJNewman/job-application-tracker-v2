@@ -11,7 +11,7 @@ import { PlusCircleFill } from 'react-bootstrap-icons'
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([])
-  const [, setNotification] = useContext(GlobalContext).notificationState
+  const { setNotification } = useContext(GlobalContext)
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
   const [noElementsAdded, setNoElementsAdded] = useState(0)
@@ -26,7 +26,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       if (!elements.filter((elem) => elem.id === selElem.id)[0].application_id) {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
-          [Number(id), selElem.id],
+          [id, selElem.id],
           () => {
             setNoElementsClicked(noElementsClicked + 1)
           }
@@ -37,21 +37,19 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       else {
         deleteDatabaseEntry(
           'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-          [Number(id), selElem.id],
+          [id, selElem.id],
           () => {
             setNoElementsClicked(noElementsClicked + 1)
           }
         )
-        console.log(
-          'Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used'
-        )
+        console.log('Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used')
       }
     }
     // When used element is clicked
     else if (code === 1) {
       deleteDatabaseEntry(
         'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-        [Number(id), selElem.id],
+        [id, selElem.id],
         () => {
           setNoElementsClicked(noElementsClicked + 1)
         }
@@ -192,7 +190,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       FROM cv_components 
       LEFT JOIN cv_component_in_application 
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
-      Number(id),
+      id,
       setElements
     )
   }, [noElementsAdded, noElementsClicked])
@@ -248,9 +246,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             <tr
               key={e.id}
               onClick={() => elementClickHandler(0, e)}
-              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                e.application_id ? 'bg-purple-700 hover:bg-purple-600 text-slate-100' : null
-              }`}>
+              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id ? 'bg-purple-700 hover:bg-purple-600 text-slate-100' : null
+                }`}>
               <td className='pr-2 w-3/12'>{e.cv_section}</td>
               <td className='pl-2 w-9/12'>{e?.cv_component_text}</td>
             </tr>

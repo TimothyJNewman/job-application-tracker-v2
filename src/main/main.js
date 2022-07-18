@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, session } = require('electron')
 const path = require('path')
+const fs = require('fs')
 const isDev = require('electron-is-dev')
 const { databaseInit, databaseHandler } = require('./database')
 const pdfGeneratorHandler = require('./pdfGenerator/pdfGenerator')
@@ -10,6 +11,16 @@ if (require('electron-squirrel-startup')) {
   app.quit()
 }
 
+// initialise output file directories
+const pdfFilesDir = path.join(app.getPath("userData"), 'output_files/pdf_files')
+if (!fs.existsSync(pdfFilesDir)) {
+  fs.mkdirSync(pdfFilesDir, { recursive: true });
+}
+const texFilesDir = path.join(app.getPath("userData"), 'output_files/tex_files')
+if (!fs.existsSync(texFilesDir)) {
+  fs.mkdirSync(texFilesDir, { recursive: true });
+}
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -17,7 +28,6 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       nodeIntegration: false,
-      worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
@@ -38,6 +48,14 @@ app.on('ready', async () => {
   await session.defaultSession.loadExtension(
     'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
   )
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': ['default-src \'self\' \'unsafe-inline\' filesystem:; object-src \'self\' filesystem:;']
+      }
+    })
+  })
   databaseInit()
   createWindow()
 })

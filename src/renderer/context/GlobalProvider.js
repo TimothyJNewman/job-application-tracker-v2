@@ -10,8 +10,10 @@ const GlobalProvider = (props) => {
   return (
     <GlobalContext.Provider
       value={{
-        appsDataState: [appsData, setAppsData],
-        notificationState: [notification, setNotification],
+        appsData,
+        setAppsData,
+        notification,
+        setNotification,
       }}>
       {props.children}
     </GlobalContext.Provider>

@@ -83,13 +83,13 @@ const columns = [
 ]
 
 const ApplicationSummaryPage = () => {
-  const [appsDataArraySql, setAppsDataArraySql] = useContext(GlobalContext).appsDataState
+  const { appsData, setAppsData, } = useContext(GlobalContext)
   const [showForm, toggleForm] = useState(false)
   const [deleteMode, setDeleteMode] = useState(false)
   const [noItemsRemoved, setNoItemsRemoved] = useState(0)
 
   const table = useReactTable({
-    data: appsDataArraySql,
+    data: appsData,
     columns,
     sortDescFirst: false,
     getCoreRowModel: getCoreRowModel(),
@@ -97,8 +97,8 @@ const ApplicationSummaryPage = () => {
   })
 
   useEffect(() => {
-    readDatabaseEntry('SELECT * FROM applications', undefined, setAppsDataArraySql)
-  }, [showForm, setAppsDataArraySql, noItemsRemoved])
+    readDatabaseEntry('SELECT * FROM applications', undefined, setAppsData)
+  }, [showForm, setAppsData, noItemsRemoved])
 
   let navigate = useNavigate()
   const handleApplicationClick = (id) => {

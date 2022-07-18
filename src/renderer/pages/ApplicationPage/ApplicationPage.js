@@ -7,7 +7,7 @@ import ApplicationDetails from '../../components/ApplicationDetails'
 
 export default function ApplicationPage() {
   const [pdfState, setPdfUrl] = useState({ isReady: false, url: '' })
-  let { id } = useParams()
+  const id = Number(useParams().id)
   return (
     <div className='grid grid-cols-1 md:grid-cols-2'>
       <div className='flex flex-col'>

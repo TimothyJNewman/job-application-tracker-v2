@@ -1,10 +1,18 @@
 const sqlite3 = require('sqlite3')
+const { app } = require('electron')
+const fs = require('fs')
 const path = require('path')
 
 // sqlite3 downloaded using https://www.techiediaries.com/electron-data-persistence/
 const databaseInit = () => {
+  // create database directory if does not exist
+  const databaseDir = path.join(app.getPath("userData"), "database");
+  if (!fs.existsSync(databaseDir)) {
+    fs.mkdirSync(databaseDir);
+  }
+
   const db = new sqlite3.Database(
-    path.join(__dirname, '../../user_files/database/db.sqlite3'),
+    path.join(app.getPath("userData"), "database", "db.sqlite3"),
     (err) => {
       if (err) console.error('Database opening error: ', err)
     }
@@ -55,7 +63,7 @@ const databaseInit = () => {
 const databaseHandler = (event, commandVerb, sql, params) => {
   // sqlite3 downloaded using https://www.techiediaries.com/electron-data-persistence/
   const db = new sqlite3.Database(
-    path.join(__dirname, '../../user_files/database/db.sqlite3'),
+    path.join(app.getPath("userData"), "database", "db.sqlite3"),
     (err) => {
       if (err) console.error('Database opening error: ', err)
     }

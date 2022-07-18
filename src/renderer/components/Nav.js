@@ -9,7 +9,7 @@ const navLinks = [
 ]
 
 export default function Nav() {
-  const [notification] = useContext(GlobalContext).notificationState
+  const {notification} = useContext(GlobalContext)
   return (
     <nav className='flex w-full p-1 bg-slate-200 h-12'>
       <div className='flex divide-x divide-slate-500'>
