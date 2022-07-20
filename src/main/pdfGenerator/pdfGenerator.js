@@ -32,7 +32,7 @@ const pdfGeneratorHandler = async (event, args) => {
 
   return new Promise((resolve, reject) => {
     pdf.on('error', (err) => reject(err))
-    pdf.on('finish', resolve(path.join(app.getPath("userData"), 'output_files/pdf_files', `output${args.id}.pdf`)))
+    pdf.on('finish', resolve(`atom://${app.getPath("userData")}\\input${args.id}.pdf`))
   })
 }
 

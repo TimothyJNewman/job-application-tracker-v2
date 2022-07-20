@@ -142,9 +142,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
       [sectionObj.section, JSON.stringify(sectionObj), new Date().toISOString()],
-      (url) => {
-        console.log(url)
-      }
+      () => { }
     )
     setNoElementsAdded(noElementsAdded + 1)
     toggleCvBuilder(false)
@@ -170,6 +168,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
           [result, id],
           (e) => {
+            console.log(result)
             setPdfUrl({ isReady: true, url: result })
           }
         )

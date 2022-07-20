@@ -13,7 +13,6 @@ const reducer = (state, action) => {
     if (index) {
       let newInputArray = [...state[name]]
       newInputArray[index] = action.value
-      console.log('new action', action)
       newState[name] = newInputArray
     }
     // for non-array inputs

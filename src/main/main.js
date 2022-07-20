@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session } = require('electron')
+const { app, BrowserWindow, ipcMain, session, protocol } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const isDev = require('electron-is-dev')
@@ -48,11 +48,15 @@ app.on('ready', async () => {
   await session.defaultSession.loadExtension(
     'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
   )
+  protocol.registerFileProtocol('atom', (request, callback) => {
+    const url = request.url.substr(7)
+    callback({ path: path.normalize(`${__dirname}/${url}`) })
+  })
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ['default-src \'self\' \'unsafe-inline\' filesystem:; object-src \'self\' filesystem:;']
+        'Content-Security-Policy': ['default-src \'self\' \'unsafe-inline\' atom:; object-src \'self\' atom:;']
       }
     })
   })
