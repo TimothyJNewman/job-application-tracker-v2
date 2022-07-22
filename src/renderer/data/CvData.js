@@ -15,6 +15,6 @@ const CvData = [
       '\textbf{1st Year} overall grade: 74.31%; Modules: Programming for Engineers, Analysis and Design of Circuits, Digital Electronics and Computer Architecture, Mathematics',
     ],
   },
-]
+];
 
-export default CvData
+export default CvData;

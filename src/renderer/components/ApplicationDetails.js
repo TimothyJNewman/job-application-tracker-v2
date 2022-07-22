@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { GlobalContext } from '../context/GlobalContext'
-import { readDatabaseEntry } from '../util/CRUD'
+import React, { useState, useEffect, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalContext';
+import { readDatabaseEntry } from '../util/CRUD';
 
 const ApplicationDetails = ({ id, setPdfUrl }) => {
-  const { appsData } = useContext(GlobalContext)
-  const AppsDetails = appsData.filter((e)=>e.id===id)[0]
+  const { appsData } = useContext(GlobalContext);
+  const AppsDetails = appsData.filter((e) => e.id === id)[0];
 
   useEffect(() => {
     if (AppsDetails.is_cv_ready) {
-      setPdfUrl({ isReady: true, url: AppsDetails.cv_url })
+      setPdfUrl({ isReady: true, url: AppsDetails.cv_url });
     } else {
-      setPdfUrl({ isReady: false, url: '' })
+      setPdfUrl({ isReady: false, url: '' });
     }
-  }, [setPdfUrl, id, AppsDetails])
+  }, [setPdfUrl, id, AppsDetails]);
 
   return (
     <div className='mx-2 grid col-span-1 md:col-span-2'>
@@ -26,7 +26,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
         <p>Date Applied: {Date(AppsDetails.date_applied)}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ApplicationDetails
+export default ApplicationDetails;

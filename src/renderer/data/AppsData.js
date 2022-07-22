@@ -36,6 +36,6 @@ const AppsData = [
     cv_url: '/',
     cover_letter_url: '/',
   },
-]
+];
 
-export default AppsData
+export default AppsData;

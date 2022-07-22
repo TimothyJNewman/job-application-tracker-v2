@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 // make pdf text fitwidth
 
@@ -9,13 +9,13 @@ const PdfDisplay = ({ url }) => {
         CV pdf viewer
       </h1>
       <embed
-        src={url}
+        src={`data:application/pdf;base64,${url}`}
         type='application/pdf'
         width={'100%'}
         style={{ height: 'calc(100vh - 3rem)' }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default PdfDisplay
+export default PdfDisplay;

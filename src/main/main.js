@@ -1,22 +1,22 @@
-const { app, BrowserWindow, ipcMain, session } = require('electron')
-const path = require('path')
-const fs = require('fs')
-const isDev = require('electron-is-dev')
-const { databaseInit, databaseHandler } = require('./database')
-const pdfGeneratorHandler = require('./pdfGenerator/pdfGenerator')
+const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const isDev = require('electron-is-dev');
+const { databaseInit, databaseHandler } = require('./database');
+const pdfGeneratorHandler = require('./pdfGenerator/pdfGenerator');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) {
-  app.quit()
+  app.quit();
 }
 
 // initialise output file directories
-const pdfFilesDir = path.join(app.getPath("userData"), 'output_files/pdf_files')
+const pdfFilesDir = path.join(app.getPath('userData'), 'output_files/pdf_files');
 if (!fs.existsSync(pdfFilesDir)) {
   fs.mkdirSync(pdfFilesDir, { recursive: true });
 }
-const texFilesDir = path.join(app.getPath("userData"), 'output_files/tex_files')
+const texFilesDir = path.join(app.getPath('userData'), 'output_files/tex_files');
 if (!fs.existsSync(texFilesDir)) {
   fs.mkdirSync(texFilesDir, { recursive: true });
 }
@@ -31,14 +31,14 @@ const createWindow = () => {
       contextIsolation: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
-  })
+  });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({ mode: 'detach' })
-}
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
+};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -47,39 +47,35 @@ app.on('ready', async () => {
   // react developer extension
   await session.defaultSession.loadExtension(
     'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
-  )
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': ['default-src \'self\' \'unsafe-inline\' filesystem:; object-src \'self\' filesystem:;']
-      }
-    })
-  })
-  databaseInit()
-  createWindow()
-})
+  );
+  protocol.registerFileProtocol('atom', (request, callback) => {
+    const url = request.url.substr(7);
+    callback({ path: path.normalize(`${__dirname}/${url}`) });
+  });
+  databaseInit();
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
-})
+});
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
 // ipcMain handlers
-ipcMain.handle('get-pdf', pdfGeneratorHandler)
-ipcMain.handle('database', databaseHandler)
+ipcMain.handle('get-pdf', pdfGeneratorHandler);
+ipcMain.handle('database', databaseHandler);

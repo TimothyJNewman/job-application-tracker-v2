@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const LetterConstructorPage = (props) => {
   return (
@@ -8,7 +8,7 @@ const LetterConstructorPage = (props) => {
       </h1>
       <p>Id: {props.id}</p>
     </div>
-  )
-}
+  );
+};
 
-export default LetterConstructorPage
+export default LetterConstructorPage;
