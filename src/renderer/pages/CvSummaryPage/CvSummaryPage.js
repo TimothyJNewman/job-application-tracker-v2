@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import CvData from '../../data/CvData'
+import React, { useState } from 'react';
+import CvData from '../../data/CvData';
 
 // add test to check that IDs are unique
 
 const CvConstructorPage = () => {
-  const [unusedElements] = useState([...CvData])
+  const [unusedElements] = useState([...CvData]);
   return (
     <div className='mx-2'>
       <h1 className='font-bold text-xl'>Curriculum vitae</h1>
@@ -27,12 +27,12 @@ const CvConstructorPage = () => {
                 <td className='pr-2 w-3/12'>{elem.Section}</td>
                 <td className='pl-2 w-9/12'>{elem?.title}</td>
               </tr>
-            )
+            );
           })}
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default CvConstructorPage
+export default CvConstructorPage;

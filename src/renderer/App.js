@@ -1,13 +1,13 @@
-import React from 'react'
-import Nav from './components/Nav'
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
+import React from 'react';
+import Nav from './components/Nav';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import {
   ApplicationPage,
   ApplicationSummaryPage,
   CvConstructorPage,
   CvSummaryPage,
-} from './pages/index'
-import GlobalProvider from './context/GlobalProvider'
+} from './pages/index';
+import GlobalProvider from './context/GlobalProvider';
 
 const App = () => {
   return (
@@ -22,13 +22,13 @@ const App = () => {
         </Routes>
       </Router>
     </div>
-  )
-}
+  );
+};
 
 const AppWrapper = () => (
   <GlobalProvider>
     <App />
   </GlobalProvider>
-)
+);
 
-export default AppWrapper
+export default AppWrapper;

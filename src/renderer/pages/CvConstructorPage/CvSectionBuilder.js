@@ -1,33 +1,33 @@
-import React, { useEffect, useState, useReducer, useRef } from 'react'
-import useClickOutside from '../../util/useClickOutside'
-import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons'
+import React, { useEffect, useState, useReducer, useRef } from 'react';
+import useClickOutside from '../../util/useClickOutside';
+import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons';
 
 const reducer = (state, action) => {
-  let newState
+  let newState;
   if (action.status === 'initialLoad') {
-    newState = { section: action.section, ...action.defaultState }
+    newState = { section: action.section, ...action.defaultState };
   } else if (action.status === 'inputChange') {
-    newState = { ...state }
-    const [name, index] = action.name.split('.')
+    newState = { ...state };
+    const [name, index] = action.name.split('.');
     // for array inputs
     if (index) {
-      let newInputArray = [...state[name]]
-      newInputArray[index] = action.value
-      newState[name] = newInputArray
+      let newInputArray = [...state[name]];
+      newInputArray[index] = action.value;
+      newState[name] = newInputArray;
     }
     // for non-array inputs
     else {
-      newState[action.name] = action.value
+      newState[action.name] = action.value;
     }
   } else if (action.status === 'addArrayInput') {
-    newState = { ...state }
-    newState[action.name] = [...newState[action.name], '']
+    newState = { ...state };
+    newState[action.name] = [...newState[action.name], ''];
   } else if (action.status === 'removeArrayInput') {
-    newState = { ...state }
-    newState[action.name] = newState[action.name].filter((e, i) => i !== action.index)
+    newState = { ...state };
+    newState[action.name] = newState[action.name].filter((e, i) => i !== action.index);
   }
-  return newState
-}
+  return newState;
+};
 
 const paramsStructure = {
   summary: {
@@ -75,14 +75,14 @@ const paramsStructure = {
     misc: 'shortText',
     itemArray: 'shortTextArray',
   },
-}
+};
 
 const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
-  const [currentSection, setCurrentSection] = useState('summary')
-  const [currentInputs, dispatch] = useReducer(reducer, {})
-  const [currentSectionJsx, setCurrentSectionJsx] = useState([<React.Fragment key={0} />])
-  const clickRef = useRef()
-  useClickOutside(clickRef, 'overlay-blur', onClickOutside)
+  const [currentSection, setCurrentSection] = useState('summary');
+  const [currentInputs, dispatch] = useReducer(reducer, {});
+  const [currentSectionJsx, setCurrentSectionJsx] = useState([<React.Fragment key={0} />]);
+  const clickRef = useRef();
+  useClickOutside(clickRef, 'overlay-blur', onClickOutside);
 
   useEffect(() => {
     const inputTypes = {
@@ -90,14 +90,14 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
       longText: '',
       shortTextArray: [''],
       number: 0,
-      date: ['0000-00-00', '0000-00-00'],
-    }
-    const defaultState = {}
+      date: ['', ''],
+    };
+    const defaultState = {};
     for (let input in paramsStructure[currentSection]) {
-      defaultState[input] = inputTypes[paramsStructure[currentSection][input]]
+      defaultState[input] = inputTypes[paramsStructure[currentSection][input]];
     }
-    dispatch({ status: 'initialLoad', defaultState, section: currentSection })
-  }, [currentSection])
+    dispatch({ status: 'initialLoad', defaultState, section: currentSection });
+  }, [currentSection]);
 
   useEffect(() => {
     const getSectionForm = () => {
@@ -168,7 +168,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
                   ))}
               </div>
             </React.Fragment>
-          )
+          );
         },
         number: (name, state, key, autofocus) => (
           <React.Fragment key={key}>
@@ -212,10 +212,10 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             </div>
           </React.Fragment>
         ),
-      }
-      const inputs = paramsStructure[currentInputs.section]
-      const inputsJsxArray = []
-      let isFirstInput = true
+      };
+      const inputs = paramsStructure[currentInputs.section];
+      const inputsJsxArray = [];
+      let isFirstInput = true;
       for (let inputName in inputs) {
         inputsJsxArray.push(
           inputTypesObject[inputs[inputName]](
@@ -225,30 +225,30 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
             isFirstInput,
             currentInputs[inputName].length
           )
-        )
-        isFirstInput = false
+        );
+        isFirstInput = false;
       }
-      return inputsJsxArray
-    }
-    setCurrentSectionJsx(getSectionForm())
-  }, [currentInputs])
+      return inputsJsxArray;
+    };
+    setCurrentSectionJsx(getSectionForm());
+  }, [currentInputs]);
 
   const addArrayInput = (name) => {
-    dispatch({ status: 'addArrayInput', name })
-  }
+    dispatch({ status: 'addArrayInput', name });
+  };
 
   const removeArrayInput = (name, index) => {
-    dispatch({ status: 'removeArrayInput', name, index })
-  }
+    dispatch({ status: 'removeArrayInput', name, index });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    addElementCallback(currentInputs)
-  }
+    e.preventDefault();
+    addElementCallback(currentInputs);
+  };
 
   const handleInputChange = (e) => {
-    dispatch({ status: 'inputChange', name: e.target.name, value: e.target.value })
-  }
+    dispatch({ status: 'inputChange', name: e.target.name, value: e.target.value });
+  };
 
   return (
     <div className='flex fixed h-screen w-screen items-center justify-center top-0 left-0 backdrop-blur-md backdrop-brightness-75'>
@@ -276,7 +276,7 @@ const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CvSectionBuilder
+export default CvSectionBuilder;

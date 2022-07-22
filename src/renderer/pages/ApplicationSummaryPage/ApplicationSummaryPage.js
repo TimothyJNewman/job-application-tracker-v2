@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import AddApplicationForm from '../../components/AddApplicationForm'
-import { createDatabaseEntry, deleteDatabaseEntry, readDatabaseEntry } from '../../util/CRUD'
-import { GlobalContext } from '../../context/GlobalContext'
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AddApplicationForm from '../../components/AddApplicationForm';
+import { createDatabaseEntry, deleteDatabaseEntry, readDatabaseEntry } from '../../util/CRUD';
+import { GlobalContext } from '../../context/GlobalContext';
 import {
   flexRender,
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
-} from '@tanstack/react-table'
+} from '@tanstack/react-table';
 import {
   SortAlphaDown,
   SortAlphaDownAlt,
@@ -16,7 +16,7 @@ import {
   EnvelopeFill,
   TrashFill,
   FilePersonFill,
-} from 'react-bootstrap-icons'
+} from 'react-bootstrap-icons';
 
 const columns = [
   {
@@ -80,13 +80,13 @@ const columns = [
       </Link>
     ),
   },
-]
+];
 
 const ApplicationSummaryPage = () => {
-  const { appsData, setAppsData, } = useContext(GlobalContext)
-  const [showForm, toggleForm] = useState(false)
-  const [deleteMode, setDeleteMode] = useState(false)
-  const [noItemsRemoved, setNoItemsRemoved] = useState(0)
+  const { appsData, setAppsData } = useContext(GlobalContext);
+  const [showForm, toggleForm] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [noItemsRemoved, setNoItemsRemoved] = useState(0);
 
   const table = useReactTable({
     data: appsData,
@@ -94,22 +94,22 @@ const ApplicationSummaryPage = () => {
     sortDescFirst: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-  })
+  });
 
   useEffect(() => {
-    readDatabaseEntry('SELECT * FROM applications', undefined, setAppsData)
-  }, [showForm, setAppsData, noItemsRemoved])
+    readDatabaseEntry('SELECT * FROM applications', undefined, setAppsData);
+  }, [showForm, setAppsData, noItemsRemoved]);
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const handleApplicationClick = (id) => {
     if (deleteMode) {
       deleteDatabaseEntry('DELETE FROM applications WHERE id=?', id, () =>
         setNoItemsRemoved(noItemsRemoved + 1)
-      )
+      );
     } else {
-      navigate('/application/' + id, { replace: true })
+      navigate('/application/' + id, { replace: true });
     }
-  }
+  };
 
   const handleSubmitCallback = (params) => {
     createDatabaseEntry(
@@ -122,14 +122,14 @@ const ApplicationSummaryPage = () => {
         new Date().toISOString(),
       ],
       () => {
-        toggleForm(!showForm)
+        toggleForm(!showForm);
       }
-    )
-  }
+    );
+  };
 
   const handleCancelCallback = () => {
-    toggleForm(!showForm)
-  }
+    toggleForm(!showForm);
+  };
 
   return (
     <div className='mx-2 absolute'>
@@ -189,8 +189,8 @@ const ApplicationSummaryPage = () => {
       </table>
       <button
         onClick={(e) => {
-          e.preventDefault()
-          toggleForm(!showForm)
+          e.preventDefault();
+          toggleForm(!showForm);
         }}
         className='block my-2 ml-auto std-button'>
         Add new
@@ -203,7 +203,7 @@ const ApplicationSummaryPage = () => {
         />
       ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default ApplicationSummaryPage
+export default ApplicationSummaryPage;

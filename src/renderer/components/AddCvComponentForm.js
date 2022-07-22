@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const defaultState = {
   company: '',
   role: '',
   job_description: '',
   status: 'To Apply',
-}
+};
 
 export default function AddCvComponentForm(props) {
-  const [Section, setSection] = useState('')
-  const [appInput, setAppInput] = useState(defaultState)
+  const [Section, setSection] = useState('');
+  const [appInput, setAppInput] = useState(defaultState);
   return (
     <>
       <form>
@@ -17,23 +17,23 @@ export default function AddCvComponentForm(props) {
         <input
           value={Section.summary}
           onChange={(e) => {
-            setSection((arr) => ({ ...arr, summary: e.target.value }))
+            setSection((arr) => ({ ...arr, summary: e.target.value }));
           }}
         />
       </form>
       <form
         className={`form ${props.className}`}
         onSubmit={(e) => {
-          e.preventDefault()
-          props.handleSubmitCallback(appInput)
-          setAppInput(defaultState)
+          e.preventDefault();
+          props.handleSubmitCallback(appInput);
+          setAppInput(defaultState);
         }}>
         <label htmlFor='summary'>Summary:</label>
         <br />
         <input
           value={appInput.summary}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, summary: e.target.value }))
+            setAppInput((arr) => ({ ...arr, summary: e.target.value }));
           }}
           type='text'
           name='summary'
@@ -52,16 +52,16 @@ export default function AddCvComponentForm(props) {
       <form
         className={`form ${props.className}`}
         onSubmit={(e) => {
-          e.preventDefault()
-          props.handleSubmitCallback(appInput)
-          setAppInput(defaultState)
+          e.preventDefault();
+          props.handleSubmitCallback(appInput);
+          setAppInput(defaultState);
         }}>
         <label htmlFor='company'>Company:</label>
         <br />
         <input
           value={appInput.company}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, company: e.target.value }))
+            setAppInput((arr) => ({ ...arr, company: e.target.value }));
           }}
           type='text'
           name='company'
@@ -72,7 +72,7 @@ export default function AddCvComponentForm(props) {
         <input
           value={appInput.role}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, role: e.target.value }))
+            setAppInput((arr) => ({ ...arr, role: e.target.value }));
           }}
           type='text'
           name='role'
@@ -91,16 +91,16 @@ export default function AddCvComponentForm(props) {
       <form
         className={`form ${props.className}`}
         onSubmit={(e) => {
-          e.preventDefault()
-          props.handleSubmitCallback(appInput)
-          setAppInput(defaultState)
+          e.preventDefault();
+          props.handleSubmitCallback(appInput);
+          setAppInput(defaultState);
         }}>
         <label htmlFor='company'>Company:</label>
         <br />
         <input
           value={appInput.company}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, company: e.target.value }))
+            setAppInput((arr) => ({ ...arr, company: e.target.value }));
           }}
           type='text'
           name='company'
@@ -111,7 +111,7 @@ export default function AddCvComponentForm(props) {
         <input
           value={appInput.role}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, role: e.target.value }))
+            setAppInput((arr) => ({ ...arr, role: e.target.value }));
           }}
           type='text'
           name='role'
@@ -122,7 +122,7 @@ export default function AddCvComponentForm(props) {
         <input
           value={appInput.job_description}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, job_description: e.target.value }))
+            setAppInput((arr) => ({ ...arr, job_description: e.target.value }));
           }}
           type='text'
           name='job_description'
@@ -133,7 +133,7 @@ export default function AddCvComponentForm(props) {
         <select
           value={appInput.status}
           onChange={(e) => {
-            setAppInput((arr) => ({ ...arr, status: e.target.value }))
+            setAppInput((arr) => ({ ...arr, status: e.target.value }));
           }}
           name='status'>
           <option value='To Apply'>To Apply</option>
@@ -151,5 +151,5 @@ export default function AddCvComponentForm(props) {
         </div>
       </form>
     </>
-  )
+  );
 }

@@ -1,22 +1,22 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react';
 import {
   createDatabaseEntry,
   readDatabaseEntry,
   updateDatabaseEntry,
   deleteDatabaseEntry,
-} from '../../util/CRUD'
-import { GlobalContext } from '../../context/GlobalContext'
-import CvSectionBuilder from './CvSectionBuilder'
-import { PlusCircleFill } from 'react-bootstrap-icons'
+} from '../../util/CRUD';
+import { GlobalContext } from '../../context/GlobalContext';
+import CvSectionBuilder from './CvSectionBuilder';
+import { PlusCircleFill } from 'react-bootstrap-icons';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
-  const [elements, setElements] = useState([])
-  const { setNotification } = useContext(GlobalContext)
+  const [elements, setElements] = useState([]);
+  const { setNotification } = useContext(GlobalContext);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
-  const [noElementsAdded, setNoElementsAdded] = useState(0)
-  const [noElementsClicked, setNoElementsClicked] = useState(0)
-  const [showCvBuilder, toggleCvBuilder] = useState(false)
+  const [noElementsAdded, setNoElementsAdded] = useState(0);
+  const [noElementsClicked, setNoElementsClicked] = useState(0);
+  const [showCvBuilder, toggleCvBuilder] = useState(false);
 
   // Handles clicks to elements in either used or unused components
   const elementClickHandler = (code, selElem) => {
@@ -28,10 +28,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
           [id, selElem.id],
           () => {
-            setNoElementsClicked(noElementsClicked + 1)
+            setNoElementsClicked(noElementsClicked + 1);
           }
-        )
-        console.log('Added ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' to used')
+        );
+        console.log('Added ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' to used');
       }
       // If element is already used, remove it
       else {
@@ -39,10 +39,12 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
           [id, selElem.id],
           () => {
-            setNoElementsClicked(noElementsClicked + 1)
+            setNoElementsClicked(noElementsClicked + 1);
           }
-        )
-        console.log('Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used')
+        );
+        console.log(
+          'Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used'
+        );
       }
     }
     // When used element is clicked
@@ -51,137 +53,145 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
         [id, selElem.id],
         () => {
-          setNoElementsClicked(noElementsClicked + 1)
+          setNoElementsClicked(noElementsClicked + 1);
         }
-      )
+      );
       console.log(
         'Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used'
-      )
+      );
     }
-  }
+  };
 
-  const generatePdfParams = {
-    id: id,
-    name: 'CompanyA',
-    paramsArray: [
-      {
-        section: 'summary',
-        text: 'This is a summary',
-      },
-      {
-        section: 'heading',
-        name: 'Timothy Newman',
-        phone: 123345,
-        address: '123 Street Name, Town, State 12345',
-        email: 'email@email.com',
-        linkedIn: 'linkedin.com/in/timothy-jabez-newman-1406aa213/',
-        gitHub: 'github.com/TimothyJNewman',
-      },
-      {
-        section: 'education',
-        institution: 'Imperial College London',
-        date: 'May 2020 -- August 2020',
-        course: 'Electrical and Electronic Engineering',
-        location: 'London',
-      },
-      {
-        section: 'coursework',
-        itemArray: [
-          'Data Structures',
-          'Software Methodology',
-          'Algorithms Analysis',
-          'Database Management',
-          'Artificial Intelligence',
-          'Internet Technology',
-          'Systems Programming',
-          'Computer Architecture',
-        ],
-      },
-      {
-        section: 'experience',
-        company: 'Company B',
-        role: 'Intern',
-        date: 'May 2020 -- August 2020',
-        location: 'Singapore, Singapore',
-        itemArray: ['ItemA', 'ItemB', 'ItemC'],
-      },
-      {
-        section: 'project',
-        title: 'Gym Reservation Bot',
-        skillArray: ['Python', 'Selenium', 'Google Cloud Console'],
-        date: 'January 2021',
-        itemArray: [
-          'Developed an automatic bot using Python and Google Cloud Console to register myself for a timeslot at my school gym.',
-          'Implemented Selenium to create an instance of Chrome in order to interact with the correct elements of the web page.',
-          'Created a Linux virtual machine to run on Google Cloud so that the program is able to run everyday from the cloud.',
-          'Used Cron to schedule the program to execute automatically at 11 AM every morning so a reservation is made for me.',
-        ],
-      },
-      {
-        section: 'technical',
-        languages: ['Python', 'Java', 'C', 'HTML/CSS', 'JavaScript', 'SQL'],
-        tools: ['VS Code', 'Eclipse', 'Google Cloud Platform', 'Android Studio'],
-        technologies: ['Linux', 'Jenkins', 'GitHub', 'JUnit', 'WordPress'],
-      },
-      {
-        section: 'involvement',
-        organisation: 'Fraternity',
-        date: 'Spring 2020 -- Present',
-        role: 'President',
-        misc: 'University Name',
-        itemArray: [
-          'Achieved a 4 star fraternity ranking by the Office of Fraternity and Sorority Affairs (highest possible ranking).',
-          'Managed executive board of 5 members and ran weekly meetings to oversee progress in essential parts of the chapter.',
-          'Led chapter of 30+ members to work towards goals that improve and promote community service, academics, and unity.',
-        ],
-      },
-    ],
-  }
+  /* const generatePdfParams = {
+     id: id,
+     name: 'CompanyA',
+     paramsArray: [
+       {
+         section: 'summary',
+         text: 'This is a summary',
+       },
+       {
+         section: 'heading',
+         name: 'Timothy Newman',
+         phone: 123345,
+         address: '123 Street Name, Town, State 12345',
+         email: 'email@email.com',
+         linkedIn: 'linkedin.com/in/timothy-jabez-newman-1406aa213/',
+         gitHub: 'github.com/TimothyJNewman',
+       },
+       {
+         section: 'education',
+         institution: 'Imperial College London',
+         date: 'May 2020 -- August 2020',
+         course: 'Electrical and Electronic Engineering',
+         location: 'London',
+       },
+       {
+         section: 'coursework',
+         itemArray: [
+           'Data Structures',
+           'Software Methodology',
+           'Algorithms Analysis',
+           'Database Management',
+           'Artificial Intelligence',
+           'Internet Technology',
+           'Systems Programming',
+           'Computer Architecture',
+         ],
+       },
+       {
+         section: 'experience',
+         company: 'Company B',
+         role: 'Intern',
+         date: 'May 2020 -- August 2020',
+         location: 'Singapore, Singapore',
+         itemArray: ['ItemA', 'ItemB', 'ItemC'],
+       },
+       {
+         section: 'project',
+         title: 'Gym Reservation Bot',
+         skillArray: ['Python', 'Selenium', 'Google Cloud Console'],
+         date: 'January 2021',
+         itemArray: [
+           'Developed an automatic bot using Python and Google Cloud Console to register myself for a timeslot at my school gym.',
+           'Implemented Selenium to create an instance of Chrome in order to interact with the correct elements of the web page.',
+           'Created a Linux virtual machine to run on Google Cloud so that the program is able to run everyday from the cloud.',
+           'Used Cron to schedule the program to execute automatically at 11 AM every morning so a reservation is made for me.',
+         ],
+       },
+       {
+         section: 'technical',
+         languages: ['Python', 'Java', 'C', 'HTML/CSS', 'JavaScript', 'SQL'],
+         tools: ['VS Code', 'Eclipse', 'Google Cloud Platform', 'Android Studio'],
+         technologies: ['Linux', 'Jenkins', 'GitHub', 'JUnit', 'WordPress'],
+       },
+       {
+         section: 'involvement',
+         organisation: 'Fraternity',
+         date: 'Spring 2020 -- Present',
+         role: 'President',
+         misc: 'University Name',
+         itemArray: [
+           'Achieved a 4 star fraternity ranking by the Office of Fraternity and Sorority Affairs (highest possible ranking).',
+           'Managed executive board of 5 members and ran weekly meetings to oversee progress in essential parts of the chapter.',
+           'Led chapter of 30+ members to work towards goals that improve and promote community service, academics, and unity.',
+         ],
+       },
+     ],
+   };*/
+
+  const generatePdfParams = () => {
+    return {
+      id: id,
+      name: String(id),
+      paramsArray: elements.filter((e) => e.application_id).map((f) => {
+        return { ...JSON.parse(f.cv_component_text) }
+      }),
+    };
+  };
 
   const cvSectionBuilderHandler = (sectionObj) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
       [sectionObj.section, JSON.stringify(sectionObj), new Date().toISOString()],
       () => { }
-    )
-    setNoElementsAdded(noElementsAdded + 1)
-    toggleCvBuilder(false)
-  }
+    );
+    setNoElementsAdded(noElementsAdded + 1);
+    toggleCvBuilder(false);
+  };
 
   // Todo add loading animation when pdf is generating
   const generatePdf = () => {
     if (elements.filter((e) => e.application_id).length === 0) {
-      console.log('Select cv elements before generating document!')
+      console.log('Select cv elements before generating document!');
       setNotification({
         severity: 'high',
         text: 'Select cv elements before generating document',
-      })
-      return
+      });
+      return;
     }
 
     // Generate pdf in the background
     window.electron
-      .getPdf('get-pdf', generatePdfParams)
+      .getPdf('get-pdf', generatePdfParams())
       .then((result) => {
-        console.log('CV Pdf url: ', result)
         updateDatabaseEntry(
           'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
           [result, id],
           (e) => {
-            console.log(result)
-            setPdfUrl({ isReady: true, url: result })
+            setPdfUrl({ isReady: true, url: result });
           }
-        )
+        );
         setNotification({
           severity: 'low',
           text: 'Successfuly generated CV Pdf',
-        })
+        });
       })
       .catch((error) => {
-        console.log(`PDF error: ${error}`)
-        setNotification({ severity: 'low', text: `CV Pdf Error: ${error}` })
-      })
-  }
+        console.log(`PDF error: ${error}`);
+        setNotification({ severity: 'low', text: `CV Pdf Error: ${error}` });
+      });
+  };
 
   useEffect(() => {
     readDatabaseEntry(
@@ -191,8 +201,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
       id,
       setElements
-    )
-  }, [noElementsAdded, noElementsClicked])
+    );
+  }, [noElementsAdded, noElementsClicked]);
 
   return (
     <div className='mx-2 break-all'>
@@ -263,7 +273,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         />
       ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default CvConstructorPage
+export default CvConstructorPage;

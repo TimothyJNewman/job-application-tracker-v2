@@ -116,52 +116,52 @@ const getLatex = (params) => {
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-  `
+  `;
 
   const texPostamble = String.raw`
 \end{document}
-  `
+  `;
 
   const getHeading = (headingsArray) => {
-    const e = headingsArray[0]
-    let output = String.raw``
+    const e = headingsArray[0];
+    let output = String.raw``;
     output += String.raw`
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape ${e.name}} \\ \vspace{1pt}
     ${e.address} \\ \vspace{1pt}
     \small \raisebox{-0.1\height}
-    \faPhone\ ${e.phone} ~ \href{mailto:${e.email}}{\raisebox{-0.2\height}
-    \faEnvelope\  \underline{${e.email}}} ~ \href{${e.linkedIn}}{\raisebox{-0.2\height}
-    \faLinkedin\ \underline{${e.linkedIn}}} ~ \href{${e.gitHub}}{\raisebox{-0.2\height}
-    \faGithub\ \underline{${e.gitHub}}}
+    ${e.phone !== '' ? String.raw`\faPhone\ ${e.phone}` : ''}
+    ${e.email !== '' ? String.raw`~ \href{mailto:${e.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${e.email}}}` : ''}
+    ${e.linkedIn !== '' ? String.raw` ~ \href{${e.linkedIn}}{\raisebox{-0.2\height}\faLinkedin\ \underline{${e.linkedIn}}}` : ''} 
+    ${e.gitHub !== '' ? String.raw`~ \href{${e.gitHub}}{\raisebox{-0.2\height}\faGithub\ \underline{${e.gitHub}}}` : ''}
     \vspace{-8pt}
 \end{center}
-        `
-    return output
-  }
+        `;
+    return output;
+  };
 
   const getEducations = (educationArray) => {
     const educationHeader = String.raw`
 %-----------EDUCATION-----------
 \section{Education}
-  \resumeSubHeadingListStart`
+  \resumeSubHeadingListStart`;
     const educationFooter = String.raw`
   \resumeSubHeadingListEnd
   
-  `
-    let output = String.raw``
-    output += educationHeader
+  `;
+    let output = String.raw``;
+    output += educationHeader;
     educationArray.forEach((e) => {
       output += String.raw` 
     \resumeSubheading
       {${e.institution}}{${e.date}}
-      {${e.course}}{${e.location}}`
-    })
-    output += educationFooter
+      {${e.course}}{${e.location}}`;
+    });
+    output += educationFooter;
 
-    return output
-  }
+    return output;
+  };
 
   const getCourseworks = (courseworkArray) => {
     const courseworkHeader = String.raw`
@@ -170,100 +170,100 @@ const getLatex = (params) => {
   %\resumeSubHeadingListStart
       \begin{multicols}{4} \small
         \begin{itemize}[itemsep=-5pt, parsep=3pt]
-    `
+    `;
     const courseworkFooter = String.raw`
         \end{itemize}
       \end{multicols}
       \vspace*{2.0\multicolsep}
     %\resumeSubHeadingListEnd
 
-    `
-    let output = String.raw``
-    output += courseworkHeader
+    `;
+    let output = String.raw``;
+    output += courseworkHeader;
     courseworkArray[0].itemArray.forEach((e) => {
       output += String.raw`
-          \item ${e}`
-    })
-    output += courseworkFooter
-    return output
-  }
+          \item ${e}`;
+    });
+    output += courseworkFooter;
+    return output;
+  };
 
   const getExperiences = (experienceArray) => {
     const experienceHeader = String.raw`
 % ----------- EXPERIENCE-----------
 \section{Experience}
-  \resumeSubHeadingListStart`
+  \resumeSubHeadingListStart`;
     const getExperience = (company, role, date, location, itemArray) => {
-      let output = String.raw``
+      let output = String.raw``;
       output += String.raw`
     \resumeSubheading
       {${company}} {${date}} 
       {${role}} {${location}}
-    \resumeItemListStart`
+    \resumeItemListStart`;
       itemArray.forEach((item) => {
         output += String.raw`
-      \resumeItem{${item}}`
-      })
+      \resumeItem{${item}}`;
+      });
       output += String.raw`
-    \resumeItemListEnd`
-      return output
-    }
+    \resumeItemListEnd`;
+      return output;
+    };
     const experienceFooter = String.raw`
   \resumeSubHeadingListEnd
 \vspace{-16pt}
 
-`
+`;
 
-    let output = String.raw``
-    output += experienceHeader
+    let output = String.raw``;
+    output += experienceHeader;
     experienceArray.forEach((e) => {
-      output += getExperience(e.company, e.role, e.date, e.location, e.itemArray)
-    })
-    output += experienceFooter
-    return output
-  }
+      output += getExperience(e.company, e.role, e.date, e.location, e.itemArray);
+    });
+    output += experienceFooter;
+    return output;
+  };
 
   const getProjects = (projectArray) => {
     const projectHeader = String.raw`
 %-----------PROJECTS-----------
 \section{Projects}
   \vspace{-5pt}
-  \resumeSubHeadingListStart`
+  \resumeSubHeadingListStart`;
     const getProject = (title, skillArray, date, itemArray) => {
-      let output = String.raw``
+      let output = String.raw``;
       output += String.raw`
     \resumeProjectHeading
       {\textbf{${title}} $|$ \emph{${skillArray.reduce(
         (prev, curr) => prev + ', ' + curr
       )}}}{${date}}
-      \resumeItemListStart`
+      \resumeItemListStart`;
       itemArray.forEach((item) => {
         output += String.raw`
-        \resumeItem{${item}}`
-      })
+        \resumeItem{${item}}`;
+      });
       output += String.raw`
-    \resumeItemListEnd`
-      return output
-    }
+    \resumeItemListEnd`;
+      return output;
+    };
     const experienceFooter = String.raw`
   \resumeSubHeadingListEnd
 \vspace{-15pt}
 
-`
-    let output = String.raw``
-    output += projectHeader
+`;
+    let output = String.raw``;
+    output += projectHeader;
     projectArray.forEach((e) => {
-      output += getProject(e.title, e.skillArray, e.date, e.itemArray)
-    })
-    output += experienceFooter
-    return output
-  }
+      output += getProject(e.title, e.skillArray, e.date, e.itemArray);
+    });
+    output += experienceFooter;
+    return output;
+  };
 
   const getTechnicalSkills = (technicalArray) => {
     if (technicalArray.length > 1) {
-      console.error('Technical Skills section can only have 1 item')
+      console.error('Technical Skills section can only have 1 item');
     }
-    let output = String.raw``
+    let output = String.raw``;
     output += String.raw`
 %-----------PROGRAMMING SKILLS-----------
 \section{Technical Skills}
@@ -282,85 +282,97 @@ const getLatex = (params) => {
 \end{itemize}
 \vspace{-16pt}
 
-`
-    return output
-  }
+`;
+    return output;
+  };
 
   const getInvolvements = (involvementArray) => {
     const involvementHeader = String.raw`
 %-----------INVOLVEMENT---------------
 \section{Leadership / Extracurricular}
-  \resumeSubHeadingListStart`
+  \resumeSubHeadingListStart`;
 
     const getInvolvement = (organisation, date, role, misc, itemArray) => {
       return String.raw`
     \resumeSubheading{${organisation}}{${date}}{${role}}{${misc}}
       \resumeItemListStart
         ${itemArray.reduce((prev, curr) => {
-          return (
-            prev +
-            String.raw`
+        return (
+          prev +
+          String.raw`
         \resumeItem{${curr}}`
-          )
-        }, String.raw``)}
-      \resumeItemListEnd`
-    }
+        );
+      }, String.raw``)}
+      \resumeItemListEnd`;
+    };
     const involvementFooter = String.raw`
 \resumeSubHeadingListEnd
 
-`
-    let output = String.raw``
-    output += involvementHeader
+`;
+    let output = String.raw``;
+    output += involvementHeader;
     involvementArray.forEach((e) => {
-      output += getInvolvement(e.organisation, e.date, e.role, e.misc, e.itemArray)
-    })
-    output += involvementFooter
-    return output
-  }
+      output += getInvolvement(e.organisation, e.date, e.role, e.misc, e.itemArray);
+    });
+    output += involvementFooter;
+    return output;
+  };
 
   const generateTex = (params) => {
-    let output = String.raw``
-    output += texPreamble
-    output += getHeading(
+    let output = String.raw``;
+    output += texPreamble;
+    const headingArr = params.paramsArray.filter((elem) => {
+      return elem.section === 'heading';
+    })
+    if (headingArr.length !== 0) {
+      output += getHeading(headingArr)
+    }
+    const educationArr = params.paramsArray.filter((elem) => {
+      return elem.section === 'education';
+    })
+    if (educationArr.length !== 0) {
+      output += getEducations(educationArr)
+    }
+    const courseworkArr =
       params.paramsArray.filter((elem) => {
-        return elem.section === 'heading'
+        return elem.section === 'coursework';
       })
-    )
-    output += getEducations(
+    if (courseworkArr.length !== 0) {
+      output += getCourseworks(courseworkArr)
+    }
+    const experienceArr =
       params.paramsArray.filter((elem) => {
-        return elem.section === 'education'
+        return elem.section === 'experience';
       })
-    )
-    output += getCourseworks(
+    if (experienceArr.length !== 0) {
+      output += getExperiences(experienceArr)
+    }
+    const projectsArr =
       params.paramsArray.filter((elem) => {
-        return elem.section === 'coursework'
+        return elem.section === 'project';
       })
-    )
-    output += getExperiences(
+    if (projectsArr.length !== 0) {
+      output += getProjects(projectsArr)
+    }
+    const technicalSkillsArr =
       params.paramsArray.filter((elem) => {
-        return elem.section === 'experience'
+        return elem.section === 'technical';
       })
-    )
-    output += getProjects(
+    if (technicalSkillsArr.length !== 0) {
+      output += getTechnicalSkills(technicalSkillsArr)
+    }
+    const involvementArr =
       params.paramsArray.filter((elem) => {
-        return elem.section === 'project'
+        return elem.section === 'involvement';
       })
-    )
-    output += getTechnicalSkills(
-      params.paramsArray.filter((elem) => {
-        return elem.section === 'technical'
-      })
-    )
-    output += getInvolvements(
-      params.paramsArray.filter((elem) => {
-        return elem.section === 'involvement'
-      })
-    )
-    output += texPostamble
-    return output
-  }
+    if (involvementArr.length !== 0) {
+      output += getInvolvements(involvementArr)
+    }
+    output += texPostamble;
+    return output;
+  };
 
-  return generateTex(params)
-}
+  return generateTex(params);
+};
 
-module.exports = getLatex
+module.exports = getLatex;

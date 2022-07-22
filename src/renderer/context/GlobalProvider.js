@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { GlobalContext } from './GlobalContext'
+import React, { useState } from 'react';
+import { GlobalContext } from './GlobalContext';
 
 const GlobalProvider = (props) => {
-  const [appsData, setAppsData] = useState([])
+  const [appsData, setAppsData] = useState([]);
   const [notification, setNotification] = useState({
     severity: 'low',
     text: '',
-  })
+  });
   return (
     <GlobalContext.Provider
       value={{
@@ -17,7 +17,7 @@ const GlobalProvider = (props) => {
       }}>
       {props.children}
     </GlobalContext.Provider>
-  )
-}
+  );
+};
 
-export default GlobalProvider
+export default GlobalProvider;

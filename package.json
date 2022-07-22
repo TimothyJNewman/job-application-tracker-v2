@@ -93,6 +93,7 @@
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "node-latex": "^3.1.0",
+    "pdf-to-base64": "^1.0.3",
     "prettier": "^2.7.1",
     "react-bootstrap-icons": "^1.8.4",
     "react-router-dom": "^6.3.0",
