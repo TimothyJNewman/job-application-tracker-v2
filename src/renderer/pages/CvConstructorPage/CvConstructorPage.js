@@ -31,7 +31,6 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             setNoElementsClicked(noElementsClicked + 1);
           }
         );
-        console.log('Added ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' to used');
       }
       // If element is already used, remove it
       else {
@@ -41,9 +40,6 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           () => {
             setNoElementsClicked(noElementsClicked + 1);
           }
-        );
-        console.log(
-          'Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used'
         );
       }
     }
@@ -55,9 +51,6 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         () => {
           setNoElementsClicked(noElementsClicked + 1);
         }
-      );
-      console.log(
-        'Removed ' + String(selElem.cv_section) + ' with id: ' + selElem.id + ' from used'
       );
     }
   };
@@ -163,7 +156,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   // Todo add loading animation when pdf is generating
   const generatePdf = () => {
     if (elements.filter((e) => e.application_id).length === 0) {
-      console.log('Select cv elements before generating document!');
+      console.error('Select cv elements before generating document!');
       setNotification({
         severity: 'high',
         text: 'Select cv elements before generating document',
@@ -188,7 +181,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         });
       })
       .catch((error) => {
-        console.log(`PDF error: ${error}`);
+        console.error(`PDF error: ${error}`);
         setNotification({ severity: 'low', text: `CV Pdf Error: ${error}` });
       });
   };

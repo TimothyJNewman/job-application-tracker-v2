@@ -9,7 +9,6 @@ const pdf2base64 = require('pdf-to-base64');
 // Handler for get pdf request
 const pdfGeneratorHandler = async (event, args) => {
   console.log(args);
-  console.log(`Message received at main process: Latex params with id ${args.id}`);
   const latexString = getLatex(args);
   const pdf = await latex(latexString);
 
