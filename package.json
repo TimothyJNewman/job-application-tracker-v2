@@ -9,9 +9,15 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "postinstall": "electron-rebuild -f -w sqlite3"
   },
-  "keywords": [],
+  "repository": "https://github.com/TimothyJNewman/job-application-tracker-v2",
+  "keywords": [
+    "electron",
+    "sqlite3"
+  ],
   "author": {
     "name": "TimothyJNewman",
     "email": "84350177+TimothyJNewman@users.noreply.github.com"
@@ -73,12 +79,24 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.64",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.64",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
+    "autoprefixer": "^10.4.7",
     "css-loader": "^6.7.1",
     "electron": "19.0.8",
+    "electron-rebuild": "^3.2.8",
     "node-loader": "^2.0.0",
-    "style-loader": "^3.3.1"
+    "postcss-loader": "^7.0.1",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.1.6"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "@tanstack/react-table": "^8.2.6",
+    "electron-is-dev": "^2.0.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "node-latex": "^3.1.0",
+    "pdf-to-base64": "^1.0.3",
+    "prettier": "^2.7.1",
+    "react-bootstrap-icons": "^1.8.4",
+    "react-router-dom": "^6.3.0",
+    "sqlite3": "^5.0.9"
   }
 }
