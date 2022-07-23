@@ -47,9 +47,13 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
   // react developer extension
-  await session.defaultSession.loadExtension(
-    'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
-  );
+  try {
+    await session.defaultSession.loadExtension(
+      'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
+    );
+  } catch (err) {
+    console.error(err)
+  }
   protocol.registerFileProtocol('atom', (request, callback) => {
     const url = request.url.substr(7);
     callback({ path: path.normalize(`${__dirname}/${url}`) });
