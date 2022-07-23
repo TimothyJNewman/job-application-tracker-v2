@@ -8,7 +8,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "make-linux": "electron-forge make --platform linux --targets deb",
+    "make-linux": "electron-forge make --platform=linux --targets=deb",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
@@ -73,6 +73,8 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
     "@electron-forge/maker-rpm": "^6.0.0-beta.64",
@@ -81,8 +83,10 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.64",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "autoprefixer": "^10.4.7",
+    "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "electron": "19.0.8",
+    "electron-installer-debian": "^3.1.0",
     "electron-rebuild": "^3.2.8",
     "node-loader": "^2.0.0",
     "postcss-loader": "^7.0.1",
@@ -99,7 +103,9 @@
     "node-latex": "^3.1.0",
     "pdf-to-base64": "^1.0.3",
     "prettier": "^2.7.1",
+    "react": "^18.2.0",
     "react-bootstrap-icons": "^1.8.4",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "sqlite3": "^5.0.10"
   }
