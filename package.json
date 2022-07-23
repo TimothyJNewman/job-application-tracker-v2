@@ -8,6 +8,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make-linux": "electron-forge make --platform linux --targets deb",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
@@ -90,13 +91,16 @@
   },
   "dependencies": {
     "@tanstack/react-table": "^8.2.6",
+    "aws-sdk": "^2.1181.0",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.2.9",
     "node-latex": "^3.1.0",
     "pdf-to-base64": "^1.0.3",
     "prettier": "^2.7.1",
     "react-bootstrap-icons": "^1.8.4",
     "react-router-dom": "^6.3.0",
-    "sqlite3": "^5.0.9"
+    "sqlite3": "^5.0.10"
   }
 }
