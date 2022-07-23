@@ -85,6 +85,7 @@
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "electron": "19.0.8",
+    "electron-installer-debian": "^3.1.0",
     "electron-rebuild": "^3.2.8",
     "node-loader": "^2.0.0",
     "postcss-loader": "^7.0.1",
