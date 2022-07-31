@@ -68,7 +68,11 @@ const databaseHandler = (event, commandVerb, sql, params) => {
       if (err) console.error('Database opening error: ', err);
     }
   );
-  if (commandVerb === 'POST' || commandVerb === 'PUT' || commandVerb === 'DELETE') {
+  if (
+    commandVerb === 'POST' ||
+    commandVerb === 'PUT' ||
+    commandVerb === 'DELETE'
+  ) {
     return new Promise((resolve, reject) => {
       db.run(sql, params, (err) => {
         if (err && err.message) reject(err);

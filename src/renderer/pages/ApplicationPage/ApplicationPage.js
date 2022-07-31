@@ -18,7 +18,9 @@ export default function ApplicationPage() {
       {pdfState.isReady ? (
         <PdfDisplay url={pdfState.url} />
       ) : (
-        <p className='mx-2'>No CV PDF found. Click generate pdf to create a new one.</p>
+        <p className='mx-2'>
+          No CV PDF found. Click generate pdf to create a new one.
+        </p>
       )}
     </div>
   );

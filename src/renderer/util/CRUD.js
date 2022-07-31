@@ -26,4 +26,9 @@ const deleteDatabaseEntry = (sql, params, callback) => {
     .catch((error) => console.error(`Database error: ${error}`));
 };
 
-export { createDatabaseEntry, readDatabaseEntry, updateDatabaseEntry, deleteDatabaseEntry };
+export {
+  createDatabaseEntry,
+  readDatabaseEntry,
+  updateDatabaseEntry,
+  deleteDatabaseEntry,
+};

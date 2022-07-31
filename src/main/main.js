@@ -12,11 +12,17 @@ if (require('electron-squirrel-startup')) {
 }
 
 // initialise output file directories
-const pdfFilesDir = path.join(app.getPath('userData'), 'output_files/pdf_files');
+const pdfFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/pdf_files'
+);
 if (!fs.existsSync(pdfFilesDir)) {
   fs.mkdirSync(pdfFilesDir, { recursive: true });
 }
-const texFilesDir = path.join(app.getPath('userData'), 'output_files/tex_files');
+const texFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/tex_files'
+);
 if (!fs.existsSync(texFilesDir)) {
   fs.mkdirSync(texFilesDir, { recursive: true });
 }
@@ -52,7 +58,7 @@ app.on('ready', async () => {
       'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
     );
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
   protocol.registerFileProtocol('atom', (request, callback) => {
     const url = request.url.substr(7);

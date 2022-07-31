@@ -24,8 +24,8 @@ const CvConstructorPage = () => {
                 className={
                   'w-full border-y border-slate-200 hover:bg-slate-500 hover:text-slate-100'
                 }>
-                <td className='pr-2 w-3/12'>{elem.Section}</td>
-                <td className='pl-2 w-9/12'>{elem?.title}</td>
+                <td className='px-2 w-3/12'>{elem.Section}</td>
+                <td className='px-2 w-9/12'>{elem?.title}</td>
               </tr>
             );
           })}

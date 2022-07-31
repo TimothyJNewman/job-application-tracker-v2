@@ -23,7 +23,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     // When unused element is clicked
     if (code === 0) {
       // If element is not already used
-      if (!elements.filter((elem) => elem.id === selElem.id)[0].application_id) {
+      if (
+        !elements.filter((elem) => elem.id === selElem.id)[0].application_id
+      ) {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
           [id, selElem.id],
@@ -137,17 +139,23 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     return {
       id: id,
       name: String(id),
-      paramsArray: elements.filter((e) => e.application_id).map((f) => {
-        return { ...JSON.parse(f.cv_component_text) }
-      }),
+      paramsArray: elements
+        .filter((e) => e.application_id)
+        .map((f) => {
+          return { ...JSON.parse(f.cv_component_text) };
+        }),
     };
   };
 
   const cvSectionBuilderHandler = (sectionObj) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
-      [sectionObj.section, JSON.stringify(sectionObj), new Date().toISOString()],
-      () => { }
+      [
+        sectionObj.section,
+        JSON.stringify(sectionObj),
+        new Date().toISOString(),
+      ],
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -201,7 +209,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     <div className='mx-2 break-all'>
       <h1 id='cv-contructor' className='font-bold text-xl'>
         CV constructor{' '}
-        <button className='has-tooltip inline px-1' onClick={() => toggleCvBuilder(!showCvBuilder)}>
+        <button
+          className='has-tooltip inline px-1'
+          onClick={() => toggleCvBuilder(!showCvBuilder)}
+          type='button'>
           <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8 font-normal text-base'>
             Add new CV section
           </span>
@@ -228,8 +239,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 key={elem.id}
                 onClick={() => elementClickHandler(1, elem)}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
-                <td className='pr-2 w-3/12'>{elem.cv_section}</td>
-                <td className='pl-2 w-9/12'>{elem?.cv_component_text}</td>
+                <td className='px-2 w-3/12'>{elem.cv_section}</td>
+                <td className='px-2 w-9/12'>{elem?.cv_component_text}</td>
               </tr>
             ))}
         </tbody>
@@ -248,15 +259,21 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             <tr
               key={e.id}
               onClick={() => elementClickHandler(0, e)}
-              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id ? 'bg-purple-700 hover:bg-purple-600 text-slate-100' : null
-                }`}>
-              <td className='pr-2 w-3/12'>{e.cv_section}</td>
-              <td className='pl-2 w-9/12'>{e?.cv_component_text}</td>
+              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
+                e.application_id
+                  ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
+                  : null
+              }`}>
+              <td className='px-2 w-3/12'>{e.cv_section}</td>
+              <td className='px-2 w-9/12'>{e?.cv_component_text}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={generatePdf} className='block my-2 ml-auto std-button'>
+      <button
+        onClick={generatePdf}
+        className='block my-2 ml-auto std-button'
+        type='button'>
         Generate CV PDF
       </button>
       {showCvBuilder ? (

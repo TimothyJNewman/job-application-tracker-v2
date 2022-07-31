@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AddApplicationForm from '../../components/AddApplicationForm';
-import { createDatabaseEntry, deleteDatabaseEntry, readDatabaseEntry } from '../../util/CRUD';
+import {
+  createDatabaseEntry,
+  deleteDatabaseEntry,
+  readDatabaseEntry,
+} from '../../util/CRUD';
 import { GlobalContext } from '../../context/GlobalContext';
 import {
   flexRender,
@@ -61,7 +65,9 @@ const columns = [
     headerCellProps: { className: 'px-2' },
     bodyCellProps: { className: 'px-2 text-center' },
     cell: (info) => (
-      <Link className='w-12' to={`/application/${info.row.original.id}#cv-contructor`}>
+      <Link
+        className='w-12'
+        to={`/application/${info.row.original.id}#cv-contructor`}>
         <FilePersonFill
           className='w-6 h-6 inline hover:text-purple-700 hoanimate-pulse'
           alt='CV Icon'
@@ -76,7 +82,10 @@ const columns = [
     bodyCellProps: { className: 'px-2 text-center' },
     cell: (info) => (
       <Link className='w-12' to={`/application/${info.row.original.id}`}>
-        <EnvelopeFill className='w-6 h-6 inline hover:text-purple-700' alt='Letter Icon' />
+        <EnvelopeFill
+          className='w-6 h-6 inline hover:text-purple-700'
+          alt='Letter Icon'
+        />
       </Link>
     ),
   },
@@ -134,8 +143,13 @@ const ApplicationSummaryPage = () => {
   return (
     <div className='mx-2 absolute'>
       <h1 className='font-bold text-xl w-fit inline'>All Applications</h1>
-      <p className='has-tooltip inline px-1' onClick={() => setDeleteMode(!deleteMode)}>
-        <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8'> Delete button </span>
+      <p
+        className='has-tooltip inline px-1'
+        onClick={() => setDeleteMode(!deleteMode)}>
+        <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8'>
+          {' '}
+          Delete button{' '}
+        </span>
         <TrashFill
           style={{ color: `${deleteMode ? 'red' : ''}` }}
           className={'w-6 h-6 mx-1 mb-1 inline hover:text-purple-700'}
@@ -157,13 +171,22 @@ const ApplicationSummaryPage = () => {
                   {header.isPlaceholder ? null : (
                     <div
                       {...{
-                        className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                        className: header.column.getCanSort()
+                          ? 'cursor-pointer select-none'
+                          : '',
                         onClick: header.column.getToggleSortingHandler(),
                       }}>
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                       {{
-                        asc: <SortAlphaDown className='w-4 h-4 mb-1 ml-1 inline' />,
-                        desc: <SortAlphaDownAlt className='w-4 h-4 mb-1 ml-1 inline' />,
+                        asc: (
+                          <SortAlphaDown className='w-4 h-4 mb-1 ml-1 inline' />
+                        ),
+                        desc: (
+                          <SortAlphaDownAlt className='w-4 h-4 mb-1 ml-1 inline' />
+                        ),
                       }[header.column.getIsSorted()] ?? null}
                     </div>
                   )}
@@ -179,7 +202,10 @@ const ApplicationSummaryPage = () => {
               className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'
               onClick={() => handleApplicationClick(row.original.id)}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} {...cell.column.columnDef.bodyCellProps}>
+                <td
+                  key={cell.id}
+                  className='px-2'
+                  {...cell.column.columnDef.bodyCellProps}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -188,6 +214,7 @@ const ApplicationSummaryPage = () => {
         </tbody>
       </table>
       <button
+        type='button'
         onClick={(e) => {
           e.preventDefault();
           toggleForm(!showForm);

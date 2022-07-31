@@ -15,13 +15,21 @@ const pdfGeneratorHandler = async (event, args) => {
   // save pdf file
   const pdfString = new Promise((resolve, reject) => {
     const output = fs.createWriteStream(
-      path.join(app.getPath('userData'), 'output_files/pdf_files', `output${args.id}.pdf`)
+      path.join(
+        app.getPath('userData'),
+        'output_files/pdf_files',
+        `output${args.id}.pdf`
+      )
     );
     pdf.pipe(output);
     pdf.on('error', (err) => reject(err));
     pdf.on('finish', () => {
       const base64EncodedPdf = pdf2base64(
-        path.join(app.getPath('userData'), 'output_files/pdf_files', `output${args.id}.pdf`)
+        path.join(
+          app.getPath('userData'),
+          'output_files/pdf_files',
+          `output${args.id}.pdf`
+        )
       );
       base64EncodedPdf
         .then((res) => {
@@ -36,7 +44,11 @@ const pdfGeneratorHandler = async (event, args) => {
   // save tex file
   const texFile = new Promise((resolve, reject) => {
     const input = fs.createWriteStream(
-      path.join(app.getPath('userData'), 'output_files/tex_files', `input${args.id}.tex`)
+      path.join(
+        app.getPath('userData'),
+        'output_files/tex_files',
+        `input${args.id}.tex`
+      )
     );
     const latexReadable = Readable.from(latexString);
     latexReadable.pipe(input);
