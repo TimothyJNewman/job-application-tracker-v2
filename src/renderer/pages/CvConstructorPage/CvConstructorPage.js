@@ -148,10 +148,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   };
 
   const cvSectionBuilderHandler = (sectionObj) => {
+    console.log(sectionObj)
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
       [
-        sectionObj.section,
+        Object.keys(sectionObj)[0],
         JSON.stringify(sectionObj),
         new Date().toISOString(),
       ],
@@ -278,7 +279,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       </button>
       {showCvBuilder ? (
         <CvSectionBuilder
-          addElementCallback={cvSectionBuilderHandler}
+          addSectionCallback={cvSectionBuilderHandler}
           onClickOutside={() => toggleCvBuilder(!showCvBuilder)}
         />
       ) : null}

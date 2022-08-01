@@ -15,7 +15,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   useEffect(() => {
     let newSchemaValue;
     if (schema[currentSection].constructor === Array) {
-      newSchemaValue = [...schema[currentSection]];
+      newSchemaValue = {...schema[currentSection][0]};
     } else if (schema[currentSection].constructor === Object) {
       newSchemaValue = { ...schema[currentSection] };
     }
@@ -208,7 +208,6 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           breadCrumbs,
         });
       } else if (schemaValue.constructor === Array) {
-        console.log(schemaKey)
         returnVal = [];
         returnVal.push(
           getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
