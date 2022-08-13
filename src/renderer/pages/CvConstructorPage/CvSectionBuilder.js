@@ -6,7 +6,7 @@ import schema from './jsonSchema';
 const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');
   const [currentSchema, setCurrentSchema] = useState({});
-  const [currentFieldValues, setCurrentFieldValues] = useState({});
+  const [currentFieldValues, setCurrentFieldValues] = useState({ section: "", description: "" });
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
 
   const clickRef = useRef();
@@ -15,12 +15,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   useEffect(() => {
     let newSchemaValue;
     if (schema[currentSection].constructor === Array) {
-      newSchemaValue = {...schema[currentSection][0]};
+      newSchemaValue = { ...schema[currentSection][0] };
     } else if (schema[currentSection].constructor === Object) {
       newSchemaValue = { ...schema[currentSection] };
     }
     setCurrentSchema({ [currentSection]: newSchemaValue });
-    setCurrentFieldValues({});
+    setCurrentFieldValues({ [currentSection]: {}, section: currentSection, description: "" });
   }, [currentSection]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       const newFieldValues = getDefaultFieldValues(
         currentSchema[currentSection]
       );
-      setCurrentFieldValues({ [currentSection]: newFieldValues });
+      setCurrentFieldValues({ [currentSection]: newFieldValues, section: currentSection, description: "" });
     }
   }, [currentSchema]);
 
@@ -57,6 +57,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const getInputFieldJsx = ({ inputType, inputName, breadCrumbs }) => {
     let state;
+    console.log(currentFieldValues, breadCrumbs)
     if (breadCrumbs) {
       switch (breadCrumbs.length) {
         case 1:

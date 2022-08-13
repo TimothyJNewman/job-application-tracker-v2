@@ -152,11 +152,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
       [
-        Object.keys(sectionObj)[0],
-        JSON.stringify(sectionObj),
+        sectionObj.section,
+        sectionObj[sectionObj[section]],
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -260,11 +260,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             <tr
               key={e.id}
               onClick={() => elementClickHandler(0, e)}
-              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                e.application_id
+              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id
                   ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
                   : null
-              }`}>
+                }`}>
               <td className='px-2 w-3/12'>{e.cv_section}</td>
               <td className='px-2 w-9/12'>{e?.cv_component_text}</td>
             </tr>
