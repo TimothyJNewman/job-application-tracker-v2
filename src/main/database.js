@@ -1,9 +1,9 @@
-const sqlite3 = require('sqlite3');
+const Database = require('better-sqlite3');
 const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-// sqlite3 downloaded using https://www.techiediaries.com/electron-data-persistence/
+// using better-sqlite3
 const databaseInit = () => {
   // create database directory if does not exist
   const databaseDir = path.join(app.getPath('userData'), 'database');
@@ -11,21 +11,26 @@ const databaseInit = () => {
     fs.mkdirSync(databaseDir);
   }
 
-  const db = new sqlite3.Database(
-    path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
-    (err) => {
-      if (err) console.error('Database opening error: ', err);
-    }
-  );
+  let db;
+  try {
+    db = new Database(
+      path.join(app.getPath('userData'), 'database', 'db.sqlite3')
+    );
+  } catch (error) {
+    if (error) console.error('Database opening error: ', error);
+  }
 
-  db.serialize(function () {
-    db.run(`
+  db.transaction(() => {
+    db.prepare(
+      `
     CREATE TABLE IF NOT EXISTS seasons (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       season VARCHAR(63)
     )
-  `);
-    db.run(`
+  `
+    ).run();
+    db.prepare(
+      `
     CREATE TABLE IF NOT EXISTS applications (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       company VARCHAR(127) NOT NULL,
@@ -37,8 +42,10 @@ const databaseInit = () => {
       is_cv_ready TINYINT NOT NULL DEFAULT 0 CHECK(is_cv_ready IN (0,1)),
       date_applied DATE
     )
-  `);
-    db.run(`
+  `
+    ).run();
+    db.prepare(
+      `
     CREATE TABLE IF NOT EXISTS cv_component_in_application (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       application_id INTEGER NOT NULL,
@@ -46,45 +53,64 @@ const databaseInit = () => {
       FOREIGN KEY (application_id) REFERENCES applications (id),
       FOREIGN KEY (component_id) REFERENCES cv_components (id)
     )
-  `);
-    db.run(`
+  `
+    ).run();
+    db.prepare(
+      `
     CREATE TABLE IF NOT EXISTS cv_components (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      cv_section VARCHAR(127) NOT NULL,
+      cv_component_section VARCHAR(127) NOT NULL,
       cv_component_text TEXT,
+      cv_component_description TEXT,
       date_created DATE
     )
-  `);
-  });
-  db.close();
+  `
+    ).run();
+  })();
 };
 
 // Handler for database request
 const databaseHandler = (event, commandVerb, sql, params) => {
-  // sqlite3 downloaded using https://www.techiediaries.com/electron-data-persistence/
-  const db = new sqlite3.Database(
-    path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
-    (err) => {
-      if (err) console.error('Database opening error: ', err);
-    }
-  );
+  // using better-sqlite3
+  let db;
+  try {
+    db = new Database(
+      path.join(app.getPath('userData'), 'database', 'db.sqlite3')
+    );
+  } catch (error) {
+    if (error) console.error('Database opening error: ', error);
+  }
   if (
     commandVerb === 'POST' ||
     commandVerb === 'PUT' ||
     commandVerb === 'DELETE'
   ) {
     return new Promise((resolve, reject) => {
-      db.run(sql, params, (err) => {
-        if (err && err.message) reject(err);
-        else resolve(`${commandVerb} command is successful`);
-      });
+      try {
+        db.transaction(() => db.prepare(sql).run(params))();
+        resolve(`${commandVerb} command is successful`);
+      } catch (error) {
+        reject(error);
+        throw error;
+      }
     });
   } else if (commandVerb === 'GET') {
     return new Promise((resolve, reject) => {
-      db.all(sql, params, (err, rows) => {
-        if (err && err.message) reject(err);
-        else resolve(rows);
-      });
+      try {
+        db.transaction(() => {
+          let rows;
+          if (params) {
+            rows = db.prepare(sql).all(params);
+          } else {
+            rows = db.prepare(sql).all();
+          }
+          resolve(rows);
+        })();
+      } catch (error) {
+        reject(error);
+        console.log(sql, params);
+        throw error;
+      }
     });
   }
 };

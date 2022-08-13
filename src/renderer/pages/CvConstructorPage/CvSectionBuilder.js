@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useReducer, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import useClickOutside from '../../util/useClickOutside';
-import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons';
-import schema from './jsonSchema';
+import schema from '../../constants/jsonSchema';
 
 const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');
   const [currentSchema, setCurrentSchema] = useState({});
-  const [currentFieldValues, setCurrentFieldValues] = useState({ section: "", description: "" });
+  const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
 
   const clickRef = useRef();
@@ -20,7 +19,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       newSchemaValue = { ...schema[currentSection] };
     }
     setCurrentSchema({ [currentSection]: newSchemaValue });
-    setCurrentFieldValues({ [currentSection]: {}, section: currentSection, description: "" });
+    setCurrentFieldValues({});
   }, [currentSection]);
 
   useEffect(() => {
@@ -31,7 +30,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       const newFieldValues = getDefaultFieldValues(
         currentSchema[currentSection]
       );
-      setCurrentFieldValues({ [currentSection]: newFieldValues, section: currentSection, description: "" });
+      setCurrentFieldValues({
+        [currentSection]: newFieldValues,
+        section: currentSection,
+        description: '',
+      });
     }
   }, [currentSchema]);
 
@@ -57,7 +60,6 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const getInputFieldJsx = ({ inputType, inputName, breadCrumbs }) => {
     let state;
-    console.log(currentFieldValues, breadCrumbs)
     if (breadCrumbs) {
       switch (breadCrumbs.length) {
         case 1:
@@ -73,7 +75,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         case 4:
           state =
             currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][
-            breadCrumbs[3]
+              breadCrumbs[3]
             ];
           break;
       }
@@ -215,7 +217,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         );
         returnVal.push(
           ...schemaValue.map((subSchemaValue, index) =>
-            getInputJsxRecursive(`${schemaKey}-${index}`, subSchemaValue, [...breadCrumbs, index])
+            getInputJsxRecursive(`${schemaKey}-${index}`, subSchemaValue, [
+              ...breadCrumbs,
+              index,
+            ])
           )
         );
         returnVal.push(
@@ -249,7 +254,9 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const getDefaultArraySchema = (schema, breadCrumbs) => {
     if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error('Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs);
+      throw new Error(
+        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
+      );
     }
     switch (breadCrumbs.length) {
       case 1:
@@ -270,7 +277,9 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     deleteIndex = null
   ) => {
     if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error('Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs);
+      throw new Error(
+        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
+      );
     }
     let newSchema = { ...schema };
     let newFieldValues = { ...fieldValues };

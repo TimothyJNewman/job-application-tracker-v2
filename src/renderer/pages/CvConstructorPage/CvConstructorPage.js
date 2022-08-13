@@ -8,6 +8,7 @@ import {
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
 import { PlusCircleFill } from 'react-bootstrap-icons';
+import schema from '../../constants/jsonSchema';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
@@ -135,34 +136,50 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
      ],
    };*/
 
-  const generatePdfParams = () => {
+  const generatePdfParams = (schemaLocal, elementsLocal) => {
+    const resumeObject = {};
+
+    elementsLocal
+      .filter((e) => e.application_id)
+      .forEach(({ cv_component_section, cv_component_text }) => {
+        if (schemaLocal[cv_component_section].constructor === Array) {
+          if (resumeObject[cv_component_section]) {
+            resumeObject[cv_component_section].push(
+              JSON.parse(cv_component_text)
+            );
+          } else {
+            resumeObject[cv_component_section] = [
+              JSON.parse(cv_component_text),
+            ];
+          }
+        } else if (schemaLocal[cv_component_section].constructor === Object) {
+          resumeObject[cv_component_section] = JSON.parse(cv_component_text);
+        }
+      });
+
     return {
       id: id,
       name: String(id),
-      paramsArray: elements
-        .filter((e) => e.application_id)
-        .map((f) => {
-          return { ...JSON.parse(f.cv_component_text) };
-        }),
+      resumeObject,
     };
   };
 
   const cvSectionBuilderHandler = (sectionObj) => {
-    console.log(sectionObj)
     createDatabaseEntry(
-      'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
+      'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created) VALUES (?,?,?,?)',
       [
         sectionObj.section,
-        sectionObj[sectionObj[section]],
+        JSON.stringify(sectionObj[sectionObj.section], null, 2),
+        sectionObj.description,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
   };
 
-  // Todo add loading animation when pdf is generating
+  // TODO add loading animation when pdf is generating
   const generatePdf = () => {
     if (elements.filter((e) => e.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
@@ -175,7 +192,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
     // Generate pdf in the background
     window.electron
-      .getPdf('get-pdf', generatePdfParams())
+      .getPdf('get-pdf', generatePdfParams(schema, elements))
       .then((result) => {
         updateDatabaseEntry(
           'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
@@ -197,7 +214,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   useEffect(() => {
     readDatabaseEntry(
-      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_section, cv_components.cv_component_text, cv_component_in_application.application_id
+      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_component_section, cv_components.cv_component_text, cv_component_in_application.application_id
       FROM cv_components 
       LEFT JOIN cv_component_in_application 
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
@@ -229,7 +246,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
             <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-9/12'>Title</th>
+            <th className='pl-2 w-6/12'>Text</th>
+            <th className='pl-2 w-3/12'>Desc</th>
           </tr>
         </thead>
         <tbody>
@@ -240,8 +258,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 key={elem.id}
                 onClick={() => elementClickHandler(1, elem)}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
-                <td className='px-2 w-3/12'>{elem.cv_section}</td>
-                <td className='px-2 w-9/12'>{elem?.cv_component_text}</td>
+                <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
+                <td className='px-2 w-6/12'>{elem?.cv_component_text}</td>
+                <td className='px-2 w-3/12'>
+                  {elem?.cv_component_description}
+                </td>
               </tr>
             ))}
         </tbody>
@@ -252,7 +273,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
             <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-9/12'>Title</th>
+            <th className='pl-2 w-6/12'>Text</th>
+            <th className='pl-2 w-3/12'>Desc</th>
           </tr>
         </thead>
         <tbody>
@@ -260,12 +282,14 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             <tr
               key={e.id}
               onClick={() => elementClickHandler(0, e)}
-              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id
+              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
+                e.application_id
                   ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
                   : null
-                }`}>
-              <td className='px-2 w-3/12'>{e.cv_section}</td>
-              <td className='px-2 w-9/12'>{e?.cv_component_text}</td>
+              }`}>
+              <td className='px-2 w-3/12'>{e.cv_component_section}</td>
+              <td className='px-2 w-6/12'>{e?.cv_component_text}</td>
+              <td className='px-2 w-3/12'>{e?.cv_component_description}</td>
             </tr>
           ))}
         </tbody>
