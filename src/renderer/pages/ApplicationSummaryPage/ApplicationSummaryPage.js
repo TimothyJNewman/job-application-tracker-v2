@@ -106,7 +106,7 @@ const ApplicationSummaryPage = () => {
   });
 
   useEffect(() => {
-    readDatabaseEntry('SELECT * FROM applications', undefined, setAppsData);
+    readDatabaseEntry('SELECT * FROM applications', null, setAppsData);
   }, [showForm, setAppsData, noItemsRemoved]);
 
   let navigate = useNavigate();
