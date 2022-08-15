@@ -146,7 +146,7 @@ const getLatex = (resumeObject) => {
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape ${basics.name}} \\ \vspace{1pt}
-    ${basics.location.address} \\ \vspace{1pt}
+    ${basics.location.address && `${basics.location.address}\\ \vspace{1pt}`}
     \small \raisebox{-0.1\height}
     ${basics.phone !== '' ? String.raw`\faPhone\ ${basics.phone}` : ''}
     ${basics.email !== ''
@@ -206,7 +206,7 @@ const getLatex = (resumeObject) => {
 
     let output = String.raw``;
     output += experienceHeader;
-    experienceArray.forEach((e) => {
+    work.forEach((e) => {
       output += getWorkExperience(e);
     });
     output += experienceFooter;
@@ -248,7 +248,7 @@ const getLatex = (resumeObject) => {
     volunteer.forEach((e) => {
       output += getInvolvement(e);
     });
-    output += involvementFooterskills;
+    output += involvementFooter;
     return output;
   };
 
