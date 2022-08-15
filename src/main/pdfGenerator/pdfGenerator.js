@@ -81,7 +81,7 @@ const pdfGeneratorHandler = async (event, args) => {
     );
     pdf.pipe(output);
     pdf.on('error', (err) => reject(err));
-    pdf.on('finish', () => {
+    pdf.on('finish', async () => {
       const base64EncodedPdf = pdf2base64(
         path.join(
           app.getPath('userData'),
@@ -89,13 +89,14 @@ const pdfGeneratorHandler = async (event, args) => {
           `output${args.id}.pdf`
         )
       );
-      base64EncodedPdf
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+      try {
+        const response = await base64EncodedPdf;
+        resolve(response);
+      } catch (error) {
+        reject(error);
+        throw error;
+      }
+
     });
   });
 
