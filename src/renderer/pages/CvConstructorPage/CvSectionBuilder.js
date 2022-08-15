@@ -6,6 +6,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
+  const [currentDescription, setCurrentDescription] = useState('');
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
 
   const clickRef = useRef();
@@ -82,7 +83,8 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       }
     }
     const inputFieldJsxDictionary = {
-      unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
+      // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
+      unavailable: () => null,
       objectLabel: ({ inputName }) => (
         <React.Fragment key={inputName}>
           <p>{inputName}</p>
@@ -361,7 +363,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addSectionCallback(currentFieldValues);
+    addSectionCallback(currentFieldValues, currentDescription);
   };
 
   const handleInputChange = (e, fieldValues, breadCrumbs) => {
@@ -393,11 +395,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   return (
     <div className='flex fixed h-screen w-screen items-center justify-center top-0 left-0 backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed h-screen w-screen'></div>
+      <div id='overlay-blur' className='fixed h-screen w-screen z-10'></div>
       <div
         ref={clickRef}
-        className='z-10 m-8 w-full flex items-center justify-center'>
-        <div className='bg-white p-4 grow max-w-3xl'>
+        className='m-8 w-full flex items-center justify-center'>
+        <div className='bg-white p-4 grow max-w-3xl z-20'>
           <h1 id='cv-section-builder' className='font-bold text-xl'>
             {currentSection} section builder
           </h1>
@@ -412,6 +414,16 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             ))}
           </ul>
           <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
+            {currentSectionJsx[currentSection] && <><label htmlFor='description' className='bold my-2 py-1'>
+              Description
+            </label>
+              <input
+                className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+                type='text'
+                name='description'
+                value={currentDescription}
+                onChange={(e) => setCurrentDescription(e.target.value)}
+              /></>}
             {currentSectionJsx[currentSection]}
             <br />
             <input

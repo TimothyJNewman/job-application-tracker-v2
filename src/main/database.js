@@ -76,7 +76,8 @@ const databaseHandler = (event, commandVerb, sql, params) => {
   let db;
   try {
     db = new Database(
-      path.join(app.getPath('userData'), 'database', 'db.sqlite3'), { verbose: console.log }
+      path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
+      { verbose: console.log }
     );
   } catch (error) {
     if (error) console.error('Database opening error: ', error);

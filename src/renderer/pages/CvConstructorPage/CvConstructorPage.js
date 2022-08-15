@@ -166,13 +166,13 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     };
   };
 
-  const addCVSectionBuilderHandler = (sectionObj) => {
+  const addCVSectionBuilderHandler = (sectionObj, sectionDesc) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created) VALUES (?,?,?,?)',
       [
         sectionObj.section,
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
-        sectionObj.description,
+        sectionDesc,
         new Date().toISOString(),
       ],
       () => { }
@@ -181,15 +181,16 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     toggleCvBuilder(false);
   };
 
-  const editCVSectionBuilderHandler = (sectionObj, id) => {
+  const editCVSectionBuilderHandler = (sectionObj, sectionDesc, id) => {
     updateDatabaseEntry(
-      'UPDATE cv_components SET cv_component_text=?, date_modified=? WHERE id=?',
+      'UPDATE cv_components SET cv_component_text=?, cv_component_description=?, date_modified=? WHERE id=?',
       [
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
+        sectionDesc,
         new Date().toISOString(),
-        id
+        id,
       ],
-      (e) => {console.log(e,"update callback") }
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -230,7 +231,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   useEffect(() => {
     readDatabaseEntry(
-      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_component_section, cv_components.cv_component_text, cv_component_in_application.application_id
+      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_component_section, cv_components.cv_component_text, cv_components.cv_component_description, cv_component_in_application.application_id
       FROM cv_components 
       LEFT JOIN cv_component_in_application 
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
@@ -285,12 +286,22 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 key={elem.id}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
                 <td className='w-full'>
-                  {elem?.cv_component_description}<button className="std-button" onClick={() => elementClickHandler(1, elem)}>Remove</button>
+                  Description: {elem?.cv_component_description}{' '}
+                  <button
+                    className='std-button'
+                    onClick={() => elementClickHandler(1, elem)}>
+                    Remove
+                  </button>
                   <CvSectionBuilderV2
                     editSectionCallback={editCVSectionBuilderHandler}
                     id={elem.id}
                     currentSection={currentSection}
-                    currentFieldValuesDatabase={JSON.parse(elem?.cv_component_text)} /></td>
+                    currentDescriptionDatabase={elem.cv_component_description}
+                    currentFieldValuesDatabase={JSON.parse(
+                      elem.cv_component_text
+                    )}
+                  />
+                </td>
               </tr>
             ))}
         </tbody>
@@ -313,8 +324,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 key={e.id}
                 onClick={() => elementClickHandler(0, e)}
                 className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id
-                  ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
-                  : null
+                    ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
+                    : null
                   }`}>
                 <td className='px-2 w-3/12'>{e.cv_component_section}</td>
                 <td className='px-2 w-6/12'>{e?.cv_component_text}</td>

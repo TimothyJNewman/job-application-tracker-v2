@@ -64,7 +64,7 @@ const schema = {
     {
       name: 'shortText',
       level: 'unavailable',
-      keywords: 'unavailable'
+      keywords: 'unavailable',
     },
   ],
   languages: 'unavailable',
@@ -86,4 +86,4 @@ const schema = {
   ],
 };
 
-export default schema
+export default schema;

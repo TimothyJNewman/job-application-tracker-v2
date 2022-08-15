@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../constants/template2_schema';
 
-const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFieldValuesDatabase }) => {
+const CvSectionBuilder = ({
+  editSectionCallback,
+  id,
+  currentSection,
+  currentFieldValuesDatabase,
+  currentDescriptionDatabase,
+}) => {
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
+  const [currentDescription, setCurrentDescription] = useState('');
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
 
   useEffect(() => {
@@ -24,14 +31,13 @@ const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFiel
     ) {
       const newFieldValues = currentFieldValuesDatabase
         ? currentFieldValuesDatabase
-        : getDefaultFieldValues(
-          currentSchema[currentSection]
-        );
+        : getDefaultFieldValues(currentSchema[currentSection]);
       setCurrentFieldValues({
         [currentSection]: newFieldValues,
         section: currentSection,
         description: '',
       });
+      setCurrentDescription(currentDescriptionDatabase);
     }
   }, [currentSchema]);
 
@@ -79,7 +85,13 @@ const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFiel
       }
     }
     const inputFieldJsxDictionary = {
-      unavailable: ({ inputName }) => <>{inputName}<span>Not available</span></>,
+      // unavailable: ({ inputName }) => (
+      //   <>
+      //     {inputName}
+      //     <span>Not available</span>
+      //   </>
+      // ),
+      unavailable: () => null,
       objectLabel: ({ inputName }) => (
         <React.Fragment key={inputName}>
           <p>{inputName}</p>
@@ -358,7 +370,7 @@ const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFiel
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    editSectionCallback(currentFieldValues, id);
+    editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
   const handleInputChange = (e, fieldValues, breadCrumbs) => {
@@ -389,13 +401,23 @@ const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFiel
   };
 
   return (
-    <div
-      className='w-full flex items-center justify-center'>
+    <div className='w-full flex items-center justify-center'>
       <div className='bg-white p-4 grow'>
         <h1 id='cv-section-builder' className='font-bold text-xl'>
           {currentSection} section builder
         </h1>
         <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
+          {currentSectionJsx[currentSection] && <><label htmlFor='description' className='bold my-2 py-1'>
+            Description
+          </label>
+            <input
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+              type='text'
+              name='description'
+              value={currentDescription}
+              onChange={(e) => setCurrentDescription(e.target.value)}
+            /></>
+          }
           {currentSectionJsx[currentSection]}
           <br />
           <input
