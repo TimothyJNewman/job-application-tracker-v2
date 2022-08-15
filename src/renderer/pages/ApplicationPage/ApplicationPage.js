@@ -9,19 +9,21 @@ export default function ApplicationPage() {
   const [pdfState, setPdfUrl] = useState({ isReady: false, url: '' });
   const id = Number(useParams().id);
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2'>
-      <div className='flex flex-col'>
+    <div className='grid grid-cols-12'>
+      <div className='flex flex-col col-span-8'>
         <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
         <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
         <LetterConstructorPage id={id} />
       </div>
-      {pdfState.isReady ? (
-        <PdfDisplay url={pdfState.url} />
-      ) : (
-        <p className='mx-2'>
-          No CV PDF found. Click generate pdf to create a new one.
-        </p>
-      )}
+      <div className='col-span-4'>
+        {pdfState.isReady ? (
+          <PdfDisplay url={pdfState.url} />
+        ) : (
+          <p className='mx-2'>
+            No CV PDF found. Click generate pdf to create a new one.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

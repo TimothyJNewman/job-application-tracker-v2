@@ -7,6 +7,7 @@ import {
 } from '../../util/CRUD';
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
+import CvSectionBuilderV2 from './CvSectionBuilderV2';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import schema from '../../constants/jsonSchema';
 
@@ -18,6 +19,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [noElementsAdded, setNoElementsAdded] = useState(0);
   const [noElementsClicked, setNoElementsClicked] = useState(0);
   const [showCvBuilder, toggleCvBuilder] = useState(false);
+  const [currentSection, setCurrentSection] = useState('basics');
 
   // Handles clicks to elements in either used or unused components
   const elementClickHandler = (code, selElem) => {
@@ -173,7 +175,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionObj.description,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -241,28 +243,40 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           />
         </button>
       </h1>
+      <ul className='flex flex-wrap gap-2 mb-2'>
+        {Object.keys(schema).map((key) => (
+          <li
+            key={key}
+            onClick={() => setCurrentSection(key)}
+            className='underline hover:underline-offset-4 hover:cursor-pointer'>
+            {key}
+          </li>
+        ))}
+      </ul>
       <h2>Used Components</h2>
       <table className='w-full' style={{ transition: 'height 2s' }}>
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
-            <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-6/12'>Text</th>
-            <th className='pl-2 w-3/12'>Desc</th>
+            <th className='px-1 w-full'>Text</th>
           </tr>
         </thead>
         <tbody>
           {elements
-            .filter((e) => e.application_id)
+            .filter(
+              (e) =>
+                e.application_id && e.cv_component_section === currentSection
+            )
             .map((elem) => (
               <tr
                 key={elem.id}
                 onClick={() => elementClickHandler(1, elem)}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
-                <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
-                <td className='px-2 w-6/12'>{elem?.cv_component_text}</td>
-                <td className='px-2 w-3/12'>
+                <td className='w-full'>
                   {elem?.cv_component_description}
-                </td>
+                  <CvSectionBuilderV2
+                    addSectionCallback={cvSectionBuilderHandler}
+                    currentSection={currentSection}
+                    currentFieldValuesDatabase={JSON.parse(elem?.cv_component_text)} /></td>
               </tr>
             ))}
         </tbody>
@@ -278,20 +292,21 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           </tr>
         </thead>
         <tbody>
-          {elements.map((e) => (
-            <tr
-              key={e.id}
-              onClick={() => elementClickHandler(0, e)}
-              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                e.application_id
+          {elements
+            .filter((e) => e.cv_component_section === currentSection)
+            .map((e) => (
+              <tr
+                key={e.id}
+                onClick={() => elementClickHandler(0, e)}
+                className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id
                   ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
                   : null
-              }`}>
-              <td className='px-2 w-3/12'>{e.cv_component_section}</td>
-              <td className='px-2 w-6/12'>{e?.cv_component_text}</td>
-              <td className='px-2 w-3/12'>{e?.cv_component_description}</td>
-            </tr>
-          ))}
+                  }`}>
+                <td className='px-2 w-3/12'>{e.cv_component_section}</td>
+                <td className='px-2 w-6/12'>{e?.cv_component_text}</td>
+                <td className='px-2 w-3/12'>{e?.cv_component_description}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <button
