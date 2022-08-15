@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import schema from '../../constants/jsonSchema';
+import schema from '../../constants/template2_schema';
 
-const CvSectionBuilder = ({ addSectionCallback, currentSection, currentFieldValuesDatabase }) => {
+const CvSectionBuilder = ({ editSectionCallback, id, currentSection, currentFieldValuesDatabase }) => {
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
 
   useEffect(() => {
-    let newSchemaValue;
+    let newSchemaValue = schema[currentSection];
     if (schema[currentSection].constructor === Array) {
       newSchemaValue = { ...schema[currentSection][0] };
     } else if (schema[currentSection].constructor === Object) {
@@ -49,6 +49,7 @@ const CvSectionBuilder = ({ addSectionCallback, currentSection, currentFieldValu
   }, [currentFieldValues]);
 
   const inputDefaultValue = {
+    unavailable: null,
     shortText: '',
     longText: '',
     number: 0,
@@ -66,7 +67,6 @@ const CvSectionBuilder = ({ addSectionCallback, currentSection, currentFieldValu
           state = currentFieldValues[breadCrumbs[0]][breadCrumbs[1]];
           break;
         case 3:
-          console.log(breadCrumbs, currentFieldValues)
           state =
             currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]];
           break;
@@ -79,6 +79,7 @@ const CvSectionBuilder = ({ addSectionCallback, currentSection, currentFieldValu
       }
     }
     const inputFieldJsxDictionary = {
+      unavailable: ({ inputName }) => <>{inputName}<span>Not available</span></>,
       objectLabel: ({ inputName }) => (
         <React.Fragment key={inputName}>
           <p>{inputName}</p>
@@ -357,7 +358,7 @@ const CvSectionBuilder = ({ addSectionCallback, currentSection, currentFieldValu
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addSectionCallback(currentFieldValues);
+    editSectionCallback(currentFieldValues, id);
   };
 
   const handleInputChange = (e, fieldValues, breadCrumbs) => {

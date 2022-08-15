@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useClickOutside from '../../util/useClickOutside';
-import schema from '../../constants/jsonSchema';
+import schema from '../../constants/template2_schema';
 
 const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');
@@ -12,7 +12,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   useClickOutside(clickRef, 'overlay-blur', onClickOutside);
 
   useEffect(() => {
-    let newSchemaValue;
+    let newSchemaValue = schema[currentSection];
     if (schema[currentSection].constructor === Array) {
       newSchemaValue = { ...schema[currentSection][0] };
     } else if (schema[currentSection].constructor === Object) {
@@ -52,6 +52,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   }, [currentFieldValues]);
 
   const inputDefaultValue = {
+    unavailable: null,
     shortText: '',
     longText: '',
     number: 0,
@@ -75,12 +76,13 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         case 4:
           state =
             currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][
-              breadCrumbs[3]
+            breadCrumbs[3]
             ];
           break;
       }
     }
     const inputFieldJsxDictionary = {
+      unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
       objectLabel: ({ inputName }) => (
         <React.Fragment key={inputName}>
           <p>{inputName}</p>

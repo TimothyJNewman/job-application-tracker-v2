@@ -9,7 +9,7 @@ import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
 import CvSectionBuilderV2 from './CvSectionBuilderV2';
 import { PlusCircleFill } from 'react-bootstrap-icons';
-import schema from '../../constants/jsonSchema';
+import schema from '../../constants/template2_schema';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
@@ -166,7 +166,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     };
   };
 
-  const cvSectionBuilderHandler = (sectionObj) => {
+  const addCVSectionBuilderHandler = (sectionObj) => {
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created) VALUES (?,?,?,?)',
       [
@@ -176,6 +176,20 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
       ],
       () => { }
+    );
+    setNoElementsAdded(noElementsAdded + 1);
+    toggleCvBuilder(false);
+  };
+
+  const editCVSectionBuilderHandler = (sectionObj, id) => {
+    updateDatabaseEntry(
+      'UPDATE cv_components SET cv_component_text=?, date_modified=? WHERE id=?',
+      [
+        JSON.stringify(sectionObj[sectionObj.section], null, 2),
+        new Date().toISOString(),
+        id
+      ],
+      (e) => {console.log(e,"update callback") }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -269,12 +283,12 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             .map((elem) => (
               <tr
                 key={elem.id}
-                onClick={() => elementClickHandler(1, elem)}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
                 <td className='w-full'>
-                  {elem?.cv_component_description}
+                  {elem?.cv_component_description}<button className="std-button" onClick={() => elementClickHandler(1, elem)}>Remove</button>
                   <CvSectionBuilderV2
-                    addSectionCallback={cvSectionBuilderHandler}
+                    editSectionCallback={editCVSectionBuilderHandler}
+                    id={elem.id}
                     currentSection={currentSection}
                     currentFieldValuesDatabase={JSON.parse(elem?.cv_component_text)} /></td>
               </tr>
@@ -317,7 +331,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       </button>
       {showCvBuilder ? (
         <CvSectionBuilder
-          addSectionCallback={cvSectionBuilderHandler}
+          addSectionCallback={addCVSectionBuilderHandler}
           onClickOutside={() => toggleCvBuilder(!showCvBuilder)}
         />
       ) : null}
