@@ -77,7 +77,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         case 4:
           state =
             currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][
-            breadCrumbs[3]
+              breadCrumbs[3]
             ];
           break;
       }
@@ -414,16 +414,20 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             ))}
           </ul>
           <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
-            {currentSectionJsx[currentSection] && <><label htmlFor='description' className='bold my-2 py-1'>
-              Description
-            </label>
-              <input
-                className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-                type='text'
-                name='description'
-                value={currentDescription}
-                onChange={(e) => setCurrentDescription(e.target.value)}
-              /></>}
+            {currentSectionJsx[currentSection] && (
+              <>
+                <label htmlFor='description' className='bold my-2 py-1'>
+                  Description
+                </label>
+                <input
+                  className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+                  type='text'
+                  name='description'
+                  value={currentDescription}
+                  onChange={(e) => setCurrentDescription(e.target.value)}
+                />
+              </>
+            )}
             {currentSectionJsx[currentSection]}
             <br />
             <input
