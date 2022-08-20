@@ -146,7 +146,7 @@ const getLatex = (resumeObject) => {
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape ${basics.name}} \\ \vspace{1pt}
-    ${basics.location.address && `${basics.location.address}\\ \vspace{1pt}`}
+    ${basics.location.address && String.raw`${basics.location.address}\\ \vspace{1pt}`}
     \small \raisebox{-0.1\height}
     ${basics.phone !== '' ? String.raw`\faPhone\ ${basics.phone}` : ''}
     ${basics.email !== ''

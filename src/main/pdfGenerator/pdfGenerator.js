@@ -96,7 +96,6 @@ const pdfGeneratorHandler = async (event, args) => {
         reject(error);
         throw error;
       }
-
     });
   });
 

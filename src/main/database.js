@@ -63,6 +63,7 @@ const databaseInit = () => {
       cv_component_text TEXT,
       cv_component_description TEXT,
       date_created DATE
+      date_modified DATE
     )
   `
     ).run();
@@ -75,7 +76,8 @@ const databaseHandler = (event, commandVerb, sql, params) => {
   let db;
   try {
     db = new Database(
-      path.join(app.getPath('userData'), 'database', 'db.sqlite3')
+      path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
+      { verbose: console.log }
     );
   } catch (error) {
     if (error) console.error('Database opening error: ', error);
