@@ -132,21 +132,9 @@ const getLatex = (params) => {
     ${e.address} \\ \vspace{1pt}
     \small \raisebox{-0.1\height}
     ${e.phone !== '' ? String.raw`\faPhone\ ${e.phone}` : ''}
-    ${
-      e.email !== ''
-        ? String.raw`~ \href{mailto:${e.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${e.email}}}`
-        : ''
-    }
-    ${
-      e.linkedIn !== ''
-        ? String.raw` ~ \href{${e.linkedIn}}{\raisebox{-0.2\height}\faLinkedin\ \underline{${e.linkedIn}}}`
-        : ''
-    } 
-    ${
-      e.gitHub !== ''
-        ? String.raw`~ \href{${e.gitHub}}{\raisebox{-0.2\height}\faGithub\ \underline{${e.gitHub}}}`
-        : ''
-    }
+    ${e.email !== '' ? String.raw`~ \href{mailto:${e.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${e.email}}}` : ''}
+    ${e.linkedIn !== '' ? String.raw` ~ \href{${e.linkedIn}}{\raisebox{-0.2\height}\faLinkedin\ \underline{${e.linkedIn}}}` : ''} 
+    ${e.gitHub !== '' ? String.raw`~ \href{${e.gitHub}}{\raisebox{-0.2\height}\faGithub\ \underline{${e.gitHub}}}` : ''}
     \vspace{-8pt}
 \end{center}
         `;
@@ -229,13 +217,7 @@ const getLatex = (params) => {
     let output = String.raw``;
     output += experienceHeader;
     experienceArray.forEach((e) => {
-      output += getExperience(
-        e.company,
-        e.role,
-        e.date,
-        e.location,
-        e.itemArray
-      );
+      output += getExperience(e.company, e.role, e.date, e.location, e.itemArray);
     });
     output += experienceFooter;
     return output;
@@ -315,12 +297,12 @@ const getLatex = (params) => {
     \resumeSubheading{${organisation}}{${date}}{${role}}{${misc}}
       \resumeItemListStart
         ${itemArray.reduce((prev, curr) => {
-          return (
-            prev +
-            String.raw`
+        return (
+          prev +
+          String.raw`
         \resumeItem{${curr}}`
-          );
-        }, String.raw``)}
+        );
+      }, String.raw``)}
       \resumeItemListEnd`;
     };
     const involvementFooter = String.raw`
@@ -330,13 +312,7 @@ const getLatex = (params) => {
     let output = String.raw``;
     output += involvementHeader;
     involvementArray.forEach((e) => {
-      output += getInvolvement(
-        e.organisation,
-        e.date,
-        e.role,
-        e.misc,
-        e.itemArray
-      );
+      output += getInvolvement(e.organisation, e.date, e.role, e.misc, e.itemArray);
     });
     output += involvementFooter;
     return output;
@@ -347,45 +323,50 @@ const getLatex = (params) => {
     output += texPreamble;
     const headingArr = params.paramsArray.filter((elem) => {
       return elem.section === 'heading';
-    });
+    })
     if (headingArr.length !== 0) {
-      output += getHeading(headingArr);
+      output += getHeading(headingArr)
     }
     const educationArr = params.paramsArray.filter((elem) => {
       return elem.section === 'education';
-    });
+    })
     if (educationArr.length !== 0) {
-      output += getEducations(educationArr);
+      output += getEducations(educationArr)
     }
-    const courseworkArr = params.paramsArray.filter((elem) => {
-      return elem.section === 'coursework';
-    });
+    const courseworkArr =
+      params.paramsArray.filter((elem) => {
+        return elem.section === 'coursework';
+      })
     if (courseworkArr.length !== 0) {
-      output += getCourseworks(courseworkArr);
+      output += getCourseworks(courseworkArr)
     }
-    const experienceArr = params.paramsArray.filter((elem) => {
-      return elem.section === 'experience';
-    });
+    const experienceArr =
+      params.paramsArray.filter((elem) => {
+        return elem.section === 'experience';
+      })
     if (experienceArr.length !== 0) {
-      output += getExperiences(experienceArr);
+      output += getExperiences(experienceArr)
     }
-    const projectsArr = params.paramsArray.filter((elem) => {
-      return elem.section === 'project';
-    });
+    const projectsArr =
+      params.paramsArray.filter((elem) => {
+        return elem.section === 'project';
+      })
     if (projectsArr.length !== 0) {
-      output += getProjects(projectsArr);
+      output += getProjects(projectsArr)
     }
-    const technicalSkillsArr = params.paramsArray.filter((elem) => {
-      return elem.section === 'technical';
-    });
+    const technicalSkillsArr =
+      params.paramsArray.filter((elem) => {
+        return elem.section === 'technical';
+      })
     if (technicalSkillsArr.length !== 0) {
-      output += getTechnicalSkills(technicalSkillsArr);
+      output += getTechnicalSkills(technicalSkillsArr)
     }
-    const involvementArr = params.paramsArray.filter((elem) => {
-      return elem.section === 'involvement';
-    });
+    const involvementArr =
+      params.paramsArray.filter((elem) => {
+        return elem.section === 'involvement';
+      })
     if (involvementArr.length !== 0) {
-      output += getInvolvements(involvementArr);
+      output += getInvolvements(involvementArr)
     }
     output += texPostamble;
     return output;

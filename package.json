@@ -1,7 +1,7 @@
 {
   "name": "job-application-tracker-v2",
-  "productName": "Job Application Tracker",
-  "version": "0.1.0",
+  "productName": "job-application-tracker-v2",
+  "version": "1.0.0",
   "description": "Simple job application tracker and CV generator",
   "main": ".webpack/main",
   "scripts": {
@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "format": "prettier --write \"src/**/*.{js,jsx}\""
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "postinstall": "electron-rebuild -f -w sqlite3"
   },
   "repository": "https://github.com/TimothyJNewman/job-application-tracker-v2",
   "keywords": [
@@ -84,6 +85,7 @@
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "electron": "19.0.8",
+    "electron-installer-debian": "^3.1.0",
     "electron-rebuild": "^3.2.8",
     "node-loader": "^2.0.0",
     "postcss-loader": "^7.0.1",
@@ -93,7 +95,6 @@
   "dependencies": {
     "@tanstack/react-table": "^8.2.6",
     "aws-sdk": "^2.1181.0",
-    "better-sqlite3": "^7.6.2",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "mock-aws-s3": "^4.0.2",
@@ -105,7 +106,6 @@
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
-    "resume-cli": "^3.0.7",
     "sqlite3": "^5.0.10"
   }
 }

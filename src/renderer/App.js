@@ -5,6 +5,7 @@ import {
   ApplicationPage,
   ApplicationSummaryPage,
   CvConstructorPage,
+  CvSummaryPage,
 } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
 
@@ -14,6 +15,7 @@ const App = () => {
       <Router>
         <Nav />
         <Routes>
+          <Route path='/cv-page/' element={<CvSummaryPage />} />
           <Route path='/cv-page/:id' element={<CvConstructorPage />} />
           <Route path='/application/:id' element={<ApplicationPage />} />
           <Route path='/' element={<ApplicationSummaryPage />} />

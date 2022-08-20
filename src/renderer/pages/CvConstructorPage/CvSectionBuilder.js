@@ -1,348 +1,265 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useReducer, useRef } from 'react';
 import useClickOutside from '../../util/useClickOutside';
-import schema from '../../constants/template2_schema';
+import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons';
 
-const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
-  const [currentSection, setCurrentSection] = useState('basics');
-  const [currentSchema, setCurrentSchema] = useState({});
-  const [currentFieldValues, setCurrentFieldValues] = useState({});
-  const [currentDescription, setCurrentDescription] = useState('');
-  const [currentSectionJsx, setCurrentSectionJsx] = useState({});
+const reducer = (state, action) => {
+  let newState;
+  if (action.status === 'initialLoad') {
+    newState = { section: action.section, ...action.defaultState };
+  } else if (action.status === 'inputChange') {
+    newState = { ...state };
+    const [name, index] = action.name.split('.');
+    // for array inputs
+    if (index) {
+      let newInputArray = [...state[name]];
+      newInputArray[index] = action.value;
+      newState[name] = newInputArray;
+    }
+    // for non-array inputs
+    else {
+      newState[action.name] = action.value;
+    }
+  } else if (action.status === 'addArrayInput') {
+    newState = { ...state };
+    newState[action.name] = [...newState[action.name], ''];
+  } else if (action.status === 'removeArrayInput') {
+    newState = { ...state };
+    newState[action.name] = newState[action.name].filter((e, i) => i !== action.index);
+  }
+  return newState;
+};
 
+const paramsStructure = {
+  summary: {
+    text: 'longText',
+  },
+  heading: {
+    name: 'shortText',
+    phone: 'number',
+    address: 'longText',
+    email: 'shortText',
+    linkedIn: 'shortText',
+    gitHub: 'shortText',
+  },
+  education: {
+    institution: 'shortText',
+    date: 'date',
+    course: 'shortText',
+    location: 'shortText',
+  },
+  coursework: {
+    itemArray: 'shortTextArray',
+  },
+  experience: {
+    company: 'shortText',
+    role: 'shortText',
+    date: 'date',
+    location: 'shortText',
+    itemArray: 'shortTextArray',
+  },
+  project: {
+    title: 'shortText',
+    skillArray: 'shortTextArray',
+    date: 'date',
+    itemArray: 'shortTextArray',
+  },
+  technical: {
+    languages: 'shortTextArray',
+    tools: 'shortTextArray',
+    technologies: 'shortTextArray',
+  },
+  involvement: {
+    organisation: 'shortText',
+    date: 'date',
+    role: 'shortText',
+    misc: 'shortText',
+    itemArray: 'shortTextArray',
+  },
+};
+
+const CvSectionBuilder = ({ addElementCallback, onClickOutside }) => {
+  const [currentSection, setCurrentSection] = useState('summary');
+  const [currentInputs, dispatch] = useReducer(reducer, {});
+  const [currentSectionJsx, setCurrentSectionJsx] = useState([<React.Fragment key={0} />]);
   const clickRef = useRef();
   useClickOutside(clickRef, 'overlay-blur', onClickOutside);
 
   useEffect(() => {
-    let newSchemaValue = schema[currentSection];
-    if (schema[currentSection].constructor === Array) {
-      newSchemaValue = { ...schema[currentSection][0] };
-    } else if (schema[currentSection].constructor === Object) {
-      newSchemaValue = { ...schema[currentSection] };
+    const inputTypes = {
+      shortText: '',
+      longText: '',
+      shortTextArray: [''],
+      number: 0,
+      date: ['', ''],
+    };
+    const defaultState = {};
+    for (let input in paramsStructure[currentSection]) {
+      defaultState[input] = inputTypes[paramsStructure[currentSection][input]];
     }
-    setCurrentSchema({ [currentSection]: newSchemaValue });
-    setCurrentFieldValues({});
+    dispatch({ status: 'initialLoad', defaultState, section: currentSection });
   }, [currentSection]);
 
   useEffect(() => {
-    if (
-      Object.keys(currentSchema).length !== 0 &&
-      Object.keys(currentFieldValues).length === 0
-    ) {
-      const newFieldValues = getDefaultFieldValues(
-        currentSchema[currentSection]
-      );
-      setCurrentFieldValues({
-        [currentSection]: newFieldValues,
-        section: currentSection,
-        description: '',
-      });
-    }
-  }, [currentSchema]);
-
-  useEffect(() => {
-    if (
-      Object.keys(currentSchema).length !== 0 &&
-      Object.keys(currentFieldValues).length !== 0
-    ) {
-      const newInputJsx = getInputJsx(
-        currentSection,
-        currentSchema[currentSection]
-      );
-      setCurrentSectionJsx(newInputJsx);
-    }
-  }, [currentFieldValues]);
-
-  const inputDefaultValue = {
-    unavailable: null,
-    shortText: '',
-    longText: '',
-    number: 0,
-    date: '',
-  };
-
-  const getInputFieldJsx = ({ inputType, inputName, breadCrumbs }) => {
-    let inputState;
-    if (breadCrumbs) {
-      let currentFieldValuesSub = currentFieldValues
-      for (let i = 0; i < breadCrumbs.length; i++) {
-        if (i === breadCrumbs.length - 1) {
-          inputState = currentFieldValuesSub[breadCrumbs[i]]
-        } else {
-          currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]]
-        }
-      }
-    }
-
-    const inputFieldJsxDictionary = {
-      // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
-      unavailable: () => null,
-      objectLabel: ({ inputName }) => (
-        <React.Fragment key={inputName}>
-          <p>{inputName}</p>
-          <br />
-        </React.Fragment>
-      ),
-      newFieldButton: ({ inputName, breadCrumbs }) => (
-        <React.Fragment key={`add-button-${inputName}`}>
-          <br />
-          <button
-            onClick={(e) => addFieldHandler(e, breadCrumbs)}
-            className='std-button'
-            type='button'>
-            {`Add ${inputName}`}
-          </button>
-        </React.Fragment>
-      ),
-      shortText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
-          <label
-            value={inputName}
-            htmlFor={inputName}
-            className='italic my-2 py-1'>
-            {inputName}
-          </label>
-          <input
-            type='text'
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
-            }
-          />
-        </React.Fragment>
-      ),
-      longText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
-          <label htmlFor={inputName} className='italic my-2 py-1'>
-            {inputName}
-          </label>
-          <textarea
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
-            }></textarea>
-        </React.Fragment>
-      ),
-      number: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
-          <label
-            value={inputName}
-            htmlFor={inputName}
-            className='italic my-2 py-1'>
-            {inputName}
-          </label>
-          <input
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-            type='number'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
-            }
-          />
-        </React.Fragment>
-      ),
-      date: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
-          <label
-            value={inputName}
-            htmlFor={inputName}
-            className='italic my-2 py-1'>
-            {inputName}
-          </label>
-          <div className='mr-6'>
+    const getSectionForm = () => {
+      const inputTypesObject = {
+        shortText: (name, state, key, autofocus) => (
+          <React.Fragment key={key}>
+            <label value={name} htmlFor={name} className='italic my-2 py-1'>
+              {name}
+            </label>
             <input
-              className='border-4 focus:border-purple-700 my-1 mr-2 p-1 px-2 outline-none'
-              type='date'
-              name={inputName}
-              id={inputName}
-              value={inputState}
-              onChange={(e) =>
-                handleInputChange(e, currentFieldValues, breadCrumbs)
-              }
+              autoFocus={autofocus}
+              type='text'
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+              name={name}
+              id={name}
+              value={state}
+              onChange={handleInputChange}
             />
-          </div>
-        </React.Fragment>
-      ),
-    };
-    return inputFieldJsxDictionary[inputType]({
-      inputName,
-      inputState,
-      breadCrumbs,
-    });
-  };
-
-  const getDefaultFieldValues = (schemaValue) => {
-    let returnVal;
-    if (schemaValue.constructor === String) {
-      returnVal = inputDefaultValue[schemaValue];
-    } else if (schemaValue.constructor === Array) {
-      returnVal = schemaValue.map((subSchemaValue) =>
-        getDefaultFieldValues(subSchemaValue)
-      );
-    } else if (schemaValue.constructor === Object) {
-      returnVal = {};
-      Object.entries(schemaValue).forEach(([subSchemaKey, subSchemaValue]) => {
-        returnVal[subSchemaKey] = getDefaultFieldValues(subSchemaValue);
-      });
-    }
-    return returnVal;
-  };
-
-  // gets input jsx given a schema
-  const getInputJsx = (schemaKey, schemaValue) => {
-    const getInputJsxRecursive = (schemaKey, schemaValue, breadCrumbs) => {
-      let returnVal;
-      if (schemaValue.constructor === String) {
-        returnVal = getInputFieldJsx({
-          inputType: schemaValue,
-          inputName: schemaKey,
-          breadCrumbs,
-        });
-      } else if (schemaValue.constructor === Array) {
-        returnVal = [];
-        returnVal.push(
-          getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
-        );
-        returnVal.push(
-          ...schemaValue.map((subSchemaValue, index) =>
-            getInputJsxRecursive(`${schemaKey}-${index}`, subSchemaValue, [
-              ...breadCrumbs,
-              index,
-            ])
+          </React.Fragment>
+        ),
+        longText: (name, state, key, autofocus) => (
+          <React.Fragment key={key}>
+            <label htmlFor={name} className='italic my-2 py-1'>
+              {name}
+            </label>
+            <textarea
+              autoFocus={autofocus}
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+              name={name}
+              id={name}
+              value={state}
+              onChange={handleInputChange}></textarea>
+          </React.Fragment>
+        ),
+        shortTextArray: (name, state, key, autofocus, multiplicity) => {
+          return (
+            <React.Fragment key={key}>
+              <label value={name} htmlFor={name} className='italic my-1 py-1'>
+                <div className='flex items-center'>
+                  {name}
+                  <div
+                    onClick={() => addArrayInput(name)}
+                    className='cursor-pointer px-1 py-2 hover:text-purple-700'>
+                    <PlusCircleFill alt='Add new' className='w-4 h-4' />
+                  </div>
+                </div>
+              </label>
+              <div className=''>
+                {Array(multiplicity)
+                  .fill(0)
+                  .map((e, i) => (
+                    <div key={i} className='flex items-center'>
+                      <input
+                        autoFocus={autofocus}
+                        className='grow border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
+                        type='text'
+                        name={`${name}.${i}`}
+                        id={`${name}.${i}`}
+                        value={state[i]}
+                        onChange={handleInputChange}
+                      />
+                      <div
+                        onClick={() => removeArrayInput(name, i)}
+                        className='cursor-pointer p-2 hover:text-red-500'>
+                        <XCircleFill alt='Remove Input' className='w-4 h-4' />
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </React.Fragment>
+          );
+        },
+        number: (name, state, key, autofocus) => (
+          <React.Fragment key={key}>
+            <label value={name} htmlFor={name} className='italic my-2 py-1'>
+              {name}
+            </label>
+            <input
+              autoFocus={autofocus}
+              className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+              type='number'
+              name={name}
+              id={name}
+              value={state}
+              onChange={handleInputChange}
+            />
+          </React.Fragment>
+        ),
+        date: (name, state, key, autofocus) => (
+          <React.Fragment key={key}>
+            <label value={name} htmlFor={name} className='italic my-2 py-1'>
+              {name}
+            </label>
+            <div className='mr-6'>
+              <input
+                autoFocus={autofocus}
+                className='border-4 focus:border-purple-700 my-1 mr-2 p-1 px-2 outline-none'
+                type='date'
+                name={`${name}.0`}
+                id={`${name}.0`}
+                value={state[0]}
+                onChange={handleInputChange}
+              />
+              <input
+                className='border-4 focus:border-purple-700 my-1 p-1 px-2 outline-none'
+                type='date'
+                name={`${name}.1`}
+                id={`${name}.1`}
+                value={state[1]}
+                onChange={handleInputChange}
+              />
+            </div>
+          </React.Fragment>
+        ),
+      };
+      const inputs = paramsStructure[currentInputs.section];
+      const inputsJsxArray = [];
+      let isFirstInput = true;
+      for (let inputName in inputs) {
+        inputsJsxArray.push(
+          inputTypesObject[inputs[inputName]](
+            inputName,
+            currentInputs[inputName],
+            inputName,
+            isFirstInput,
+            currentInputs[inputName].length
           )
         );
-        returnVal.push(
-          getInputFieldJsx({
-            inputType: 'newFieldButton',
-            inputName: schemaKey,
-            breadCrumbs,
-          })
-        );
-      } else if (schemaValue.constructor === Object) {
-        returnVal = [];
-        returnVal.push(
-          getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
-        );
-        returnVal.push(
-          ...Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
-            getInputJsxRecursive(subSchemaKey, subSchemaValue, [
-              ...breadCrumbs,
-              subSchemaKey,
-            ])
-          )
-        );
+        isFirstInput = false;
       }
-      return returnVal;
+      return inputsJsxArray;
     };
-    const newSchemaValue = getInputJsxRecursive(schemaKey, schemaValue, [
-      schemaKey,
-    ]);
-    return { [schemaKey]: newSchemaValue };
+    setCurrentSectionJsx(getSectionForm());
+  }, [currentInputs]);
+
+  const addArrayInput = (name) => {
+    dispatch({ status: 'addArrayInput', name });
   };
 
-  const getDefaultArraySchema = (schema, breadCrumbs) => {
-    if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
-    let schemaSub = schema
-    for (let i = 0; i < breadCrumbs.length; i++) {
-      if (i === breadCrumbs.length - 1) {
-        return schemaSub[breadCrumbs[i]][0]
-      } else {
-        schemaSub = schemaSub[breadCrumbs[i]]
-      }
-    }
-
-  };
-
-  // adds or deletes input fields for array inputs
-  // if deleteIndex is null, add of not delete
-  const modifyInputFields = (
-    schema,
-    fieldValues,
-    breadCrumbs,
-    deleteIndex = null
-  ) => {
-    if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
-    let newSchema = { ...schema }
-    let newFieldValues = { ...fieldValues }
-    let schemaSub = schema
-    let fieldValuesSub = fieldValues
-    for (let i = 0; i < breadCrumbs.length; i++) {
-      if (i === breadCrumbs.length - 1) {
-        if (deleteIndex) {
-          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
-          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
-        } else {
-          schemaSub[breadCrumbs[i]] = [...schemaSub[breadCrumbs[i]], getDefaultArraySchema(currentSchema, breadCrumbs),];
-          fieldValuesSub[breadCrumbs[i]] = [...fieldValuesSub[breadCrumbs[i]], getDefaultFieldValues(getDefaultArraySchema(currentSchema, breadCrumbs)),];
-        }
-      } else {
-        schemaSub = schemaSub[breadCrumbs[i]]
-        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
-      }
-    }
-
-    setCurrentSchema(newSchema);
-    setCurrentFieldValues(newFieldValues);
-  };
-
-  const addFieldHandler = (e, breadCrumbs) => {
-    modifyInputFields(currentSchema, currentFieldValues, breadCrumbs);
+  const removeArrayInput = (name, index) => {
+    dispatch({ status: 'removeArrayInput', name, index });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addSectionCallback(currentFieldValues, currentDescription);
+    addElementCallback(currentInputs);
   };
 
-  const handleInputChange = (e, fieldValues, breadCrumbs) => {
-    if (breadCrumbs.length > 4 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
-    let newFieldValues = { ...fieldValues }
-    let fieldValuesSub = newFieldValues
-    for (let i = 0; i < breadCrumbs.length; i++) {
-      if (i === breadCrumbs.length - 1) {
-        fieldValuesSub[breadCrumbs[i]] = e.target.value
-      } else {
-        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
-      }
-    }
-
-    setCurrentFieldValues(newFieldValues);
+  const handleInputChange = (e) => {
+    dispatch({ status: 'inputChange', name: e.target.name, value: e.target.value });
   };
 
   return (
     <div className='flex fixed h-screen w-screen items-center justify-center top-0 left-0 backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed h-screen w-screen z-10'></div>
-      <div
-        ref={clickRef}
-        className='m-8 w-full flex items-center justify-center'>
-        <div className='bg-white p-4 grow max-w-3xl z-20'>
+      <div id='overlay-blur' className='fixed h-screen w-screen'></div>
+      <div ref={clickRef} className='z-10 m-8 w-full flex items-center justify-center'>
+        <div className='bg-white p-4 grow max-w-3xl'>
           <h1 id='cv-section-builder' className='font-bold text-xl'>
             {currentSection} section builder
           </h1>
           <ul className='flex flex-wrap gap-2 mb-2'>
-            {Object.entries(schema).map(([k], i) => (
+            {Object.entries(paramsStructure).map(([k], i) => (
               <li
                 key={i}
                 onClick={() => setCurrentSection(k)}
@@ -351,28 +268,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               </li>
             ))}
           </ul>
-          <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
-            {currentSectionJsx[currentSection] && (
-              <>
-                <label htmlFor='description' className='bold my-2 py-1'>
-                  Description
-                </label>
-                <input
-                  className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-                  type='text'
-                  name='description'
-                  value={currentDescription}
-                  onChange={(e) => setCurrentDescription(e.target.value)}
-                />
-              </>
-            )}
-            {currentSectionJsx[currentSection]}
+          <form className='grid grid-cols-2 gap-4 relative'>
+            {currentSectionJsx}
             <br />
-            <input
-              type='submit'
-              onClick={handleSubmit}
-              className='block my-2 ml-auto std-button'
-            />
+            <input type='submit' onClick={handleSubmit} className='block my-2 ml-auto std-button' />
           </form>
         </div>
       </div>

@@ -7,9 +7,7 @@ import {
 } from '../../util/CRUD';
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
-import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill } from 'react-bootstrap-icons';
-import schema from '../../constants/template2_schema';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
@@ -19,16 +17,13 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [noElementsAdded, setNoElementsAdded] = useState(0);
   const [noElementsClicked, setNoElementsClicked] = useState(0);
   const [showCvBuilder, toggleCvBuilder] = useState(false);
-  const [currentSection, setCurrentSection] = useState('basics');
 
   // Handles clicks to elements in either used or unused components
   const elementClickHandler = (code, selElem) => {
     // When unused element is clicked
     if (code === 0) {
       // If element is not already used
-      if (
-        !elements.filter((elem) => elem.id === selElem.id)[0].application_id
-      ) {
+      if (!elements.filter((elem) => elem.id === selElem.id)[0].application_id) {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
           [id, selElem.id],
@@ -138,65 +133,27 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
      ],
    };*/
 
-  const generatePdfParams = (schemaLocal, elementsLocal) => {
-    const resumeObject = {};
-
-    elementsLocal
-      .filter((e) => e.application_id)
-      .forEach(({ cv_component_section, cv_component_text }) => {
-        if (schemaLocal[cv_component_section].constructor === Array) {
-          if (resumeObject[cv_component_section]) {
-            resumeObject[cv_component_section].push(
-              JSON.parse(cv_component_text)
-            );
-          } else {
-            resumeObject[cv_component_section] = [
-              JSON.parse(cv_component_text),
-            ];
-          }
-        } else if (schemaLocal[cv_component_section].constructor === Object) {
-          resumeObject[cv_component_section] = JSON.parse(cv_component_text);
-        }
-      });
-
+  const generatePdfParams = () => {
     return {
       id: id,
       name: String(id),
-      resumeObject,
+      paramsArray: elements.filter((e) => e.application_id).map((f) => {
+        return { ...JSON.parse(f.cv_component_text) }
+      }),
     };
   };
 
-  const addCVSectionBuilderHandler = (sectionObj, sectionDesc) => {
+  const cvSectionBuilderHandler = (sectionObj) => {
     createDatabaseEntry(
-      'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created) VALUES (?,?,?,?)',
-      [
-        sectionObj.section,
-        JSON.stringify(sectionObj[sectionObj.section], null, 2),
-        sectionDesc,
-        new Date().toISOString(),
-      ],
-      () => {}
+      'INSERT INTO cv_components (cv_section, cv_component_text, date_created) VALUES (?,?,?)',
+      [sectionObj.section, JSON.stringify(sectionObj), new Date().toISOString()],
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
   };
 
-  const editCVSectionBuilderHandler = (sectionObj, sectionDesc, id) => {
-    updateDatabaseEntry(
-      'UPDATE cv_components SET cv_component_text=?, cv_component_description=?, date_modified=? WHERE id=?',
-      [
-        JSON.stringify(sectionObj[sectionObj.section], null, 2),
-        sectionDesc,
-        new Date().toISOString(),
-        id,
-      ],
-      () => {}
-    );
-    setNoElementsAdded(noElementsAdded + 1);
-    toggleCvBuilder(false);
-  };
-
-  // TODO add loading animation when pdf is generating
+  // Todo add loading animation when pdf is generating
   const generatePdf = () => {
     if (elements.filter((e) => e.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
@@ -209,7 +166,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
     // Generate pdf in the background
     window.electron
-      .getPdf('get-pdf', generatePdfParams(schema, elements))
+      .getPdf('get-pdf', generatePdfParams())
       .then((result) => {
         updateDatabaseEntry(
           'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
@@ -231,7 +188,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   useEffect(() => {
     readDatabaseEntry(
-      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_component_section, cv_components.cv_component_text, cv_components.cv_component_description, cv_component_in_application.application_id
+      `SELECT cv_components.id, cv_components.date_created, cv_components.cv_section, cv_components.cv_component_text, cv_component_in_application.application_id
       FROM cv_components 
       LEFT JOIN cv_component_in_application 
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
@@ -244,10 +201,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     <div className='mx-2 break-all'>
       <h1 id='cv-contructor' className='font-bold text-xl'>
         CV constructor{' '}
-        <button
-          className='has-tooltip inline px-1'
-          onClick={() => toggleCvBuilder(!showCvBuilder)}
-          type='button'>
+        <button className='has-tooltip inline px-1' onClick={() => toggleCvBuilder(!showCvBuilder)}>
           <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8 font-normal text-base'>
             Add new CV section
           </span>
@@ -258,50 +212,24 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           />
         </button>
       </h1>
-      <ul className='flex flex-wrap gap-2 mb-2'>
-        {Object.keys(schema).map((key) => (
-          <li
-            key={key}
-            onClick={() => setCurrentSection(key)}
-            className='underline hover:underline-offset-4 hover:cursor-pointer'>
-            {key}
-          </li>
-        ))}
-      </ul>
       <h2>Used Components</h2>
       <table className='w-full' style={{ transition: 'height 2s' }}>
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
-            <th className='px-1 w-full'>Text</th>
+            <th className='pr-2 w-3/12'>Section</th>
+            <th className='pl-2 w-9/12'>Title</th>
           </tr>
         </thead>
         <tbody>
           {elements
-            .filter(
-              (e) =>
-                e.application_id && e.cv_component_section === currentSection
-            )
+            .filter((e) => e.application_id)
             .map((elem) => (
               <tr
                 key={elem.id}
+                onClick={() => elementClickHandler(1, elem)}
                 className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
-                <td className='w-full'>
-                  Description: {elem?.cv_component_description}{' '}
-                  <button
-                    className='std-button'
-                    onClick={() => elementClickHandler(1, elem)}>
-                    Remove
-                  </button>
-                  <CvSectionBuilderEdit
-                    editSectionCallback={editCVSectionBuilderHandler}
-                    id={elem.id}
-                    currentSection={currentSection}
-                    currentDescriptionDatabase={elem.cv_component_description}
-                    currentFieldValuesDatabase={JSON.parse(
-                      elem.cv_component_text
-                    )}
-                  />
-                </td>
+                <td className='pr-2 w-3/12'>{elem.cv_section}</td>
+                <td className='pl-2 w-9/12'>{elem?.cv_component_text}</td>
               </tr>
             ))}
         </tbody>
@@ -312,38 +240,28 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
             <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-6/12'>Text</th>
-            <th className='pl-2 w-3/12'>Desc</th>
+            <th className='pl-2 w-9/12'>Title</th>
           </tr>
         </thead>
         <tbody>
-          {elements
-            .filter((e) => e.cv_component_section === currentSection)
-            .map((e) => (
-              <tr
-                key={e.id}
-                onClick={() => elementClickHandler(0, e)}
-                className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                  e.application_id
-                    ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
-                    : null
+          {elements.map((e) => (
+            <tr
+              key={e.id}
+              onClick={() => elementClickHandler(0, e)}
+              className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${e.application_id ? 'bg-purple-700 hover:bg-purple-600 text-slate-100' : null
                 }`}>
-                <td className='px-2 w-3/12'>{e.cv_component_section}</td>
-                <td className='px-2 w-6/12'>{e?.cv_component_text}</td>
-                <td className='px-2 w-3/12'>{e?.cv_component_description}</td>
-              </tr>
-            ))}
+              <td className='pr-2 w-3/12'>{e.cv_section}</td>
+              <td className='pl-2 w-9/12'>{e?.cv_component_text}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <button
-        onClick={generatePdf}
-        className='block my-2 ml-auto std-button'
-        type='button'>
+      <button onClick={generatePdf} className='block my-2 ml-auto std-button'>
         Generate CV PDF
       </button>
       {showCvBuilder ? (
         <CvSectionBuilder
-          addSectionCallback={addCVSectionBuilderHandler}
+          addElementCallback={cvSectionBuilderHandler}
           onClickOutside={() => toggleCvBuilder(!showCvBuilder)}
         />
       ) : null}
