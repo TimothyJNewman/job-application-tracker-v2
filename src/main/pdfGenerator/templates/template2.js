@@ -206,8 +206,8 @@ const getLatex = (resumeObject) => {
 
     let output = String.raw``;
     output += experienceHeader;
-    work.forEach((e) => {
-      output += getWorkExperience(e);
+    work.forEach((elem) => {
+      output += getWorkExperience(elem);
     });
     output += experienceFooter;
     return output;
@@ -245,8 +245,8 @@ const getLatex = (resumeObject) => {
   `;
     let output = String.raw``;
     output += involvementHeader;
-    volunteer.forEach((e) => {
-      output += getInvolvement(e);
+    volunteer.forEach((elem) => {
+      output += getInvolvement(elem);
     });
     output += involvementFooter;
     return output;
@@ -294,9 +294,9 @@ const getLatex = (resumeObject) => {
   //     `;
   //     let output = String.raw``;
   //     output += courseworkHeader;
-  //     courseworkArray[0].itemArray.forEach((e) => {
+  //     courseworkArray[0].itemArray.forEach((elem) => {
   //       output += String.raw`
-  // \item ${e} `;
+  // \item ${elem} `;
   //    });
   //     output += courseworkFooter;
   //     return output;
@@ -353,8 +353,8 @@ const getLatex = (resumeObject) => {
 `;
     let output = String.raw``;
     output += projectHeader;
-    projects.forEach((e) => {
-      output += getProject(e);
+    projects.forEach((elem) => {
+      output += getProject(elem);
     });
     output += projectFooter;
     return output;

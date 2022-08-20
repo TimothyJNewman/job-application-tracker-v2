@@ -93,7 +93,7 @@ const CvSectionBuilderEdit = ({
         <React.Fragment key={`add-button-${inputName}`}>
           <br />
           <button
-            onClick={(e) => addFieldHandler(e, breadCrumbs)}
+            onClick={(event) => addFieldHandler(event, breadCrumbs)}
             className='std-button'
             type='button'>
             {`Add ${inputName}`}
@@ -114,8 +114,8 @@ const CvSectionBuilderEdit = ({
             name={inputName}
             id={inputName}
             value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
         </React.Fragment>
@@ -130,8 +130,8 @@ const CvSectionBuilderEdit = ({
             name={inputName}
             id={inputName}
             value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
             }></textarea>
         </React.Fragment>
       ),
@@ -149,8 +149,8 @@ const CvSectionBuilderEdit = ({
             name={inputName}
             id={inputName}
             value={inputState}
-            onChange={(e) =>
-              handleInputChange(e, currentFieldValues, breadCrumbs)
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
         </React.Fragment>
@@ -170,8 +170,8 @@ const CvSectionBuilderEdit = ({
               name={inputName}
               id={inputName}
               value={inputState}
-              onChange={(e) =>
-                handleInputChange(e, currentFieldValues, breadCrumbs)
+              onChange={(event) =>
+                handleInputChange(event, currentFieldValues, breadCrumbs)
               }
             />
           </div>
@@ -303,8 +303,8 @@ const CvSectionBuilderEdit = ({
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
         if (deleteIndex) {
-          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
-          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
+          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter((elem, i) => i !== deleteIndex);
+          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[breadCrumbs[i]].filter((elem, i) => i !== deleteIndex);
         } else {
           schemaSub[breadCrumbs[i]] = [...schemaSub[breadCrumbs[i]], getDefaultArraySchema(currentSchema, breadCrumbs),];
           fieldValuesSub[breadCrumbs[i]] = [...fieldValuesSub[breadCrumbs[i]], getDefaultFieldValues(getDefaultArraySchema(currentSchema, breadCrumbs)),];
@@ -319,16 +319,16 @@ const CvSectionBuilderEdit = ({
     setCurrentFieldValues(newFieldValues);
   };
 
-  const addFieldHandler = (e, breadCrumbs) => {
+  const addFieldHandler = (event, breadCrumbs) => {
     modifyInputFields(currentSchema, currentFieldValues, breadCrumbs);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
-  const handleInputChange = (e, fieldValues, breadCrumbs) => {
+  const handleInputChange = (event, fieldValues, breadCrumbs) => {
     if (breadCrumbs.length > 4 || breadCrumbs.length <= 0) {
       throw new Error(
         'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
@@ -339,7 +339,7 @@ const CvSectionBuilderEdit = ({
     let fieldValuesSub = newFieldValues
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
-        fieldValuesSub[breadCrumbs[i]] = e.target.value
+        fieldValuesSub[breadCrumbs[i]] = event.target.value
       } else {
         fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
       }
@@ -365,7 +365,7 @@ const CvSectionBuilderEdit = ({
                 type='text'
                 name='description'
                 value={currentDescription}
-                onChange={(e) => setCurrentDescription(e.target.value)}
+                onChange={(event) => setCurrentDescription(event.target.value)}
               />
             </>
           )}

@@ -142,7 +142,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     const resumeObject = {};
 
     elementsLocal
-      .filter((e) => e.application_id)
+      .filter((elem) => elem.application_id)
       .forEach(({ cv_component_section, cv_component_text }) => {
         if (schemaLocal[cv_component_section].constructor === Array) {
           if (resumeObject[cv_component_section]) {
@@ -198,7 +198,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   // TODO add loading animation when pdf is generating
   const generatePdf = () => {
-    if (elements.filter((e) => e.application_id).length === 0) {
+    if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
       setNotification({
         severity: 'high',
@@ -214,7 +214,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         updateDatabaseEntry(
           'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
           [result, id],
-          (e) => {
+          () => {
             setPdfUrl({ isReady: true, url: result });
           }
         );
@@ -278,8 +278,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <tbody>
           {elements
             .filter(
-              (e) =>
-                e.application_id && e.cv_component_section === currentSection
+              (elem) =>
+                elem.application_id && elem.cv_component_section === currentSection
             )
             .map((elem) => (
               <tr
@@ -312,25 +312,23 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
             <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-6/12'>Text</th>
             <th className='pl-2 w-3/12'>Desc</th>
           </tr>
         </thead>
         <tbody>
           {elements
-            .filter((e) => e.cv_component_section === currentSection)
-            .map((e) => (
+            .filter((elem) => elem.cv_component_section === currentSection)
+            .map((elem) => (
               <tr
-                key={e.id}
-                onClick={() => elementClickHandler(0, e)}
+                key={elem.id}
+                onClick={() => elementClickHandler(0, elem)}
                 className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                  e.application_id
+                  elem.application_id
                     ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
                     : null
                 }`}>
-                <td className='px-2 w-3/12'>{e.cv_component_section}</td>
-                <td className='px-2 w-6/12'>{e?.cv_component_text}</td>
-                <td className='px-2 w-3/12'>{e?.cv_component_description}</td>
+                <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
+                <td className='px-2 w-3/12'>{elem.cv_component_description}</td>
               </tr>
             ))}
         </tbody>

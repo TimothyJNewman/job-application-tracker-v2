@@ -215,8 +215,8 @@ const ApplicationSummaryPage = () => {
       </table>
       <button
         type='button'
-        onClick={(e) => {
-          e.preventDefault();
+        onClick={(event) => {
+          event.preventDefault();
           toggleForm(!showForm);
         }}
         className='block my-2 ml-auto std-button'>

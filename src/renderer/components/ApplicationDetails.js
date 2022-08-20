@@ -4,7 +4,7 @@ import { readDatabaseEntry } from '../util/CRUD';
 
 const ApplicationDetails = ({ id, setPdfUrl }) => {
   const { appsData } = useContext(GlobalContext);
-  const AppsDetails = appsData.filter((e) => e.id === id)[0];
+  const AppsDetails = appsData.filter((elem) => elem.id === id)[0];
 
   useEffect(() => {
     if (AppsDetails.is_cv_ready) {

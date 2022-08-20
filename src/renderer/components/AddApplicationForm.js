@@ -12,8 +12,8 @@ export default function AddApplicationForm(props) {
   return (
     <form
       className={`form ${props.className}`}
-      onSubmit={(e) => {
-        e.preventDefault();
+      onSubmit={(event) => {
+        event.preventDefault();
         props.handleSubmitCallback(appInput);
         setAppInput(defaultState);
       }}>
@@ -21,8 +21,8 @@ export default function AddApplicationForm(props) {
       <br />
       <input
         value={appInput.company}
-        onChange={(e) => {
-          setAppInput((arr) => ({ ...arr, company: e.target.value }));
+        onChange={(event) => {
+          setAppInput((arr) => ({ ...arr, company: event.target.value }));
         }}
         type='text'
         name='company'
@@ -33,8 +33,8 @@ export default function AddApplicationForm(props) {
       <br />
       <input
         value={appInput.role}
-        onChange={(e) => {
-          setAppInput((arr) => ({ ...arr, role: e.target.value }));
+        onChange={(event) => {
+          setAppInput((arr) => ({ ...arr, role: event.target.value }));
         }}
         type='text'
         name='role'
@@ -44,8 +44,8 @@ export default function AddApplicationForm(props) {
       <br />
       <input
         value={appInput.job_description}
-        onChange={(e) => {
-          setAppInput((arr) => ({ ...arr, job_description: e.target.value }));
+        onChange={(event) => {
+          setAppInput((arr) => ({ ...arr, job_description: event.target.value }));
         }}
         type='text'
         name='job_description'
@@ -55,8 +55,8 @@ export default function AddApplicationForm(props) {
       <br />
       <select
         value={appInput.status}
-        onChange={(e) => {
-          setAppInput((arr) => ({ ...arr, status: e.target.value }));
+        onChange={(event) => {
+          setAppInput((arr) => ({ ...arr, status: event.target.value }));
         }}
         name='status'>
         <option value='To Apply'>To Apply</option>
