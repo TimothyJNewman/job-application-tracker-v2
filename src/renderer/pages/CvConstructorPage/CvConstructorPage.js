@@ -7,7 +7,7 @@ import {
 } from '../../util/CRUD';
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
-import CvSectionBuilderV2 from './CvSectionBuilderV2';
+import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
 
@@ -292,7 +292,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                     onClick={() => elementClickHandler(1, elem)}>
                     Remove
                   </button>
-                  <CvSectionBuilderV2
+                  <CvSectionBuilderEdit
                     editSectionCallback={editCVSectionBuilderHandler}
                     id={elem.id}
                     currentSection={currentSection}

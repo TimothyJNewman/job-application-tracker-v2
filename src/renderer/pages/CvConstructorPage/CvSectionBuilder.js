@@ -61,27 +61,18 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   const getInputFieldJsx = ({ inputType, inputName, breadCrumbs }) => {
-    let state;
+    let inputState;
     if (breadCrumbs) {
-      switch (breadCrumbs.length) {
-        case 1:
-          state = currentFieldValues[breadCrumbs[0]];
-          break;
-        case 2:
-          state = currentFieldValues[breadCrumbs[0]][breadCrumbs[1]];
-          break;
-        case 3:
-          state =
-            currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]];
-          break;
-        case 4:
-          state =
-            currentFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][
-              breadCrumbs[3]
-            ];
-          break;
+      let currentFieldValuesSub = currentFieldValues
+      for (let i = 0; i < breadCrumbs.length; i++) {
+        if (i === breadCrumbs.length - 1) {
+          inputState = currentFieldValuesSub[breadCrumbs[i]]
+        } else {
+          currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]]
+        }
       }
     }
+
     const inputFieldJsxDictionary = {
       // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
       unavailable: () => null,
@@ -102,7 +93,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           </button>
         </React.Fragment>
       ),
-      shortText: ({ inputName, state, breadCrumbs }) => (
+      shortText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
             value={inputName}
@@ -115,14 +106,14 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
             name={inputName}
             id={inputName}
-            value={state}
+            value={inputState}
             onChange={(e) =>
               handleInputChange(e, currentFieldValues, breadCrumbs)
             }
           />
         </React.Fragment>
       ),
-      longText: ({ inputName, state, breadCrumbs }) => (
+      longText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label htmlFor={inputName} className='italic my-2 py-1'>
             {inputName}
@@ -131,13 +122,13 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
             name={inputName}
             id={inputName}
-            value={state}
+            value={inputState}
             onChange={(e) =>
               handleInputChange(e, currentFieldValues, breadCrumbs)
             }></textarea>
         </React.Fragment>
       ),
-      number: ({ inputName, state, breadCrumbs }) => (
+      number: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
             value={inputName}
@@ -150,14 +141,14 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             type='number'
             name={inputName}
             id={inputName}
-            value={state}
+            value={inputState}
             onChange={(e) =>
               handleInputChange(e, currentFieldValues, breadCrumbs)
             }
           />
         </React.Fragment>
       ),
-      date: ({ inputName, state, breadCrumbs }) => (
+      date: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
             value={inputName}
@@ -171,7 +162,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               type='date'
               name={inputName}
               id={inputName}
-              value={state}
+              value={inputState}
               onChange={(e) =>
                 handleInputChange(e, currentFieldValues, breadCrumbs)
               }
@@ -182,7 +173,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     };
     return inputFieldJsxDictionary[inputType]({
       inputName,
-      state,
+      inputState,
       breadCrumbs,
     });
   };
@@ -262,14 +253,16 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
       );
     }
-    switch (breadCrumbs.length) {
-      case 1:
-        return schema[breadCrumbs[0]][0];
-      case 2:
-        return schema[breadCrumbs[0]][breadCrumbs[1]][0];
-      case 3:
-        return schema[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][0];
+
+    let schemaSub = schema
+    for (let i = 0; i < breadCrumbs.length; i++) {
+      if (i === breadCrumbs.length - 1) {
+        return schemaSub[breadCrumbs[i]][0]
+      } else {
+        schemaSub = schemaSub[breadCrumbs[i]]
+      }
     }
+
   };
 
   // adds or deletes input fields for array inputs
@@ -285,74 +278,26 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
       );
     }
-    let newSchema = { ...schema };
-    let newFieldValues = { ...fieldValues };
-    switch (breadCrumbs.length) {
-      case 1:
+
+    let newSchema = { ...schema }
+    let newFieldValues = { ...fieldValues }
+    let schemaSub = schema
+    let fieldValuesSub = fieldValues
+    for (let i = 0; i < breadCrumbs.length; i++) {
+      if (i === breadCrumbs.length - 1) {
         if (deleteIndex) {
-          newSchema[breadCrumbs[0]] = newSchema[breadCrumbs[0]].filter(
-            (e, i) => i !== deleteIndex
-          );
-          newFieldValues[breadCrumbs[0]] = newFieldValues[
-            breadCrumbs[0]
-          ].filter((e, i) => i !== deleteIndex);
+          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
+          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[breadCrumbs[i]].filter((e, i) => i !== deleteIndex);
         } else {
-          newSchema[breadCrumbs[0]] = [
-            ...newSchema[breadCrumbs[0]],
-            getDefaultArraySchema(currentSchema, breadCrumbs),
-          ];
-          newFieldValues[breadCrumbs[0]] = [
-            ...newFieldValues[breadCrumbs[0]],
-            getDefaultFieldValues(
-              getDefaultArraySchema(currentSchema, breadCrumbs)
-            ),
-          ];
+          schemaSub[breadCrumbs[i]] = [...schemaSub[breadCrumbs[i]], getDefaultArraySchema(currentSchema, breadCrumbs),];
+          fieldValuesSub[breadCrumbs[i]] = [...fieldValuesSub[breadCrumbs[i]], getDefaultFieldValues(getDefaultArraySchema(currentSchema, breadCrumbs)),];
         }
-        break;
-      case 2:
-        if (deleteIndex) {
-          newSchema[breadCrumbs[0]][breadCrumbs[1]] = newSchema[breadCrumbs[0]][
-            breadCrumbs[1]
-          ].filter((e, i) => i !== deleteIndex);
-          newFieldValues[breadCrumbs[0]][breadCrumbs[1]] = newFieldValues[
-            breadCrumbs[0]
-          ][breadCrumbs[1]].filter((e, i) => i !== deleteIndex);
-        } else {
-          newSchema[breadCrumbs[0]][breadCrumbs[1]] = [
-            ...newSchema[breadCrumbs[0]][breadCrumbs[1]],
-            getDefaultArraySchema(currentSchema, breadCrumbs),
-          ];
-          newFieldValues[breadCrumbs[0]][breadCrumbs[1]] = [
-            ...newFieldValues[breadCrumbs[0]][breadCrumbs[1]],
-            getDefaultFieldValues(
-              getDefaultArraySchema(currentSchema, breadCrumbs)
-            ),
-          ];
-        }
-        break;
-      case 3:
-        if (deleteIndex) {
-          newSchema[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]] = newSchema[
-            breadCrumbs[0]
-          ][breadCrumbs[1]][breadCrumbs[2]].filter((e, i) => i !== deleteIndex);
-          newFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]] =
-            newFieldValues[breadCrumbs[0]][breadCrumbs[1]][
-              breadCrumbs[2]
-            ].filter((e, i) => i !== deleteIndex);
-        } else {
-          newSchema[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]] = [
-            ...newSchema[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]],
-            getDefaultArraySchema(currentSchema, breadCrumbs),
-          ];
-          newFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]] = [
-            ...newFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]],
-            getDefaultFieldValues(
-              getDefaultArraySchema(currentSchema, breadCrumbs)
-            ),
-          ];
-        }
-        break;
+      } else {
+        schemaSub = schemaSub[breadCrumbs[i]]
+        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
+      }
     }
+
     setCurrentSchema(newSchema);
     setCurrentFieldValues(newFieldValues);
   };
@@ -372,24 +317,17 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
       );
     }
-    let newFieldValues = { ...fieldValues };
-    switch (breadCrumbs.length) {
-      case 1:
-        newFieldValues[breadCrumbs[0]] = e.target.value;
-        break;
-      case 2:
-        newFieldValues[breadCrumbs[0]][breadCrumbs[1]] = e.target.value;
-        break;
-      case 3:
-        newFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]] =
-          e.target.value;
-        break;
-      case 4:
-        newFieldValues[breadCrumbs[0]][breadCrumbs[1]][breadCrumbs[2]][
-          breadCrumbs[3]
-        ] = e.target.value;
-        break;
+
+    let newFieldValues = { ...fieldValues }
+    let fieldValuesSub = newFieldValues
+    for (let i = 0; i < breadCrumbs.length; i++) {
+      if (i === breadCrumbs.length - 1) {
+        fieldValuesSub[breadCrumbs[i]] = e.target.value
+      } else {
+        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
+      }
     }
+
     setCurrentFieldValues(newFieldValues);
   };
 
