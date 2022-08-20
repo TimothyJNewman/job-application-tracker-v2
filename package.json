@@ -102,6 +102,7 @@
     "pdf-to-base64": "^1.0.3",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
+    "react-ace": "^10.1.0",
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

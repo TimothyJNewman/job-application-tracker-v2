@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-json";
 import {
   createDatabaseEntry,
   readDatabaseEntry,
@@ -8,7 +10,7 @@ import {
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
 import CvSectionBuilderEdit from './CvSectionBuilderEdit';
-import { PlusCircleFill } from 'react-bootstrap-icons';
+import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
@@ -20,9 +22,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [noElementsClicked, setNoElementsClicked] = useState(0);
   const [showCvBuilder, toggleCvBuilder] = useState(false);
   const [currentSection, setCurrentSection] = useState('basics');
+  const [openJsonViewerArr, setOpenJsonViewerArr] = useState([]);
 
   // Handles clicks to elements in either used or unused components
-  const elementClickHandler = (code, selElem) => {
+  const elementAddClickHandler = (code, selElem) => {
     // When unused element is clicked
     if (code === 0) {
       // If element is not already used
@@ -59,6 +62,14 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       );
     }
   };
+
+  const elementClickHandler = (id) => {
+    if (openJsonViewerArr.includes(id)) {
+      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== id))
+    } else {
+      setOpenJsonViewerArr([openJsonViewerArr, id])
+    }
+  }
 
   /* const generatePdfParams = {
      id: id,
@@ -175,7 +186,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -190,7 +201,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -269,67 +280,67 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         ))}
       </ul>
       <h2>Used Components</h2>
-      <table className='w-full' style={{ transition: 'height 2s' }}>
-        <thead>
-          <tr className='border-y border-slate-500 divide-x divide-slate-200'>
-            <th className='px-1 w-full'>Text</th>
-          </tr>
-        </thead>
-        <tbody>
-          {elements
-            .filter(
-              (elem) =>
-                elem.application_id && elem.cv_component_section === currentSection
-            )
-            .map((elem) => (
-              <tr
-                key={elem.id}
-                className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
-                <td className='w-full'>
-                  Description: {elem?.cv_component_description}{' '}
-                  <button
-                    className='std-button'
-                    onClick={() => elementClickHandler(1, elem)}>
-                    Remove
-                  </button>
-                  <CvSectionBuilderEdit
-                    editSectionCallback={editCVSectionBuilderHandler}
-                    id={elem.id}
-                    currentSection={currentSection}
-                    currentDescriptionDatabase={elem.cv_component_description}
-                    currentFieldValuesDatabase={JSON.parse(
-                      elem.cv_component_text
-                    )}
-                  />
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {elements
+        .filter(
+          (elem) =>
+            elem.application_id && elem.cv_component_section === currentSection
+        )
+        .map((elem) => (
+          <div
+            key={elem.id}
+            className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
+            <div className='w-full'>
+              Description: {elem?.cv_component_description}{' '}
+              <button
+                className='std-button'
+                onClick={() => elementAddClickHandler(1, elem)}>
+                Remove
+              </button>
+              <CvSectionBuilderEdit
+                editSectionCallback={editCVSectionBuilderHandler}
+                id={elem.id}
+                currentSection={currentSection}
+                currentDescriptionDatabase={elem.cv_component_description}
+                currentFieldValuesDatabase={JSON.parse(
+                  elem.cv_component_text
+                )}
+              />
+            </div>
+          </div>
+        ))}
       <br />
       <h2>Unused Components</h2>
       <table className='w-full'>
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
-            <th className='pr-2 w-3/12'>Section</th>
-            <th className='pl-2 w-3/12'>Desc</th>
+            <th className='px-2 w-3/12'>Section</th>
+            <th className='px-2 w-8/12'>Desc</th>
+            <th className='w-1/12'>Toggle</th>
           </tr>
         </thead>
         <tbody>
           {elements
             .filter((elem) => elem.cv_component_section === currentSection)
             .map((elem) => (
-              <tr
-                key={elem.id}
-                onClick={() => elementClickHandler(0, elem)}
-                className={`w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100 ${
-                  elem.application_id
-                    ? 'bg-purple-700 hover:bg-purple-600 text-slate-100'
-                    : null
-                }`}>
-                <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
-                <td className='px-2 w-3/12'>{elem.cv_component_description}</td>
-              </tr>
+              <React.Fragment key={elem.id}>
+                <tr
+                  onClick={() => elementClickHandler(elem.id)}
+                  className="w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100">
+                  <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
+                  <td className='px-2 w-8/12'>{elem.cv_component_description}</td>
+                  <td className='px-2 w-1/12'><button onClick={() => elementToggleClickHandler(0, elem)} className="w-full flex justify-center items-center">{elem.application_id ? <XCircleFill className='text-red-600' /> : <PlusCircleFill className='text-green-600' />}</button></td>
+                </tr>
+                {openJsonViewerArr.includes(elem.id) && <tr>
+                  <td colSpan={"100%"}>
+                    <AceEditor
+                      mode="json"
+                      value={elem.cv_component_text}
+                      readOnly={true}
+                    />,
+                    {elem.cv_component_text}
+                  </td>
+                </tr>}
+              </React.Fragment>
             ))}
         </tbody>
       </table>
