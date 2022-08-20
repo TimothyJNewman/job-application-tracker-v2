@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
-import useClickOutside from '../../util/useClickOutside';
+import React, { useEffect, useState } from 'react';
 import schema from '../../constants/template2_schema';
 
-const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
-  const [currentSection, setCurrentSection] = useState('basics');
+const CvSectionBuilderEdit = ({
+  editSectionCallback,
+  id,
+  currentSection,
+  currentFieldValuesDatabase,
+  currentDescriptionDatabase,
+}) => {
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentDescription, setCurrentDescription] = useState('');
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
-
-  const clickRef = useRef();
-  useClickOutside(clickRef, 'overlay-blur', onClickOutside);
 
   useEffect(() => {
     let newSchemaValue = schema[currentSection];
@@ -28,14 +29,15 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       Object.keys(currentSchema).length !== 0 &&
       Object.keys(currentFieldValues).length === 0
     ) {
-      const newFieldValues = getDefaultFieldValues(
-        currentSchema[currentSection]
-      );
+      const newFieldValues = currentFieldValuesDatabase
+        ? currentFieldValuesDatabase
+        : getDefaultFieldValues(currentSchema[currentSection]);
       setCurrentFieldValues({
         [currentSection]: newFieldValues,
         section: currentSection,
         description: '',
       });
+      setCurrentDescription(currentDescriptionDatabase);
     }
   }, [currentSchema]);
 
@@ -74,7 +76,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     }
 
     const inputFieldJsxDictionary = {
-      // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
+      // unavailable: ({ inputName }) => (
+      //   <>
+      //     {inputName}
+      //     <span>Not available</span>
+      //   </>
+      // ),
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
         <React.Fragment key={inputName}>
@@ -210,9 +217,18 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         returnVal.push(
           getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
         );
+        let currentFieldValuesArray;
+        let currentFieldValuesSub = currentFieldValues
+        for (let i = 0; i < breadCrumbs.length; i++) {
+          if (i === breadCrumbs.length - 1) {
+            currentFieldValuesArray = currentFieldValuesSub[breadCrumbs[i]]
+          } else {
+            currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]]
+          }
+        }
         returnVal.push(
-          ...schemaValue.map((subSchemaValue, index) =>
-            getInputJsxRecursive(`${schemaKey}-${index}`, subSchemaValue, [
+          ...currentFieldValuesArray.map((elem, index) =>
+            getInputJsxRecursive(`${schemaKey}-${index}`, schemaValue[0], [
               ...breadCrumbs,
               index,
             ])
@@ -253,7 +269,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
       );
     }
-
+    
     let schemaSub = schema
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
@@ -262,11 +278,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         schemaSub = schemaSub[breadCrumbs[i]]
       }
     }
-
   };
 
-  // adds or deletes input fields for array inputs
-  // if deleteIndex is null, add of not delete
+  /** 
+  * adds or deletes input fields for array inputs
+  * if deleteIndex is null, add of not delete
+  */
   const modifyInputFields = (
     schema,
     fieldValues,
@@ -308,7 +325,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addSectionCallback(currentFieldValues, currentDescription);
+    editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
   const handleInputChange = (e, fieldValues, breadCrumbs) => {
@@ -332,52 +349,37 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   return (
-    <div className='flex fixed h-screen w-screen items-center justify-center top-0 left-0 backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed h-screen w-screen z-10'></div>
-      <div
-        ref={clickRef}
-        className='m-8 w-full flex items-center justify-center'>
-        <div className='bg-white p-4 grow max-w-3xl z-20'>
-          <h1 id='cv-section-builder' className='font-bold text-xl'>
-            {currentSection} section builder
-          </h1>
-          <ul className='flex flex-wrap gap-2 mb-2'>
-            {Object.entries(schema).map(([k], i) => (
-              <li
-                key={i}
-                onClick={() => setCurrentSection(k)}
-                className='underline hover:underline-offset-4 hover:cursor-pointer'>
-                {k}
-              </li>
-            ))}
-          </ul>
-          <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
-            {currentSectionJsx[currentSection] && (
-              <>
-                <label htmlFor='description' className='bold my-2 py-1'>
-                  Description
-                </label>
-                <input
-                  className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
-                  type='text'
-                  name='description'
-                  value={currentDescription}
-                  onChange={(e) => setCurrentDescription(e.target.value)}
-                />
-              </>
-            )}
-            {currentSectionJsx[currentSection]}
-            <br />
-            <input
-              type='submit'
-              onClick={handleSubmit}
-              className='block my-2 ml-auto std-button'
-            />
-          </form>
-        </div>
+    <div className='w-full flex items-center justify-center'>
+      <div className='bg-white p-4 grow'>
+        <h1 id='cv-section-builder' className='font-bold text-xl'>
+          {currentSection} section builder
+        </h1>
+        <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
+          {currentSectionJsx[currentSection] && (
+            <>
+              <label htmlFor='description' className='bold my-2 py-1'>
+                Description
+              </label>
+              <input
+                className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+                type='text'
+                name='description'
+                value={currentDescription}
+                onChange={(e) => setCurrentDescription(e.target.value)}
+              />
+            </>
+          )}
+          {currentSectionJsx[currentSection]}
+          <br />
+          <input
+            type='submit'
+            onClick={handleSubmit}
+            className='block my-2 ml-auto std-button'
+          />
+        </form>
       </div>
     </div>
   );
 };
 
-export default CvSectionBuilder;
+export default CvSectionBuilderEdit;

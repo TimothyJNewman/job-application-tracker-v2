@@ -23,7 +23,11 @@ export default function Nav() {
         ))}
       </div>
       {notification.text ? (
-        <Notification className={'grow'} text={notification.text} severity={'low'} />
+        <Notification
+          className={'grow'}
+          text={notification.text}
+          severity={'low'}
+        />
       ) : (
         ''
       )}
