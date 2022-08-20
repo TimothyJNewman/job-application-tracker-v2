@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-json";
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-json';
 import {
   createDatabaseEntry,
   readDatabaseEntry,
@@ -25,7 +25,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [openJsonViewerArr, setOpenJsonViewerArr] = useState([]);
 
   // Handles clicks to elements in either used or unused components
-  const elementAddClickHandler = (code, selElem) => {
+  const elementToggleClickHandler = (code, selElem) => {
     // When unused element is clicked
     if (code === 0) {
       // If element is not already used
@@ -65,11 +65,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   const elementClickHandler = (id) => {
     if (openJsonViewerArr.includes(id)) {
-      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== id))
+      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== id));
     } else {
-      setOpenJsonViewerArr([openJsonViewerArr, id])
+      setOpenJsonViewerArr([openJsonViewerArr, id]);
     }
-  }
+  };
 
   /* const generatePdfParams = {
      id: id,
@@ -186,7 +186,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -201,7 +201,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -250,6 +250,20 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       setElements
     );
   }, [noElementsAdded, noElementsClicked]);
+
+  const getDescription = (elem) => {
+    const { cv_component_description } = elem;
+    const { name, text, institution, organization, title, language } =
+      JSON.parse(elem.cv_component_text);
+    console.log(
+      cv_component_description !== ''
+        ? cv_component_description
+        : name ?? text ?? institution ?? organization ?? title ?? language
+    );
+    return cv_component_description !== ''
+      ? cv_component_description
+      : name ?? text ?? institution ?? organization ?? title ?? language;
+  };
 
   return (
     <div className='mx-2 break-all'>
@@ -301,9 +315,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 id={elem.id}
                 currentSection={currentSection}
                 currentDescriptionDatabase={elem.cv_component_description}
-                currentFieldValuesDatabase={JSON.parse(
-                  elem.cv_component_text
-                )}
+                currentFieldValuesDatabase={JSON.parse(elem.cv_component_text)}
               />
             </div>
           </div>
@@ -323,23 +335,42 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             .filter((elem) => elem.cv_component_section === currentSection)
             .map((elem) => (
               <React.Fragment key={elem.id}>
-                <tr
-                  onClick={() => elementClickHandler(elem.id)}
-                  className="w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100">
-                  <td className='px-2 w-3/12'>{elem.cv_component_section}</td>
-                  <td className='px-2 w-8/12'>{elem.cv_component_description}</td>
-                  <td className='px-2 w-1/12'><button onClick={() => elementToggleClickHandler(0, elem)} className="w-full flex justify-center items-center">{elem.application_id ? <XCircleFill className='text-red-600' /> : <PlusCircleFill className='text-green-600' />}</button></td>
-                </tr>
-                {openJsonViewerArr.includes(elem.id) && <tr>
-                  <td colSpan={"100%"}>
-                    <AceEditor
-                      mode="json"
-                      value={elem.cv_component_text}
-                      readOnly={true}
-                    />,
-                    {elem.cv_component_text}
+                <tr className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'>
+                  <td
+                    onClick={() => elementClickHandler(elem.id)}
+                    className='px-2 w-3/12'>
+                    {elem.cv_component_section}
                   </td>
-                </tr>}
+                  <td
+                    onClick={() => elementClickHandler(elem.id)}
+                    className='px-2 w-8/12'>
+                    {getDescription(elem)}
+                  </td>
+                  <td className='px-2 w-1/12'>
+                    <button
+                      onClick={() => elementToggleClickHandler(0, elem)}
+                      className='w-full flex justify-center items-center'>
+                      {elem.application_id ? (
+                        <XCircleFill className='text-red-600' />
+                      ) : (
+                        <PlusCircleFill className='text-green-600' />
+                      )}
+                    </button>
+                  </td>
+                </tr>
+                {openJsonViewerArr.includes(elem.id) && (
+                  <tr>
+                    <td colSpan={'100%'}>
+                      <AceEditor
+                        mode='json'
+                        width='100%'
+                        maxLines={15}
+                        value={elem.cv_component_text}
+                        readOnly={true}
+                      />
+                    </td>
+                  </tr>
+                )}
               </React.Fragment>
             ))}
         </tbody>

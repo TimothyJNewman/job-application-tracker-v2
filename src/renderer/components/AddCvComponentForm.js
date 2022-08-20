@@ -122,7 +122,10 @@ export default function AddCvComponentForm(props) {
         <input
           value={appInput.job_description}
           onChange={(event) => {
-            setAppInput((arr) => ({ ...arr, job_description: event.target.value }));
+            setAppInput((arr) => ({
+              ...arr,
+              job_description: event.target.value,
+            }));
           }}
           type='text'
           name='job_description'

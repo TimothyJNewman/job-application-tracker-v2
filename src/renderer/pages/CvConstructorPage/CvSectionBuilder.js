@@ -63,12 +63,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const getInputFieldJsx = ({ inputType, inputName, breadCrumbs }) => {
     let inputState;
     if (breadCrumbs) {
-      let currentFieldValuesSub = currentFieldValues
+      let currentFieldValuesSub = currentFieldValues;
       for (let i = 0; i < breadCrumbs.length; i++) {
         if (i === breadCrumbs.length - 1) {
-          inputState = currentFieldValuesSub[breadCrumbs[i]]
+          inputState = currentFieldValuesSub[breadCrumbs[i]];
         } else {
-          currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]]
+          currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]];
         }
       }
     }
@@ -254,15 +254,14 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       );
     }
 
-    let schemaSub = schema
+    let schemaSub = schema;
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
-        return schemaSub[breadCrumbs[i]][0]
+        return schemaSub[breadCrumbs[i]][0];
       } else {
-        schemaSub = schemaSub[breadCrumbs[i]]
+        schemaSub = schemaSub[breadCrumbs[i]];
       }
     }
-
   };
 
   // adds or deletes input fields for array inputs
@@ -279,22 +278,34 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       );
     }
 
-    let newSchema = { ...schema }
-    let newFieldValues = { ...fieldValues }
-    let schemaSub = schema
-    let fieldValuesSub = fieldValues
+    let newSchema = { ...schema };
+    let newFieldValues = { ...fieldValues };
+    let schemaSub = schema;
+    let fieldValuesSub = fieldValues;
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
         if (deleteIndex) {
-          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter((elem, i) => i !== deleteIndex);
-          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[breadCrumbs[i]].filter((elem, i) => i !== deleteIndex);
+          schemaSub[breadCrumbs[i]] = schemaSub[breadCrumbs[i]].filter(
+            (elem, i) => i !== deleteIndex
+          );
+          fieldValuesSub[breadCrumbs[i]] = fieldValuesSub[
+            breadCrumbs[i]
+          ].filter((elem, i) => i !== deleteIndex);
         } else {
-          schemaSub[breadCrumbs[i]] = [...schemaSub[breadCrumbs[i]], getDefaultArraySchema(currentSchema, breadCrumbs),];
-          fieldValuesSub[breadCrumbs[i]] = [...fieldValuesSub[breadCrumbs[i]], getDefaultFieldValues(getDefaultArraySchema(currentSchema, breadCrumbs)),];
+          schemaSub[breadCrumbs[i]] = [
+            ...schemaSub[breadCrumbs[i]],
+            getDefaultArraySchema(currentSchema, breadCrumbs),
+          ];
+          fieldValuesSub[breadCrumbs[i]] = [
+            ...fieldValuesSub[breadCrumbs[i]],
+            getDefaultFieldValues(
+              getDefaultArraySchema(currentSchema, breadCrumbs)
+            ),
+          ];
         }
       } else {
-        schemaSub = schemaSub[breadCrumbs[i]]
-        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
+        schemaSub = schemaSub[breadCrumbs[i]];
+        fieldValuesSub = fieldValuesSub[breadCrumbs[i]];
       }
     }
 
@@ -318,13 +329,13 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       );
     }
 
-    let newFieldValues = { ...fieldValues }
-    let fieldValuesSub = newFieldValues
+    let newFieldValues = { ...fieldValues };
+    let fieldValuesSub = newFieldValues;
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
-        fieldValuesSub[breadCrumbs[i]] = event.target.value
+        fieldValuesSub[breadCrumbs[i]] = event.target.value;
       } else {
-        fieldValuesSub = fieldValuesSub[breadCrumbs[i]]
+        fieldValuesSub = fieldValuesSub[breadCrumbs[i]];
       }
     }
 
@@ -362,7 +373,9 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
                   type='text'
                   name='description'
                   value={currentDescription}
-                  onChange={(event) => setCurrentDescription(event.target.value)}
+                  onChange={(event) =>
+                    setCurrentDescription(event.target.value)
+                  }
                 />
               </>
             )}
