@@ -74,6 +74,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       () => {
       }
     );
+    // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
       'DELETE FROM cv_components WHERE id = ?',
       [componentId],
@@ -84,7 +85,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   }
 
   const elementClickHandler = (componentId) => {
-    if (openJsonViewerArr.includes(id)) {
+    if (openJsonViewerArr.includes(componentId)) {
       setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== componentId));
     } else {
       setOpenJsonViewerArr([openJsonViewerArr, componentId]);
