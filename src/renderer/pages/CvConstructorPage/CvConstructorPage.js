@@ -10,7 +10,7 @@ import {
 import { GlobalContext } from '../../context/GlobalContext';
 import CvSectionBuilder from './CvSectionBuilder';
 import CvSectionBuilderEdit from './CvSectionBuilderEdit';
-import { PlusCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import { PlusCircleFill, XCircleFill, TrashFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
@@ -63,11 +63,31 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     }
   };
 
-  const elementClickHandler = (id) => {
+  /**
+   * delete component from cv_components table and cv_component_in_application if existis
+   * @param {number} componentId 
+   */
+  const elementDeleteClickHandler = (componentId) => {
+    deleteDatabaseEntry(
+      'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
+      [id, componentId],
+      () => {
+      }
+    );
+    deleteDatabaseEntry(
+      'DELETE FROM cv_components WHERE id = ?',
+      [componentId],
+      () => {
+        setNoElementsClicked(noElementsClicked + 1);
+      }
+    );
+  }
+
+  const elementClickHandler = (componentId) => {
     if (openJsonViewerArr.includes(id)) {
-      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== id));
+      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== componentId));
     } else {
-      setOpenJsonViewerArr([openJsonViewerArr, id]);
+      setOpenJsonViewerArr([openJsonViewerArr, componentId]);
     }
   };
 
@@ -186,7 +206,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -201,7 +221,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -255,11 +275,6 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     const { cv_component_description } = elem;
     const { name, text, institution, organization, title, language } =
       JSON.parse(elem.cv_component_text);
-    console.log(
-      cv_component_description !== ''
-        ? cv_component_description
-        : name ?? text ?? institution ?? organization ?? title ?? language
-    );
     return cv_component_description !== ''
       ? cv_component_description
       : name ?? text ?? institution ?? organization ?? title ?? language;
@@ -284,7 +299,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         </button>
       </h1>
       <ul className='flex flex-wrap gap-2 mb-2'>
-        {Object.keys(schema).map((key) => (
+        {Object.entries(schema).filter(([key, value]) => value !== 'unavailable').map(([key, value]) => (
           <li
             key={key}
             onClick={() => setCurrentSection(key)}
@@ -307,7 +322,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
               Description: {elem?.cv_component_description}{' '}
               <button
                 className='std-button'
-                onClick={() => elementAddClickHandler(1, elem)}>
+                onClick={() => elementToggleClickHandler(1, elem)}>
                 Remove
               </button>
               <CvSectionBuilderEdit
@@ -326,8 +341,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         <thead>
           <tr className='border-y border-slate-500 divide-x divide-slate-200'>
             <th className='px-2 w-3/12'>Section</th>
-            <th className='px-2 w-8/12'>Desc</th>
-            <th className='w-1/12'>Toggle</th>
+            <th className='px-2 w-7/12'>Desc</th>
+            <th className='px-2 w-1/12'>Toggle</th>
+            <th className='px-2 w-1/12'>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -343,7 +359,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                   </td>
                   <td
                     onClick={() => elementClickHandler(elem.id)}
-                    className='px-2 w-8/12'>
+                    className='px-2 w-7/12'>
                     {getDescription(elem)}
                   </td>
                   <td className='px-2 w-1/12'>
@@ -355,6 +371,13 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                       ) : (
                         <PlusCircleFill className='text-green-600' />
                       )}
+                    </button>
+                  </td>
+                  <td className='px-2 w-1/12'>
+                    <button
+                      onClick={() => elementDeleteClickHandler(elem.id)}
+                      className='w-full flex justify-center items-center'>
+                      <TrashFill className='text-red-600' />
                     </button>
                   </td>
                 </tr>

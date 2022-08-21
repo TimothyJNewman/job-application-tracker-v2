@@ -353,12 +353,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             {currentSection} section builder
           </h1>
           <ul className='flex flex-wrap gap-2 mb-2'>
-            {Object.entries(schema).map(([k], i) => (
+            {Object.entries(schema).filter(([key, value]) => value !== 'unavailable').map(([key, value]) => (
               <li
-                key={i}
-                onClick={() => setCurrentSection(k)}
+                key={key}
+                onClick={() => setCurrentSection(key)}
                 className='underline hover:underline-offset-4 hover:cursor-pointer'>
-                {k}
+                {key}
               </li>
             ))}
           </ul>
