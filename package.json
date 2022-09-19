@@ -108,7 +108,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "resume-cli": "^3.0.7",
-    "sqlite3": "^5.0.10"
+    "tw-elements": "^1.0.0-alpha12"
   },
   "engines": {
     "node": "^14"
