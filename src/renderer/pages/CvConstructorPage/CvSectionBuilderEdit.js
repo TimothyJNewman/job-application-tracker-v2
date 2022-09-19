@@ -105,12 +105,12 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <input
             type='text'
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -122,11 +122,11 @@ const CvSectionBuilderEdit = ({
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
-          <label htmlFor={inputName} className='italic my-2 py-1'>
+          <label htmlFor={inputName} className='my-2 py-1 italic'>
             {inputName}
           </label>
           <textarea
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -140,11 +140,11 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <input
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             type='number'
             name={inputName}
             id={inputName}
@@ -160,12 +160,12 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <div className='mr-6'>
             <input
-              className='border-4 focus:border-purple-700 my-1 mr-2 p-1 px-2 outline-none'
+              className='my-1 mr-2 border-4 p-1 px-2 outline-none focus:border-purple-700'
               type='date'
               name={inputName}
               id={inputName}
@@ -361,19 +361,19 @@ const CvSectionBuilderEdit = ({
   };
 
   return (
-    <div className='w-full flex items-center justify-center'>
-      <div className='bg-white p-4 grow'>
-        <h1 id='cv-section-builder' className='font-bold text-xl'>
+    <div className='flex w-full items-center justify-center'>
+      <div className='grow bg-white p-4'>
+        <h1 id='cv-section-builder' className='text-xl font-bold'>
           {currentSection} section builder
         </h1>
-        <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
+        <form className='relative grid max-h-[70vh] grid-cols-2 gap-4 overflow-y-auto'>
           {currentSectionJsx[currentSection] && (
             <>
               <label htmlFor='description' className='bold my-2 py-1'>
                 Description
               </label>
               <input
-                className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+                className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
                 type='text'
                 name='description'
                 value={currentDescription}
@@ -386,7 +386,7 @@ const CvSectionBuilderEdit = ({
           <input
             type='submit'
             onClick={handleSubmit}
-            className='block my-2 ml-auto std-button'
+            className='std-button my-2 ml-auto block'
           />
         </form>
       </div>

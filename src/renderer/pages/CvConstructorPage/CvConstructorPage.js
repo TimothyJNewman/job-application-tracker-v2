@@ -65,14 +65,13 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   /**
    * delete component from cv_components table and cv_component_in_application if existis
-   * @param {number} componentId 
+   * @param {number} componentId
    */
   const elementDeleteClickHandler = (componentId) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {
-      }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -82,11 +81,13 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         setNoElementsClicked(noElementsClicked + 1);
       }
     );
-  }
+  };
 
   const elementClickHandler = (componentId) => {
     if (openJsonViewerArr.includes(componentId)) {
-      setOpenJsonViewerArr(openJsonViewerArr.filter((elem) => elem !== componentId));
+      setOpenJsonViewerArr(
+        openJsonViewerArr.filter((elem) => elem !== componentId)
+      );
     } else {
       setOpenJsonViewerArr([openJsonViewerArr, componentId]);
     }
@@ -207,7 +208,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -222,7 +223,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -283,31 +284,33 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   return (
     <div className='mx-2 break-all'>
-      <h1 id='cv-contructor' className='font-bold text-xl'>
+      <h1 id='cv-contructor' className='text-xl font-bold'>
         CV constructor{' '}
         <button
           className='has-tooltip inline px-1'
           onClick={() => toggleCvBuilder(!showCvBuilder)}
           type='button'>
-          <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8 font-normal text-base'>
+          <span className='tooltip -mt-8 rounded bg-slate-100 p-1 text-base font-normal shadow-md'>
             Add new CV section
           </span>
           <PlusCircleFill
             style={{ color: `${showCvBuilder ? 'red' : ''}` }}
-            className={'w-6 h-6 mx-1 mb-1 inline hover:text-purple-700'}
+            className={'mx-1 mb-1 inline h-6 w-6 hover:text-purple-700'}
             alt='Add new CV section'
           />
         </button>
       </h1>
-      <ul className='flex flex-wrap gap-2 mb-2'>
-        {Object.entries(schema).filter(([key, value]) => value !== 'unavailable').map(([key, value]) => (
-          <li
-            key={key}
-            onClick={() => setCurrentSection(key)}
-            className='underline hover:underline-offset-4 hover:cursor-pointer'>
-            {key}
-          </li>
-        ))}
+      <ul className='mb-2 flex flex-wrap gap-2'>
+        {Object.entries(schema)
+          .filter(([key, value]) => value !== 'unavailable')
+          .map(([key, value]) => (
+            <li
+              key={key}
+              onClick={() => setCurrentSection(key)}
+              className='underline hover:cursor-pointer hover:underline-offset-4'>
+              {key}
+            </li>
+          ))}
       </ul>
       <h2>Used Components</h2>
       {elements
@@ -318,7 +321,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         .map((elem) => (
           <div
             key={elem.id}
-            className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'>
+            className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'>
             <div className='w-full'>
               Description: {elem?.cv_component_description}{' '}
               <button
@@ -340,11 +343,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       <h2>Unused Components</h2>
       <table className='w-full'>
         <thead>
-          <tr className='border-y border-slate-500 divide-x divide-slate-200'>
-            <th className='px-2 w-3/12'>Section</th>
-            <th className='px-2 w-7/12'>Desc</th>
-            <th className='px-2 w-1/12'>Toggle</th>
-            <th className='px-2 w-1/12'>Delete</th>
+          <tr className='divide-x divide-slate-200 border-y border-slate-500'>
+            <th className='w-3/12 px-2'>Section</th>
+            <th className='w-7/12 px-2'>Desc</th>
+            <th className='w-1/12 px-2'>Toggle</th>
+            <th className='w-1/12 px-2'>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -355,18 +358,18 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 <tr className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'>
                   <td
                     onClick={() => elementClickHandler(elem.id)}
-                    className='px-2 w-3/12'>
+                    className='w-3/12 px-2'>
                     {elem.cv_component_section}
                   </td>
                   <td
                     onClick={() => elementClickHandler(elem.id)}
-                    className='px-2 w-7/12'>
+                    className='w-7/12 px-2'>
                     {getDescription(elem)}
                   </td>
-                  <td className='px-2 w-1/12'>
+                  <td className='w-1/12 px-2'>
                     <button
                       onClick={() => elementToggleClickHandler(0, elem)}
-                      className='w-full flex justify-center items-center'>
+                      className='flex w-full items-center justify-center'>
                       {elem.application_id ? (
                         <XCircleFill className='text-red-600' />
                       ) : (
@@ -374,10 +377,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                       )}
                     </button>
                   </td>
-                  <td className='px-2 w-1/12'>
+                  <td className='w-1/12 px-2'>
                     <button
                       onClick={() => elementDeleteClickHandler(elem.id)}
-                      className='w-full flex justify-center items-center'>
+                      className='flex w-full items-center justify-center'>
                       <TrashFill className='text-red-600' />
                     </button>
                   </td>
@@ -401,7 +404,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       </table>
       <button
         onClick={generatePdf}
-        className='block my-2 ml-auto std-button'
+        className='std-button my-2 ml-auto block'
         type='button'>
         Generate CV PDF
       </button>

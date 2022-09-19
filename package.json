@@ -87,6 +87,8 @@
     "electron-rebuild": "^3.2.8",
     "node-loader": "^2.0.0",
     "postcss-loader": "^7.0.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.1.6"
   },
@@ -100,7 +102,6 @@
     "nock": "^13.2.9",
     "node-latex": "^3.1.0",
     "pdf-to-base64": "^1.0.3",
-    "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-bootstrap-icons": "^1.8.4",

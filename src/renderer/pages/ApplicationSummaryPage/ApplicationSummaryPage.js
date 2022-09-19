@@ -51,7 +51,7 @@ const columns = [
     accessorKey: 'date_applied',
     header: () => (
       <>
-        <CalendarCheck className='w-4 h-4 mb-1 mr-1 inline' />
+        <CalendarCheck className='mb-1 mr-1 inline h-4 w-4' />
         Applied
       </>
     ),
@@ -69,7 +69,7 @@ const columns = [
         className='w-12'
         to={`/application/${info.row.original.id}#cv-contructor`}>
         <FilePersonFill
-          className='w-6 h-6 inline hover:text-purple-700 hoanimate-pulse'
+          className='hoanimate-pulse inline h-6 w-6 hover:text-purple-700'
           alt='CV Icon'
         />
       </Link>
@@ -83,7 +83,7 @@ const columns = [
     cell: (info) => (
       <Link className='w-12' to={`/application/${info.row.original.id}`}>
         <EnvelopeFill
-          className='w-6 h-6 inline hover:text-purple-700'
+          className='inline h-6 w-6 hover:text-purple-700'
           alt='Letter Icon'
         />
       </Link>
@@ -141,18 +141,18 @@ const ApplicationSummaryPage = () => {
   };
 
   return (
-    <div className='mx-2 absolute'>
-      <h1 className='font-bold text-xl w-fit inline'>All Applications</h1>
+    <div className='absolute mx-2'>
+      <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
       <p
         className='has-tooltip inline px-1'
         onClick={() => setDeleteMode(!deleteMode)}>
-        <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8'>
+        <span className='tooltip -mt-8 rounded bg-slate-100 p-1 shadow-md'>
           {' '}
           Delete button{' '}
         </span>
         <TrashFill
           style={{ color: `${deleteMode ? 'red' : ''}` }}
-          className={'w-6 h-6 mx-1 mb-1 inline hover:text-purple-700'}
+          className={'mx-1 mb-1 inline h-6 w-6 hover:text-purple-700'}
           alt='Delete Entry Icon'
         />
       </p>
@@ -162,7 +162,7 @@ const ApplicationSummaryPage = () => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr
               key={headerGroup.id}
-              className='border-y border-slate-500 divide-x divide-slate-200'>
+              className='divide-x divide-slate-200 border-y border-slate-500'>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
@@ -182,10 +182,10 @@ const ApplicationSummaryPage = () => {
                       )}
                       {{
                         asc: (
-                          <SortAlphaDown className='w-4 h-4 mb-1 ml-1 inline' />
+                          <SortAlphaDown className='mb-1 ml-1 inline h-4 w-4' />
                         ),
                         desc: (
-                          <SortAlphaDownAlt className='w-4 h-4 mb-1 ml-1 inline' />
+                          <SortAlphaDownAlt className='mb-1 ml-1 inline h-4 w-4' />
                         ),
                       }[header.column.getIsSorted()] ?? null}
                     </div>
@@ -199,7 +199,7 @@ const ApplicationSummaryPage = () => {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'
+              className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'
               onClick={() => handleApplicationClick(row.original.id)}>
               {row.getVisibleCells().map((cell) => (
                 <td
@@ -219,12 +219,12 @@ const ApplicationSummaryPage = () => {
           event.preventDefault();
           toggleForm(!showForm);
         }}
-        className='block my-2 ml-auto std-button'>
+        className='std-button my-2 ml-auto block'>
         Add new
       </button>
       {showForm ? (
         <AddApplicationForm
-          className={`block w-full h-full absolute top-0 bg-white`}
+          className={`absolute top-0 block h-full w-full bg-white`}
           handleSubmitCallback={handleSubmitCallback}
           handleCancelCallback={handleCancelCallback}
         />

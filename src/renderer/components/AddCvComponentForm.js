@@ -39,14 +39,14 @@ export default function AddCvComponentForm(props) {
           name='summary'
         />
         <br />
-        <div className='block ml-auto max-w-fit'>
+        <div className='ml-auto block max-w-fit'>
           <input
             value='Cancel'
             type='button'
             onClick={props.handleCancelCallback}
-            className='inline mr-2 std-button'
+            className='std-button mr-2 inline'
           />
-          <input value='Submit' type='submit' className='inline std-button' />
+          <input value='Submit' type='submit' className='std-button inline' />
         </div>
       </form>
       <form
@@ -78,14 +78,14 @@ export default function AddCvComponentForm(props) {
           name='role'
         />
         <br />
-        <div className='block ml-auto max-w-fit'>
+        <div className='ml-auto block max-w-fit'>
           <input
             value='Cancel'
             type='button'
             onClick={props.handleCancelCallback}
-            className='inline mr-2 std-button'
+            className='std-button mr-2 inline'
           />
-          <input value='Submit' type='submit' className='inline std-button' />
+          <input value='Submit' type='submit' className='std-button inline' />
         </div>
       </form>
       <form
@@ -143,14 +143,14 @@ export default function AddCvComponentForm(props) {
           <option value='Applied'>Applied</option>
           <option value='Rejected'>Rejected</option>
         </select>
-        <div className='block ml-auto max-w-fit'>
+        <div className='ml-auto block max-w-fit'>
           <input
             value='Cancel'
             type='button'
             onClick={props.handleCancelCallback}
-            className='inline mr-2 std-button'
+            className='std-button mr-2 inline'
           />
-          <input value='Submit' type='submit' className='inline std-button' />
+          <input value='Submit' type='submit' className='std-button inline' />
         </div>
       </form>
     </>

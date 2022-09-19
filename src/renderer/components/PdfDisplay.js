@@ -5,7 +5,7 @@ import React from 'react';
 const PdfDisplay = ({ url }) => {
   return (
     <div className='mx-2'>
-      <h1 id='cv-pdf-viewer' className='font-bold text-xl'>
+      <h1 id='cv-pdf-viewer' className='text-xl font-bold'>
         CV pdf viewer
       </h1>
       <embed

@@ -98,12 +98,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <input
             type='text'
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -115,11 +115,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
-          <label htmlFor={inputName} className='italic my-2 py-1'>
+          <label htmlFor={inputName} className='my-2 py-1 italic'>
             {inputName}
           </label>
           <textarea
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -133,11 +133,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <input
-            className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             type='number'
             name={inputName}
             id={inputName}
@@ -153,12 +153,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           <label
             value={inputName}
             htmlFor={inputName}
-            className='italic my-2 py-1'>
+            className='my-2 py-1 italic'>
             {inputName}
           </label>
           <div className='mr-6'>
             <input
-              className='border-4 focus:border-purple-700 my-1 mr-2 p-1 px-2 outline-none'
+              className='my-1 mr-2 border-4 p-1 px-2 outline-none focus:border-purple-700'
               type='date'
               name={inputName}
               id={inputName}
@@ -343,33 +343,35 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   return (
-    <div className='flex fixed h-screen w-screen items-center justify-center top-0 left-0 backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed h-screen w-screen z-10'></div>
+    <div className='fixed top-0 left-0 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
+      <div id='overlay-blur' className='fixed z-10 h-screen w-screen'></div>
       <div
         ref={clickRef}
-        className='m-8 w-full flex items-center justify-center'>
-        <div className='bg-white p-4 grow max-w-3xl z-20'>
-          <h1 id='cv-section-builder' className='font-bold text-xl'>
+        className='m-8 flex w-full items-center justify-center'>
+        <div className='z-20 max-w-3xl grow bg-white p-4'>
+          <h1 id='cv-section-builder' className='text-xl font-bold'>
             {currentSection} section builder
           </h1>
-          <ul className='flex flex-wrap gap-2 mb-2'>
-            {Object.entries(schema).filter(([key, value]) => value !== 'unavailable').map(([key, value]) => (
-              <li
-                key={key}
-                onClick={() => setCurrentSection(key)}
-                className='underline hover:underline-offset-4 hover:cursor-pointer'>
-                {key}
-              </li>
-            ))}
+          <ul className='mb-2 flex flex-wrap gap-2'>
+            {Object.entries(schema)
+              .filter(([key, value]) => value !== 'unavailable')
+              .map(([key, value]) => (
+                <li
+                  key={key}
+                  onClick={() => setCurrentSection(key)}
+                  className='underline hover:cursor-pointer hover:underline-offset-4'>
+                  {key}
+                </li>
+              ))}
           </ul>
-          <form className='overflow-y-auto max-h-[70vh] grid grid-cols-2 gap-4 relative'>
+          <form className='relative grid max-h-[70vh] grid-cols-2 gap-4 overflow-y-auto'>
             {currentSectionJsx[currentSection] && (
               <>
                 <label htmlFor='description' className='bold my-2 py-1'>
                   Description
                 </label>
                 <input
-                  className='border-4 focus:border-purple-700 my-1 mr-8 p-1 px-2 outline-none'
+                  className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
                   type='text'
                   name='description'
                   value={currentDescription}
@@ -384,7 +386,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             <input
               type='submit'
               onClick={handleSubmit}
-              className='block my-2 ml-auto std-button'
+              className='std-button my-2 ml-auto block'
             />
           </form>
         </div>

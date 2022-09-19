@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
-require('dotenv').config()
+require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
@@ -55,7 +55,9 @@ const createWindow = () => {
 app.on('ready', async () => {
   // react developer extension
   try {
-    await session.defaultSession.loadExtension(process.env.REACT_DEV_TOOLS_PATH);
+    await session.defaultSession.loadExtension(
+      process.env.REACT_DEV_TOOLS_PATH
+    );
   } catch (err) {
     console.error(err);
   }

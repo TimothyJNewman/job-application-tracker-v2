@@ -11,7 +11,7 @@ const navLinks = [
 export default function Nav() {
   const { notification } = useContext(GlobalContext);
   return (
-    <nav className='flex w-full p-1 bg-slate-200 h-12'>
+    <nav className='flex h-12 w-full bg-slate-200 p-1'>
       <div className='flex divide-x divide-slate-500'>
         {navLinks.map((elem) => (
           <Link

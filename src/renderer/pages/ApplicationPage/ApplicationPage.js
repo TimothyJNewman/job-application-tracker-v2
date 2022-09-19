@@ -10,7 +10,7 @@ export default function ApplicationPage() {
   const id = Number(useParams().id);
   return (
     <div className='grid grid-cols-12'>
-      <div className='flex flex-col col-span-8'>
+      <div className='col-span-8 flex flex-col'>
         <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
         <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
         <LetterConstructorPage id={id} />
