@@ -109,5 +109,8 @@
     "react-router-dom": "^6.3.0",
     "resume-cli": "^3.0.7",
     "sqlite3": "^5.0.10"
+  },
+  "engines": {
+    "node": "^14"
   }
 }
