@@ -303,7 +303,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       </h1>
       <div className='mb-2 flex flex-wrap gap-2'>
         <ul
-          className='nav nav-tabs mb-2 flex list-none flex-wrap border-b-0 pl-0 flex-row'
+          className='nav nav-tabs mb-2 flex list-none flex-row flex-wrap border-b-0 pl-0'
           id='tabs-tab'
           role='tablist'>
           {Object.entries(schema)
@@ -318,7 +318,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                   href={`#tabs-${key}`}
                   className={`${
                     key === currentSection && 'active'
-                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent bg-blue-50 hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

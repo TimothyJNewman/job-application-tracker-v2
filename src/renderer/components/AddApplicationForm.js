@@ -11,7 +11,7 @@ export default function AddApplicationForm({ handleSubmitCallback }) {
   const [appInput, setAppInput] = useState(defaultState);
   return (
     <div
-      className='modal fade backdrop-blur-sm fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none'
+      className='modal fade fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
       id='addNewModal'
       tabIndex='-1'
       aria-labelledby='addNewModalLabel'
@@ -30,7 +30,7 @@ export default function AddApplicationForm({ handleSubmitCallback }) {
               data-bs-dismiss='modal'
               aria-label='Close'></button>
           </div>
-          <div className='modal-body relative p-4 flex flex-col gap-y-4'>
+          <div className='modal-body relative flex flex-col gap-y-4 p-4'>
             <div>
               <label
                 htmlFor='company'

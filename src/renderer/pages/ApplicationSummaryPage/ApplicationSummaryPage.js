@@ -28,71 +28,45 @@ const columns = [
     accessorKey: 'id',
     header: 'Id',
     headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+      className: 'w-8',
     },
     bodyCellProps: {
-      className:
-        'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900',
+      className: 'w-8',
     },
   },
   {
     accessorKey: 'company',
     header: 'Company',
-    headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
-    },
-    bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
-    },
   },
   {
     accessorKey: 'role',
     header: 'Role',
-    headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
-    },
-    bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
-    },
   },
   {
     accessorKey: 'status',
     header: 'Status',
-    headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
-    },
-    bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
-    },
   },
   {
     accessorKey: 'date_applied',
     header: () => (
       <>
-        <CalendarCheck className='mb-1 mr-1 inline h-4 w-4' />
+        <CalendarCheck className='mb-1 mr-2 inline h-4 w-4' />
         Applied
       </>
     ),
-    headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
-    },
-    bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
-    },
     cell: (info) => new Date(info.getValue()).toLocaleDateString(),
   },
   {
     id: 'cv',
     header: 'CV',
     headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+      className: 'w-8',
     },
     bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+      className: 'w-8',
     },
     cell: (info) => (
       <Link
-        className='w-8'
         to={`/application/${info.row.original.id}#cv-contructor`}>
         <FilePersonFill
           className='hoanimate-pulse inline h-5 w-5 hover:text-purple-700'
@@ -105,13 +79,13 @@ const columns = [
     id: 'letter',
     header: 'Letter',
     headerCellProps: {
-      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+      className: 'w-8',
     },
     bodyCellProps: {
-      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+      className: 'w-8',
     },
     cell: (info) => (
-      <Link className='w-8' to={`/application/${info.row.original.id}`}>
+      <Link to={`/application/${info.row.original.id}`}>
         <EnvelopeFill
           className='inline h-5 w-5 hover:text-purple-700'
           alt='Letter Icon'
@@ -172,8 +146,7 @@ const ApplicationSummaryPage = () => {
         className='has-tooltip inline px-1'
         onClick={() => setDeleteMode(!deleteMode)}>
         <span className='tooltip -mt-8 rounded bg-slate-100 p-1 shadow-md'>
-          {' '}
-          Delete button{' '}
+          Delete button
         </span>
         <TrashFill
           style={{ color: `${deleteMode ? 'red' : ''}` }}
@@ -194,9 +167,10 @@ const ApplicationSummaryPage = () => {
                         <th
                           key={header.id}
                           colSpan={header.colSpan}
-                          {...header.column.columnDef.headerCellProps}
                           scope='col'
-                          className='px-6 py-4 text-left text-sm font-medium text-gray-900'>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -234,8 +208,8 @@ const ApplicationSummaryPage = () => {
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className='whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900'
-                          {...cell.column.columnDef.bodyCellProps}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
