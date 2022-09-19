@@ -72,7 +72,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
+      () => { }
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +209,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +224,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -313,163 +313,54 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             </li>
           ))}
       </ul>
-      <div className='accordion' id='accordionExample'>
-        <div className='accordion-item border border-gray-200 bg-white'>
-          <h2 className='accordion-header mb-0' id='headingOne'>
-            <button
-              className='
-        accordion-button
-        relative
-        flex
-        w-full
-        items-center
-        rounded-none
-        border-0
-        bg-white py-4 px-5
-        text-left
-        text-base
-        text-gray-800
-        transition
-        focus:outline-none
-      '
-              type='button'
-              data-bs-toggle='collapse'
-              data-bs-target='#collapseOne'
-              aria-expanded='true'
-              aria-controls='collapseOne'>
-              Accordion Item #1
-            </button>
-          </h2>
-          <div
-            id='collapseOne'
-            className='collapse show accordion-collapse'
-            aria-labelledby='headingOne'
-            data-bs-parent='#accordionExample'>
-            <div className='accordion-body py-4 px-5'>
-              <strong>This is the first item's accordion body.</strong> It is
-              shown by default, until the collapse plugin adds the appropriate
-              classes that we use to style each element. These classes control
-              the overall appearance, as well as the showing and hiding via CSS
-              transitions. You can modify any of this with custom CSS or
-              overriding our default variables. It's also worth noting that just
-              about any HTML can go within the <code>.accordion-body</code>,
-              though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-        <div className='accordion-item border border-gray-200 bg-white'>
-          <h2 className='accordion-header mb-0' id='headingTwo'>
-            <button
-              className='
-        accordion-button
-        collapsed
-        relative
-        flex
-        w-full
-        items-center
-        rounded-none
-        border-0
-        bg-white py-4 px-5
-        text-left
-        text-base
-        text-gray-800
-        transition
-        focus:outline-none
-      '
-              type='button'
-              data-bs-toggle='collapse'
-              data-bs-target='#collapseTwo'
-              aria-expanded='false'
-              aria-controls='collapseTwo'>
-              Accordion Item #2
-            </button>
-          </h2>
-          <div
-            id='collapseTwo'
-            className='collapse accordion-collapse'
-            aria-labelledby='headingTwo'
-            data-bs-parent='#accordionExample'>
-            <div className='accordion-body py-4 px-5'>
-              <strong>This is the second item's accordion body.</strong> It is
-              hidden by default, until the collapse plugin adds the appropriate
-              classes that we use to style each element. These classes control
-              the overall appearance, as well as the showing and hiding via CSS
-              transitions. You can modify any of this with custom CSS or
-              overriding our default variables. It's also worth noting that just
-              about any HTML can go within the <code>.accordion-body</code>,
-              though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-        <div className='accordion-item border border-gray-200 bg-white'>
-          <h2 className='accordion-header mb-0' id='headingThree'>
-            <button
-              className='accordion-button collapsed
-        relative
-        flex
-        w-full
-        items-center
-        rounded-none
-        border-0
-        bg-white py-4 px-5
-        text-left
-        text-base
-        text-gray-800
-        transition
-        focus:outline-none'
-              type='button'
-              data-bs-toggle='collapse'
-              data-bs-target='#collapseThree'
-              aria-expanded='false'
-              aria-controls='collapseThree'>
-              Accordion Item #3
-            </button>
-          </h2>
-          <div
-            id='collapseThree'
-            className='collapse accordion-collapse'
-            aria-labelledby='headingThree'
-            data-bs-parent='#accordionExample'>
-            <div className='accordion-body py-4 px-5'>
-              <strong>This is the third item's accordion body.</strong> It is
-              hidden by default, until the collapse plugin adds the appropriate
-              classes that we use to style each element. These classes control
-              the overall appearance, as well as the showing and hiding via CSS
-              transitions. You can modify any of this with custom CSS or
-              overriding our default variables. It's also worth noting that just
-              about any HTML can go within the <code>.accordion-body</code>,
-              though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-      </div>
       <h2>Used Components</h2>
-      {elements
-        .filter(
-          (elem) =>
-            elem.application_id && elem.cv_component_section === currentSection
-        )
-        .map((elem) => (
-          <div
-            key={elem.id}
-            className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'>
-            <div className='w-full'>
-              Description: {elem?.cv_component_description}{' '}
-              <button
-                className='std-button'
-                onClick={() => elementToggleClickHandler(1, elem)}>
-                Remove
-              </button>
-              <CvSectionBuilderEdit
-                editSectionCallback={editCVSectionBuilderHandler}
-                id={elem.id}
-                currentSection={currentSection}
-                currentDescriptionDatabase={elem.cv_component_description}
-                currentFieldValuesDatabase={JSON.parse(elem.cv_component_text)}
-              />
+      <div className='accordion' id='accordionBuilder'>
+        {elements
+          .filter(
+            (elem) =>
+              elem.application_id &&
+              elem.cv_component_section === currentSection
+          )
+          .map((elem) => (
+            <div
+              key={elem.id}
+              className='accordion-item border border-gray-200 bg-white'>
+              <h2 className='accordion-header mb-0' id={`accordion_builder_header_${elem.id}`}>
+                <button
+                  className="accordion-button relative flex items-center w-full py-4 px-5 text-base text-gray-800 text-left bg-white border-0 rounded-none transition focus:outline-none"
+                  type='button'
+                  data-bs-toggle='collapse'
+                  data-bs-target={`#accordion_builder_collapse_${elem.id}`}
+                  aria-expanded='false'
+                  aria-controls={`#accordion_builder_collapse_${elem.id}`}>
+                  {elem?.cv_component_description}
+                </button>
+              </h2>
+              <div
+                id={`accordion_builder_collapse_${elem.id}`}
+                className='collapse accordion-collapse'
+                aria-labelledby={`accordion_builder_header_${elem.id}`}
+                data-bs-parent='#accordionBuilder'>
+                <div className='accordion-body w-full'>
+                  <button
+                    className='std-button'
+                    onClick={() => elementToggleClickHandler(1, elem)}>
+                    Remove
+                  </button>
+                  <CvSectionBuilderEdit
+                    editSectionCallback={editCVSectionBuilderHandler}
+                    id={elem.id}
+                    currentSection={currentSection}
+                    currentDescriptionDatabase={elem.cv_component_description}
+                    currentFieldValuesDatabase={JSON.parse(
+                      elem.cv_component_text
+                    )}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
       <br />
       <h2>Unused Components</h2>
       <table className='w-full'>
