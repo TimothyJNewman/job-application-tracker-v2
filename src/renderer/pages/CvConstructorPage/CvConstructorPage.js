@@ -12,7 +12,7 @@ import CvSectionBuilder from './CvSectionBuilder';
 import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill, XCircleFill, TrashFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
-import 'tw-elements';
+import 'tw-elements/dist/src/js/index';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
