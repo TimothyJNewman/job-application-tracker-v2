@@ -20,32 +20,50 @@ import {
   EnvelopeFill,
   TrashFill,
   FilePersonFill,
+  PlusLg,
 } from 'react-bootstrap-icons';
 
 const columns = [
   {
     accessorKey: 'id',
     header: 'Id',
-    headerCellProps: { className: 'pr-2 w-1/12' },
-    bodyCellProps: { className: 'pr-2 w-1/12 text-center' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className:
+        'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900',
+    },
   },
   {
     accessorKey: 'company',
     header: 'Company',
-    headerCellProps: { className: 'px-2 w-3/12' },
-    bodyCellProps: { className: 'px-2 w-3/12' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
   },
   {
     accessorKey: 'role',
     header: 'Role',
-    headerCellProps: { className: 'px-2 w-4/12' },
-    bodyCellProps: { className: 'px-2 w-4/12' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
   },
   {
     accessorKey: 'status',
     header: 'Status',
-    headerCellProps: { className: 'px-2 w-2/12' },
-    bodyCellProps: { className: 'px-2 w-2/12 text-center' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
   },
   {
     accessorKey: 'date_applied',
@@ -55,15 +73,23 @@ const columns = [
         Applied
       </>
     ),
-    headerCellProps: { className: 'px-2 w-2/12 text-center' },
-    bodyCellProps: { className: 'px-2 w-2/12 text-center' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
     cell: (info) => new Date(info.getValue()).toLocaleDateString(),
   },
   {
     id: 'cv',
     header: 'CV',
-    headerCellProps: { className: 'px-2' },
-    bodyCellProps: { className: 'px-2 text-center' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
     cell: (info) => (
       <Link
         className='w-12'
@@ -78,8 +104,12 @@ const columns = [
   {
     id: 'letter',
     header: 'Letter',
-    headerCellProps: { className: 'px-2' },
-    bodyCellProps: { className: 'px-2 text-center' },
+    headerCellProps: {
+      className: 'text-sm font-medium text-gray-900 px-6 py-4 text-left',
+    },
+    bodyCellProps: {
+      className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
+    },
     cell: (info) => (
       <Link className='w-12' to={`/application/${info.row.original.id}`}>
         <EnvelopeFill
@@ -141,7 +171,7 @@ const ApplicationSummaryPage = () => {
   };
 
   return (
-    <div className='absolute mx-2'>
+    <div className='p-4'>
       <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
       <p
         className='has-tooltip inline px-1'
@@ -157,69 +187,82 @@ const ApplicationSummaryPage = () => {
         />
       </p>
       {deleteMode ? <p className='-mt-1'>Click on an item to delete 🡣</p> : ''}
-      <table className='w-full'>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className='divide-x divide-slate-200 border-y border-slate-500'>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  colSpan={header.colSpan}
-                  {...header.column.columnDef.headerCellProps}>
-                  {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort()
-                          ? 'cursor-pointer select-none'
-                          : '',
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: (
-                          <SortAlphaDown className='mb-1 ml-1 inline h-4 w-4' />
-                        ),
-                        desc: (
-                          <SortAlphaDownAlt className='mb-1 ml-1 inline h-4 w-4' />
-                        ),
-                      }[header.column.getIsSorted()] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'
-              onClick={() => handleApplicationClick(row.original.id)}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className='px-2'
-                  {...cell.column.columnDef.bodyCellProps}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className='flex flex-col'>
+        <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
+          <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
+            <div className='overflow-hidden'>
+              <table className='min-w-full'>
+                <thead className='border-b bg-white'>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          {...header.column.columnDef.headerCellProps}
+                          scope='col'
+                          className='px-6 py-4 text-left text-sm font-medium text-gray-900'>
+                          {header.isPlaceholder ? null : (
+                            <div
+                              {...{
+                                className: header.column.getCanSort()
+                                  ? 'cursor-pointer select-none'
+                                  : '',
+                                onClick:
+                                  header.column.getToggleSortingHandler(),
+                              }}>
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {{
+                                asc: (
+                                  <SortAlphaDown className='mb-1 ml-1 inline h-4 w-4' />
+                                ),
+                                desc: (
+                                  <SortAlphaDownAlt className='mb-1 ml-1 inline h-4 w-4' />
+                                ),
+                              }[header.column.getIsSorted()] ?? null}
+                            </div>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr
+                      key={row.id}
+                      className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'
+                      onClick={() => handleApplicationClick(row.original.id)}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td
+                          key={cell.id}
+                          className='whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900'
+                          {...cell.column.columnDef.bodyCellProps}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <button
         type='button'
         onClick={(event) => {
           event.preventDefault();
           toggleForm(!showForm);
         }}
-        className='std-button my-2 ml-auto block'>
+        className='ml-auto align-center flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        <PlusLg className='w-4 h-4 mr-2' />
         Add new
       </button>
       {showForm ? (

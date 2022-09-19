@@ -284,7 +284,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   };
 
   return (
-    <div className='mx-2 break-all'>
+    <div className='p-4'>
       <h1 id='cv-contructor' className='text-xl font-bold'>
         CV constructor{' '}
         <button
@@ -301,18 +301,30 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           />
         </button>
       </h1>
-      <ul className='mb-2 flex flex-wrap gap-2'>
-        {Object.entries(schema)
-          .filter(([key, value]) => value !== 'unavailable')
-          .map(([key, value]) => (
-            <li
-              key={key}
-              onClick={() => setCurrentSection(key)}
-              className='underline hover:cursor-pointer hover:underline-offset-4'>
-              {key}
-            </li>
-          ))}
-      </ul>
+      <div className='mb-2 flex flex-wrap gap-2'>
+        <ul className="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-2" id="tabs-tab"
+          role="tablist">
+          {Object.entries(schema)
+            .filter(([key, value]) => value !== 'unavailable')
+            .map(([key, value]) => (
+              <li key={key} onClick={() => setCurrentSection(key)} className="nav-item" role="presentation">
+                <a href={`#tabs-${key}`} className={`${key === currentSection && "active"} nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent`} id={`tabs-${key}-tab`} data-bs-toggle="pill" data-bs-target={`#tabs-${key}`} role="tab"
+                  aria-controls={`tabs-${key}`} aria-selected="false">{key}</a>
+              </li>
+              // <li
+              //   key={key}
+              //   onClick={() => setCurrentSection(key)}
+              //   className='underline hover:cursor-pointer hover:underline-offset-4'>
+              //   {key}
+              // </li>
+            ))}
+        </ul>
+        {/* <div className="tab-content" id="tabs-tabContent">
+          <div className="tab-pane fade show active" id={`tabs-${currentSection}`} role="tabpanel" aria-labelledby={`tabs-${currentSection}-tab`}>
+            {currentSection}
+          </div>
+        </div> */}
+      </div>
       <h2>Used Components</h2>
       <div className='accordion' id='accordionBuilder'>
         {elements
@@ -325,9 +337,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             <div
               key={elem.id}
               className='accordion-item border border-gray-200 bg-white'>
-              <h2 className='accordion-header mb-0' id={`accordion_builder_header_${elem.id}`}>
+              <h2
+                className='accordion-header mb-0'
+                id={`accordion_builder_header_${elem.id}`}>
                 <button
-                  className="accordion-button relative flex items-center w-full py-4 px-5 text-base text-gray-800 text-left bg-white border-0 rounded-none transition focus:outline-none"
+                  className='accordion-button relative flex w-full items-center rounded-none border-0 bg-white py-4 px-5 text-left text-base text-gray-800 transition focus:outline-none'
                   type='button'
                   data-bs-toggle='collapse'
                   data-bs-target={`#accordion_builder_collapse_${elem.id}`}
