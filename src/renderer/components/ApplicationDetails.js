@@ -15,7 +15,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
   }, [setPdfUrl, id, AppsDetails]);
 
   return (
-    <div className='col-span-1 p-4 grid md:col-span-2'>
+    <div className='col-span-1 grid p-4 md:col-span-2'>
       <h1 className='text-xl font-bold'>Application Details</h1>
       <div className='grid grid-cols-2'>
         <p>Id: {AppsDetails.id}</p>

@@ -72,7 +72,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => { }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +209,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +224,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -302,14 +302,31 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         </button>
       </h1>
       <div className='mb-2 flex flex-wrap gap-2'>
-        <ul className="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-2" id="tabs-tab"
-          role="tablist">
+        <ul
+          className='nav nav-tabs mb-2 flex list-none flex-wrap border-b-0 pl-0 flex-row'
+          id='tabs-tab'
+          role='tablist'>
           {Object.entries(schema)
             .filter(([key, value]) => value !== 'unavailable')
             .map(([key, value]) => (
-              <li key={key} onClick={() => setCurrentSection(key)} className="nav-item" role="presentation">
-                <a href={`#tabs-${key}`} className={`${key === currentSection && "active"} nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent`} id={`tabs-${key}-tab`} data-bs-toggle="pill" data-bs-target={`#tabs-${key}`} role="tab"
-                  aria-controls={`tabs-${key}`} aria-selected="false">{key}</a>
+              <li
+                key={key}
+                onClick={() => setCurrentSection(key)}
+                className='nav-item'
+                role='presentation'>
+                <a
+                  href={`#tabs-${key}`}
+                  className={`${
+                    key === currentSection && 'active'
+                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  id={`tabs-${key}-tab`}
+                  data-bs-toggle='pill'
+                  data-bs-target={`#tabs-${key}`}
+                  role='tab'
+                  aria-controls={`tabs-${key}`}
+                  aria-selected='false'>
+                  {key}
+                </a>
               </li>
               // <li
               //   key={key}

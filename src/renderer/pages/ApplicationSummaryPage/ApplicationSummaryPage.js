@@ -92,10 +92,10 @@ const columns = [
     },
     cell: (info) => (
       <Link
-        className='w-12'
+        className='w-8'
         to={`/application/${info.row.original.id}#cv-contructor`}>
         <FilePersonFill
-          className='hoanimate-pulse inline h-6 w-6 hover:text-purple-700'
+          className='hoanimate-pulse inline h-5 w-5 hover:text-purple-700'
           alt='CV Icon'
         />
       </Link>
@@ -111,9 +111,9 @@ const columns = [
       className: 'text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap',
     },
     cell: (info) => (
-      <Link className='w-12' to={`/application/${info.row.original.id}`}>
+      <Link className='w-8' to={`/application/${info.row.original.id}`}>
         <EnvelopeFill
-          className='inline h-6 w-6 hover:text-purple-700'
+          className='inline h-5 w-5 hover:text-purple-700'
           alt='Letter Icon'
         />
       </Link>
@@ -123,9 +123,8 @@ const columns = [
 
 const ApplicationSummaryPage = () => {
   const { appsData, setAppsData } = useContext(GlobalContext);
-  const [showForm, toggleForm] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
-  const [noItemsRemoved, setNoItemsRemoved] = useState(0);
+  const [noItemsChanged, setNoItemsChanged] = useState(0);
 
   const table = useReactTable({
     data: appsData,
@@ -137,13 +136,13 @@ const ApplicationSummaryPage = () => {
 
   useEffect(() => {
     readDatabaseEntry('SELECT * FROM applications', null, setAppsData);
-  }, [showForm, setAppsData, noItemsRemoved]);
+  }, [setAppsData, noItemsChanged]);
 
   let navigate = useNavigate();
   const handleApplicationClick = (id) => {
     if (deleteMode) {
       deleteDatabaseEntry('DELETE FROM applications WHERE id=?', id, () =>
-        setNoItemsRemoved(noItemsRemoved + 1)
+        setNoItemsChanged(noItemsChanged + 1)
       );
     } else {
       navigate('/application/' + id, { replace: true });
@@ -161,13 +160,9 @@ const ApplicationSummaryPage = () => {
         new Date().toISOString(),
       ],
       () => {
-        toggleForm(!showForm);
+        setNoItemsChanged(noItemsChanged + 1);
       }
     );
-  };
-
-  const handleCancelCallback = () => {
-    toggleForm(!showForm);
   };
 
   return (
@@ -257,21 +252,15 @@ const ApplicationSummaryPage = () => {
       </div>
       <button
         type='button'
-        onClick={(event) => {
-          event.preventDefault();
-          toggleForm(!showForm);
-        }}
-        className='ml-auto align-center flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        <PlusLg className='w-4 h-4 mr-2' />
+        data-mdb-ripple='true'
+        data-mdb-ripple-color='light'
+        data-bs-toggle='modal'
+        data-bs-target='#addNewModal'
+        className='align-center ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        <PlusLg className='mr-2 h-4 w-4' />
         Add new
       </button>
-      {showForm ? (
-        <AddApplicationForm
-          className={`absolute top-0 block h-full w-full bg-white`}
-          handleSubmitCallback={handleSubmitCallback}
-          handleCancelCallback={handleCancelCallback}
-        />
-      ) : null}
+      <AddApplicationForm handleSubmitCallback={handleSubmitCallback} />
     </div>
   );
 };
