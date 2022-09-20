@@ -26,16 +26,16 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [openJsonViewerArr, setOpenJsonViewerArr] = useState([]);
 
   // Handles clicks to elements in either used or unused components
-  const elementToggleClickHandler = (code, selElem) => {
+  const elementToggleClickHandler = (action, deleteComponentID) => {
     // When unused element is clicked
-    if (code === 0) {
+    if (action === "unused") {
       // If element is not already used
       if (
-        !elements.filter((elem) => elem.id === selElem.id)[0].application_id
+        !elements.filter((elem) => elem.id === deleteComponentID)[0].application_id
       ) {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
-          [id, selElem.id],
+          [id, deleteComponentID],
           () => {
             setNoElementsClicked(noElementsClicked + 1);
           }
@@ -45,7 +45,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       else {
         deleteDatabaseEntry(
           'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-          [id, selElem.id],
+          [id, deleteComponentID],
           () => {
             setNoElementsClicked(noElementsClicked + 1);
           }
@@ -53,10 +53,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       }
     }
     // When used element is clicked
-    else if (code === 1) {
+    else if (action === "used") {
       deleteDatabaseEntry(
         'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-        [id, selElem.id],
+        [id, deleteComponentID],
         () => {
           setNoElementsClicked(noElementsClicked + 1);
         }
@@ -72,7 +72,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
+      () => { }
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +209,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +224,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -316,9 +316,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active'
-                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent bg-blue-50 px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active'
+                    } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent bg-blue-50 px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -374,6 +373,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 data-bs-parent='#accordionBuilder'>
                 <div className='accordion-body w-full'>
                   <CvSectionBuilderEdit
+                    elementToggleClickHandler={elementToggleClickHandler}
                     editSectionCallback={editCVSectionBuilderHandler}
                     id={elem.id}
                     currentSection={currentSection}
@@ -438,7 +438,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                           </td>
                           <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
                             <button
-                              onClick={() => elementToggleClickHandler(0, elem)}
+                              onClick={() => elementToggleClickHandler("unused", elem.id)}
                               className='flex w-full items-center justify-center'>
                               {elem.application_id ? (
                                 <XCircleFill className='h-5 w-5 text-red-600' />

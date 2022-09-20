@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../constants/template2_schema';
 import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
-import { toast } from "react-hot-toast"
+import { toast } from 'react-hot-toast';
 
 const CvSectionBuilderEdit = ({
+  elementToggleClickHandler,
   editSectionCallback,
   id,
   currentSection,
@@ -440,13 +441,13 @@ const CvSectionBuilderEdit = ({
 
   return (
     <>
-      <div className='relative z-20 flex items-center px-4 py-2 shadow-md'>
+      <div className='group relative z-20 flex items-center px-4 py-2 shadow-md'>
         <button
           aria-label='Delete section'
-          onClick={() => elementToggleClickHandler(1, elem)}
-          className='mr-2 flex items-center justify-center'>
+          onClick={() => elementToggleClickHandler("used", id)}
+          className='translate--5 mr-2 flex w-0 items-center justify-center opacity-20 transition transition-[width] duration-500 ease-in-out group-hover:w-6 group-hover:translate-x-0 group-hover:opacity-100 '>
           <XCircleFill className='h-5 w-5 text-red-600' />
-        </button>{' '}
+        </button>
         <h1 id='cv-section-builder' className='grow text-xl font-bold'>
           {currentSection} section builder
         </h1>
@@ -462,7 +463,7 @@ const CvSectionBuilderEdit = ({
       <div className='flex w-full items-center justify-center'>
         <div className='grow overflow-y-scroll bg-white px-4'>
           <form className='relative max-h-[70vh]'>
-            <div className='border-b border-gray-200 py-4'>
+            <div className='mb-2 border-b border-gray-200 py-4'>
               {currentSectionJsx[currentSection] && (
                 <>
                   <label
