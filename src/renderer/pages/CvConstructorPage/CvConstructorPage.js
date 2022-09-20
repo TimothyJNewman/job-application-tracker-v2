@@ -72,7 +72,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
+      () => { }
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +209,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +224,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -296,7 +296,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           </span>
           <PlusCircleFill
             style={{ color: `${showCvBuilder ? 'red' : ''}` }}
-            className={'mx-1 mb-1 inline h-6 w-6 hover:text-purple-700'}
+            className={'mx-1 mb-1 inline h-5 w-5 hover:text-purple-700'}
             alt='Add new CV section'
           />
         </button>
@@ -316,9 +316,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active'
-                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent bg-blue-50 hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active'
+                    } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent bg-blue-50 hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -394,80 +393,85 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       </div>
       <br />
       <h2>Unused Components</h2>
-      <table className='w-full'>
-        <thead>
-          <tr className='divide-x divide-slate-200 border-y border-slate-500'>
-            <th className='w-3/12 px-2'>Section</th>
-            <th className='w-7/12 px-2'>Desc</th>
-            <th className='w-1/12 px-2'>Toggle</th>
-            <th className='w-1/12 px-2'>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {elements
-            .filter((elem) => elem.cv_component_section === currentSection)
-            .map((elem) => (
-              <React.Fragment key={elem.id}>
-                <tr className='w-full cursor-pointer border-y border-slate-200 hover:bg-slate-100'>
-                  <td
-                    onClick={() => elementClickHandler(elem.id)}
-                    className='w-3/12 px-2'>
-                    {elem.cv_component_section}
-                  </td>
-                  <td
-                    onClick={() => elementClickHandler(elem.id)}
-                    className='w-7/12 px-2'>
-                    {getDescription(elem)}
-                  </td>
-                  <td className='w-1/12 px-2'>
-                    <button
-                      onClick={() => elementToggleClickHandler(0, elem)}
-                      className='flex w-full items-center justify-center'>
-                      {elem.application_id ? (
-                        <XCircleFill className='text-red-600' />
-                      ) : (
-                        <PlusCircleFill className='text-green-600' />
-                      )}
-                    </button>
-                  </td>
-                  <td className='w-1/12 px-2'>
-                    <button
-                      onClick={() => elementDeleteClickHandler(elem.id)}
-                      className='flex w-full items-center justify-center'>
-                      <TrashFill className='text-red-600' />
-                    </button>
-                  </td>
-                </tr>
-                {openJsonViewerArr.includes(elem.id) && (
+      <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+              <table class="min-w-full">
+                <thead className="bg-white border-b">
                   <tr>
-                    <td colSpan={'100%'}>
-                      <AceEditor
-                        mode='json'
-                        width='100%'
-                        maxLines={15}
-                        value={elem.cv_component_text}
-                        readOnly={true}
-                      />
-                    </td>
+                    <th scope="col" className="w-3/12  font-medium text-gray-900 px-6 py-2 text-left">Section</th>
+                    <th scope="col" className="w-7/12  font-medium text-gray-900 px-6 py-2 text-left">Desc</th>
+                    <th scope="col" className="w-1/12  font-medium text-gray-900 px-6 py-2 text-left">Toggle</th>
+                    <th scope="col" className="w-1/12  font-medium text-gray-900 px-6 py-2 text-left">Delete</th>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-        </tbody>
-      </table>
+                </thead>
+                <tbody>
+                  {elements
+                    .filter((elem) => elem.cv_component_section === currentSection)
+                    .map((elem) => (
+                      <React.Fragment key={elem.id}>
+                        <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                          <td
+                            onClick={() => elementClickHandler(elem.id)}
+                            className="w-3/12  text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                            {elem.cv_component_section}
+                          </td>
+                          <td
+                            onClick={() => elementClickHandler(elem.id)}
+                            className="w-7/12  text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                            {getDescription(elem)}
+                          </td>
+                          <td className="w-1/12  text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                            <button
+                              onClick={() => elementToggleClickHandler(0, elem)}
+                              className='flex w-full items-center justify-center'>
+                              {elem.application_id ? (
+                                <XCircleFill className='text-red-600 h-5 w-5' />
+                              ) : (
+                                <PlusCircleFill className='text-green-600 h-5 w-5' />
+                              )}
+                            </button>
+                          </td>
+                          <td className="w-1/12  text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                            <button
+                              onClick={() => elementDeleteClickHandler(elem.id)}
+                              className='flex w-full items-center justify-center'>
+                              <TrashFill className='text-red-600 h-5 w-5' />
+                            </button>
+                          </td>
+                        </tr>
+                        {openJsonViewerArr.includes(elem.id) && (
+                          <tr>
+                            <td colSpan={'100%'}>
+                              <AceEditor
+                                mode='json'
+                                width='100%'
+                                maxLines={15}
+                                value={elem.cv_component_text}
+                                readOnly={true}
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                </tbody>
+              </table></div></div></div></div>
       <button
+        type="button"
         onClick={generatePdf}
-        className='std-button my-2 ml-auto block'
-        type='button'>
-        Generate CV PDF
-      </button>
+        data-mdb-ripple="true"
+        data-mdb-ripple-color="light"
+        className="ml-auto block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+      >Generate CV PDF</button>
       {showCvBuilder ? (
         <CvSectionBuilder
           addSectionCallback={addCVSectionBuilderHandler}
           onClickOutside={() => toggleCvBuilder(!showCvBuilder)}
         />
       ) : null}
-    </div>
+    </div >
   );
 };
 
