@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Tag } from 'react-bootstrap-icons';
 import { GlobalContext } from '../context/GlobalContext';
 import { readDatabaseEntry } from '../util/CRUD';
 
@@ -23,7 +24,10 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
         <p>Role: {AppsDetails.role}</p>
         <p>Job Description: {AppsDetails.job_description}</p>
         <p>Status: {AppsDetails.status}</p>
-        <p>Date Applied: {Date(AppsDetails.date_applied)}</p>
+        <p>
+          Date Applied:{' '}
+          {new Date(AppsDetails.date_applied).toLocaleDateString()}
+        </p>
       </div>
     </div>
   );

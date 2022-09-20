@@ -442,13 +442,16 @@ const CvSectionBuilderEdit = ({
   return (
     <>
       <div className='group relative z-20 flex items-center px-4 py-2 shadow-md'>
+        <div className='ease h-5 w-1 bg-red-600 opacity-80 duration-500 group-hover:h-0 group-hover:w-0 group-hover:opacity-0'></div>
         <button
           aria-label='Delete section'
-          onClick={() => elementToggleClickHandler("used", id)}
-          className='translate--5 mr-2 flex w-0 items-center justify-center opacity-20 transition transition-[width] duration-500 ease-in-out group-hover:w-6 group-hover:translate-x-0 group-hover:opacity-100 '>
+          onClick={() => elementToggleClickHandler('used', id)}
+          className='ease mr-2 flex w-0 items-center justify-center opacity-20 transition transition-[width] duration-500 group-hover:w-6 group-hover:opacity-100 '>
           <XCircleFill className='h-5 w-5 text-red-600' />
         </button>
-        <h1 id='cv-section-builder' className='grow text-xl font-bold'>
+        <h1
+          id='cv-section-builder'
+          className='grow text-xl font-bold capitalize'>
           {currentSection} section builder
         </h1>
         <button

@@ -43,7 +43,7 @@ export default function Nav() {
               <li className='nav-item pr-2' key={elem.name}>
                 <Link
                   to={elem.url}
-                  className='nav-link p-0 text-gray-500 hover:text-gray-700 focus:text-gray-700'>
+                  className='nav-link p-0 text-gray-500 focus:text-gray-700'>
                   {elem.name}
                 </Link>
               </li>

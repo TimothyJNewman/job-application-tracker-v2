@@ -343,12 +343,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed z-10 h-screen w-screen'></div>
+    <div className='fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
+      <div id='overlay-blur' className='fixed  h-screen w-screen'></div>
       <div
         ref={clickRef}
         className='m-8 flex w-full items-center justify-center'>
-        <div className='z-20 max-w-3xl grow bg-white p-4'>
+        <div className='relative z-30 max-w-3xl grow bg-white p-4'>
           <h1 id='cv-section-builder' className='text-xl font-bold'>
             {currentSection} section builder
           </h1>

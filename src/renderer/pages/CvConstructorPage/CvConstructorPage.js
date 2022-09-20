@@ -28,10 +28,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   // Handles clicks to elements in either used or unused components
   const elementToggleClickHandler = (action, deleteComponentID) => {
     // When unused element is clicked
-    if (action === "unused") {
+    if (action === 'unused') {
       // If element is not already used
       if (
-        !elements.filter((elem) => elem.id === deleteComponentID)[0].application_id
+        !elements.filter((elem) => elem.id === deleteComponentID)[0]
+          .application_id
       ) {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
@@ -53,7 +54,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
       }
     }
     // When used element is clicked
-    else if (action === "used") {
+    else if (action === 'used') {
       deleteDatabaseEntry(
         'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
         [id, deleteComponentID],
@@ -72,7 +73,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => { }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +210,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +225,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -285,7 +286,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
 
   return (
     <div className='p-4'>
-      <h1 id='cv-contructor' className='text-xl font-bold'>
+      <h1 id='cv-contructor' className='my-2 text-xl font-bold'>
         CV constructor{' '}
         <button
           className='has-tooltip inline px-1'
@@ -301,9 +302,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           />
         </button>
       </h1>
-      <div className='mb-2 flex flex-wrap gap-2'>
+      <div className='flex flex-wrap gap-2'>
         <ul
-          className='nav nav-tabs mb-2 flex list-none flex-row flex-wrap border-b-0 pl-0'
+          className='nav nav-tabs flex list-none flex-row flex-wrap border-b-0 pl-0'
           id='tabs-tab'
           role='tablist'>
           {Object.entries(schema)
@@ -316,8 +317,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active'
-                    } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent bg-blue-50 px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -341,149 +343,147 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           </div>
         </div> */}
       </div>
-      <h2>Used Components</h2>
-      <div className='accordion' id='accordionBuilder'>
-        {elements
-          .filter(
-            (elem) =>
-              elem.application_id &&
-              elem.cv_component_section === currentSection
-          )
-          .map((elem) => (
-            <div
-              key={elem.id}
-              className='accordion-item border border-gray-200 bg-white'>
-              <h2
-                className='accordion-header mb-0'
-                id={`accordion_builder_header_${elem.id}`}>
-                <button
-                  className='accordion-button relative flex w-full items-center rounded-none border-0 bg-white py-4 px-5 text-left text-base text-gray-800 transition focus:outline-none'
-                  type='button'
-                  data-bs-toggle='collapse'
-                  data-bs-target={`#accordion_builder_collapse_${elem.id}`}
-                  aria-expanded='false'
-                  aria-controls={`#accordion_builder_collapse_${elem.id}`}>
-                  {elem?.cv_component_description}
-                </button>
-              </h2>
+      <div className='relative z-10 rounded-b bg-blue-50 p-2 shadow'>
+        <h2 className='font-medium tracking-tight'>Used Components</h2>
+        <div className='accordion' id='accordionBuilder'>
+          {elements
+            .filter(
+              (elem) =>
+                elem.application_id &&
+                elem.cv_component_section === currentSection
+            )
+            .map((elem) => (
               <div
-                id={`accordion_builder_collapse_${elem.id}`}
-                className='collapse accordion-collapse'
-                aria-labelledby={`accordion_builder_header_${elem.id}`}
-                data-bs-parent='#accordionBuilder'>
-                <div className='accordion-body w-full'>
-                  <CvSectionBuilderEdit
-                    elementToggleClickHandler={elementToggleClickHandler}
-                    editSectionCallback={editCVSectionBuilderHandler}
-                    id={elem.id}
-                    currentSection={currentSection}
-                    currentDescriptionDatabase={elem.cv_component_description}
-                    currentFieldValuesDatabase={JSON.parse(
-                      elem.cv_component_text
-                    )}
-                  />
+                key={elem.id}
+                className='accordion-item border border-gray-200 bg-white'>
+                <h2
+                  className='accordion-header mb-0'
+                  id={`accordion_builder_header_${elem.id}`}>
+                  <button
+                    className='accordion-button relative flex w-full items-center rounded-none border-0 bg-white py-2 px-5 text-left text-base text-gray-800 transition focus:outline-none'
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target={`#accordion_builder_collapse_${elem.id}`}
+                    aria-expanded='false'
+                    aria-controls={`#accordion_builder_collapse_${elem.id}`}>
+                    {elem?.cv_component_description}
+                  </button>
+                </h2>
+                <div
+                  id={`accordion_builder_collapse_${elem.id}`}
+                  className='collapse accordion-collapse'
+                  aria-labelledby={`accordion_builder_header_${elem.id}`}
+                  data-bs-parent='#accordionBuilder'>
+                  <div className='accordion-body w-full'>
+                    <CvSectionBuilderEdit
+                      elementToggleClickHandler={elementToggleClickHandler}
+                      editSectionCallback={editCVSectionBuilderHandler}
+                      id={elem.id}
+                      currentSection={currentSection}
+                      currentDescriptionDatabase={elem.cv_component_description}
+                      currentFieldValuesDatabase={JSON.parse(
+                        elem.cv_component_text
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-      </div>
-      <br />
-      <h2>Unused Components</h2>
-      <div className='flex flex-col'>
-        <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
-          <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
-            <div className='overflow-hidden'>
-              <table className='min-w-full'>
-                <thead className='border-b bg-white'>
-                  <tr>
-                    <th
-                      scope='col'
-                      className='w-3/12  px-6 py-2 text-left font-medium text-gray-900'>
-                      Section
-                    </th>
-                    <th
-                      scope='col'
-                      className='w-7/12  px-6 py-2 text-left font-medium text-gray-900'>
-                      Desc
-                    </th>
-                    <th
-                      scope='col'
-                      className='w-1/12  px-6 py-2 text-left font-medium text-gray-900'>
-                      Toggle
-                    </th>
-                    <th
-                      scope='col'
-                      className='w-1/12  px-6 py-2 text-left font-medium text-gray-900'>
-                      Delete
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {elements
-                    .filter(
-                      (elem) => elem.cv_component_section === currentSection
-                    )
-                    .map((elem) => (
-                      <React.Fragment key={elem.id}>
-                        <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
-                          <td
-                            onClick={() => elementClickHandler(elem.id)}
-                            className='w-3/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                            {elem.cv_component_section}
-                          </td>
-                          <td
-                            onClick={() => elementClickHandler(elem.id)}
-                            className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                            {getDescription(elem)}
-                          </td>
-                          <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                            <button
-                              onClick={() => elementToggleClickHandler("unused", elem.id)}
-                              className='flex w-full items-center justify-center'>
-                              {elem.application_id ? (
-                                <XCircleFill className='h-5 w-5 text-red-600' />
-                              ) : (
-                                <PlusCircleFill className='h-5 w-5 text-green-600' />
-                              )}
-                            </button>
-                          </td>
-                          <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                            <button
-                              onClick={() => elementDeleteClickHandler(elem.id)}
-                              className='flex w-full items-center justify-center'>
-                              <TrashFill className='h-5 w-5 text-red-600' />
-                            </button>
-                          </td>
-                        </tr>
-                        {openJsonViewerArr.includes(elem.id) && (
-                          <tr>
-                            <td colSpan={'100%'}>
-                              <AceEditor
-                                mode='json'
-                                width='100%'
-                                maxLines={15}
-                                value={elem.cv_component_text}
-                                readOnly={true}
-                              />
+            ))}
+        </div>
+        <br />
+        <h2 className='font-medium tracking-tight'>Unused Components</h2>
+        <div className='flex flex-col'>
+          <div className='overflow-x-auto'>
+            <div className='inline-block min-w-full py-2 '>
+              <div className='overflow-hidden'>
+                <table className='min-w-full'>
+                  <thead className='border-b bg-white '>
+                    <tr className='text-left text-gray-700 '>
+                      <th scope='col' className='w-3/12  px-6 py-2 font-normal'>
+                        Section
+                      </th>
+                      <th scope='col' className='w-7/12  px-6 py-2 font-normal'>
+                        Desc
+                      </th>
+                      <th scope='col' className='w-1/12  px-6 py-2 font-normal'>
+                        Toggle
+                      </th>
+                      <th scope='col' className='w-1/12  px-6 py-2 font-normal'>
+                        Delete
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {elements
+                      .filter(
+                        (elem) => elem.cv_component_section === currentSection
+                      )
+                      .map((elem) => (
+                        <React.Fragment key={elem.id}>
+                          <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
+                            <td
+                              onClick={() => elementClickHandler(elem.id)}
+                              className='w-3/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              {elem.cv_component_section}
+                            </td>
+                            <td
+                              onClick={() => elementClickHandler(elem.id)}
+                              className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              {getDescription(elem)}
+                            </td>
+                            <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              <button
+                                onClick={() =>
+                                  elementToggleClickHandler('unused', elem.id)
+                                }
+                                className='flex w-full items-center justify-center'>
+                                {elem.application_id ? (
+                                  <XCircleFill className='h-5 w-5 text-red-600' />
+                                ) : (
+                                  <PlusCircleFill className='h-5 w-5 text-green-600' />
+                                )}
+                              </button>
+                            </td>
+                            <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              <button
+                                onClick={() =>
+                                  elementDeleteClickHandler(elem.id)
+                                }
+                                className='flex w-full items-center justify-center'>
+                                <TrashFill className='h-5 w-5 text-red-600' />
+                              </button>
                             </td>
                           </tr>
-                        )}
-                      </React.Fragment>
-                    ))}
-                </tbody>
-              </table>
+                          {openJsonViewerArr.includes(elem.id) && (
+                            <tr>
+                              <td colSpan={'100%'}>
+                                <AceEditor
+                                  mode='json'
+                                  width='100%'
+                                  maxLines={15}
+                                  value={elem.cv_component_text}
+                                  readOnly={true}
+                                />
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
+        <button
+          type='button'
+          onClick={generatePdf}
+          data-mdb-ripple='true'
+          data-mdb-ripple-color='light'
+          className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+          Generate CV PDF
+        </button>
       </div>
-      <button
-        type='button'
-        onClick={generatePdf}
-        data-mdb-ripple='true'
-        data-mdb-ripple-color='light'
-        className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        Generate CV PDF
-      </button>
       {showCvBuilder ? (
         <CvSectionBuilder
           addSectionCallback={addCVSectionBuilderHandler}
