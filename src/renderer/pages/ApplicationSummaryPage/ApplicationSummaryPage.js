@@ -66,8 +66,7 @@ const columns = [
       className: 'w-8',
     },
     cell: (info) => (
-      <Link
-        to={`/application/${info.row.original.id}#cv-contructor`}>
+      <Link to={`/application/${info.row.original.id}#cv-contructor`}>
         <FilePersonFill
           className='hoanimate-pulse inline h-5 w-5 hover:text-purple-700'
           alt='CV Icon'
@@ -149,7 +148,7 @@ const ApplicationSummaryPage = () => {
           Delete button
         </span>
         <TrashFill
-          style={{ color: `${deleteMode ? 'red' : ''}` }}
+          style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
           className={'mx-1 mb-1 inline h-6 w-6 hover:text-purple-700'}
           alt='Delete Entry Icon'
         />
@@ -168,9 +167,10 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
-                            }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -208,8 +208,9 @@ const ApplicationSummaryPage = () => {
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
-                            }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -230,7 +231,7 @@ const ApplicationSummaryPage = () => {
         data-mdb-ripple-color='light'
         data-bs-toggle='modal'
         data-bs-target='#addNewModal'
-        className='align-center ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
         <PlusLg className='mr-2 h-4 w-4' />
         Add new
       </button>

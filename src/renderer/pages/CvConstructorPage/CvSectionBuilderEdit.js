@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../constants/template2_schema';
+import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
 
 const CvSectionBuilderEdit = ({
   editSectionCallback,
@@ -91,18 +92,44 @@ const CvSectionBuilderEdit = ({
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
         <React.Fragment key={`add-button-${inputName}`}>
-          <br />
           <button
+            onClick={(event) => addFieldHandler(event, breadCrumbs)}
+            type='button'
+            data-mdb-ripple='true'
+            data-mdb-ripple-color='light'
+            className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+            <PlusLg className='mr-2 h-4 w-4' />
+            {`Add ${inputName}`}
+          </button>
+          <br />
+          {/* <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
             className='std-button'
             type='button'>
             {`Add ${inputName}`}
-          </button>
+          </button> */}
         </React.Fragment>
       ),
       shortText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
+            value={inputName}
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block text-gray-700'>
+            {inputName}
+          </label>
+          <input
+            type='text'
+            className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            placeholder='Text input'
+            name={inputName}
+            id={inputName}
+            value={inputState}
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
+            }
+          />
+          {/* <label
             value={inputName}
             htmlFor={inputName}
             className='my-2 py-1 italic'>
@@ -117,12 +144,27 @@ const CvSectionBuilderEdit = ({
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
-          />
+          /> */}
         </React.Fragment>
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
-          <label htmlFor={inputName} className='my-2 py-1 italic'>
+          <label
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block text-gray-700'>
+            {inputName}
+          </label>
+          <textarea
+            className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            name={inputName}
+            id={inputName}
+            value={inputState}
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
+            }
+            rows='3'
+            placeholder='Your message'></textarea>
+          {/* <label htmlFor={inputName} className='my-2 py-1 italic'>
             {inputName}
           </label>
           <textarea
@@ -132,12 +174,29 @@ const CvSectionBuilderEdit = ({
             value={inputState}
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
-            }></textarea>
+            }></textarea> */}
         </React.Fragment>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
+            value={inputName}
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block text-gray-700'>
+            {inputName}
+          </label>
+          <input
+            type='number'
+            className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            name={inputName}
+            id={inputName}
+            value={inputState}
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
+            }
+            placeholder='Number input'
+          />
+          {/* <label
             value={inputName}
             htmlFor={inputName}
             className='my-2 py-1 italic'>
@@ -152,12 +211,29 @@ const CvSectionBuilderEdit = ({
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
-          />
+          /> */}
         </React.Fragment>
       ),
       date: ({ inputName, inputState, breadCrumbs }) => (
         <React.Fragment key={inputName}>
           <label
+            value={inputName}
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block text-gray-700'>
+            {inputName}
+          </label>
+          <input
+            type='date'
+            className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            placeholder='Text input'
+            name={inputName}
+            id={inputName}
+            value={inputState}
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
+            }
+          />
+          {/* <label
             value={inputName}
             htmlFor={inputName}
             className='my-2 py-1 italic'>
@@ -174,7 +250,7 @@ const CvSectionBuilderEdit = ({
                 handleInputChange(event, currentFieldValues, breadCrumbs)
               }
             />
-          </div>
+          </div> */}
         </React.Fragment>
       ),
     };
@@ -360,16 +436,50 @@ const CvSectionBuilderEdit = ({
     setCurrentFieldValues(newFieldValues);
   };
 
-  return (
+  return (<>
+    <div className='items-center relative z-20 flex px-4 py-2 shadow-md'>
+      <button
+        aria-label='Delete section'
+        onClick={() => elementToggleClickHandler(1, elem)}
+        className='flex items-center justify-center mr-2'>
+        <XCircleFill className='h-5 w-5 text-red-600' />
+      </button> <h1
+        id='cv-section-builder'
+        className='grow text-xl font-bold'>
+        {currentSection} section builder
+      </h1>
+      <button
+        type='submit'
+        onClick={handleSubmit}
+        data-mdb-ripple='true'
+        data-mdb-ripple-color='light'
+        className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        Save
+      </button>
+    </div>
     <div className='flex w-full items-center justify-center'>
-      <div className='grow bg-white p-4'>
-        <h1 id='cv-section-builder' className='text-xl font-bold'>
-          {currentSection} section builder
-        </h1>
-        <form className='relative grid max-h-[70vh] grid-cols-2 gap-4 overflow-y-auto'>
-          {currentSectionJsx[currentSection] && (
-            <>
-              <label htmlFor='description' className='bold my-2 py-1'>
+      <div className='grow overflow-y-scroll bg-white px-4'>
+        <form className='relative max-h-[70vh]'>
+          <div className='border-b border-gray-200 py-4'>
+            {currentSectionJsx[currentSection] && (
+              <>
+                <label
+                  htmlFor='description'
+                  className='form-label mb-2 inline-block text-gray-700'>
+                  Description
+                </label>
+                <input
+                  type='text'
+                  className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                  placeholder='Text input'
+                  name='description'
+                  id='description'
+                  value={currentDescription}
+                  onChange={(event) =>
+                    setCurrentDescription(event.target.value)
+                  }
+                />
+                {/* <label htmlFor='description' className='bold my-2 py-1'>
                 Description
               </label>
               <input
@@ -378,19 +488,14 @@ const CvSectionBuilderEdit = ({
                 name='description'
                 value={currentDescription}
                 onChange={(event) => setCurrentDescription(event.target.value)}
-              />
-            </>
-          )}
+              /> */}
+              </>
+            )}
+          </div>
           {currentSectionJsx[currentSection]}
-          <br />
-          <input
-            type='submit'
-            onClick={handleSubmit}
-            className='std-button my-2 ml-auto block'
-          />
         </form>
       </div>
-    </div>
+    </div></>
   );
 };
 
