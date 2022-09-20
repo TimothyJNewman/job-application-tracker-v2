@@ -285,7 +285,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   };
 
   return (
-    <div className='p-4'>
+    <div className='px-4'>
       <h1 id='cv-contructor' className='my-2 text-xl font-bold'>
         CV constructor{' '}
         <button
