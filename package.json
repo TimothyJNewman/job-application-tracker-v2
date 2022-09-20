@@ -106,6 +106,7 @@
     "react-ace": "^10.1.0",
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.0",
     "react-router-dom": "^6.3.0",
     "resume-cli": "^3.0.7",
     "tw-elements": "^1.0.0-alpha12"

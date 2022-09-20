@@ -1,6 +1,7 @@
 import React from 'react';
 import Nav from './components/Nav';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import {
   ApplicationPage,
   ApplicationSummaryPage,
@@ -11,6 +12,7 @@ import GlobalProvider from './context/GlobalProvider';
 const App = () => {
   return (
     <div className='App w-screen overflow-hidden'>
+      <Toaster />
       <Router>
         <Nav />
         <Routes>

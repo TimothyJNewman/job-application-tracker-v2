@@ -72,7 +72,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => { }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -209,7 +209,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +224,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -316,8 +316,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active'
-                    } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent bg-blue-50 px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active'
+                  } nav-link my-2 block border-x-0 border-t-0 border-b-2 border-transparent bg-blue-50 px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

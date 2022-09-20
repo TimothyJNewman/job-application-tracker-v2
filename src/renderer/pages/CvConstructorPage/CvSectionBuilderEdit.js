@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../constants/template2_schema';
 import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
+import { toast } from "react-hot-toast"
 
 const CvSectionBuilderEdit = ({
   editSectionCallback,
@@ -413,6 +414,7 @@ const CvSectionBuilderEdit = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    toast.success('Successfully saved');
     editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
@@ -436,50 +438,50 @@ const CvSectionBuilderEdit = ({
     setCurrentFieldValues(newFieldValues);
   };
 
-  return (<>
-    <div className='items-center relative z-20 flex px-4 py-2 shadow-md'>
-      <button
-        aria-label='Delete section'
-        onClick={() => elementToggleClickHandler(1, elem)}
-        className='flex items-center justify-center mr-2'>
-        <XCircleFill className='h-5 w-5 text-red-600' />
-      </button> <h1
-        id='cv-section-builder'
-        className='grow text-xl font-bold'>
-        {currentSection} section builder
-      </h1>
-      <button
-        type='submit'
-        onClick={handleSubmit}
-        data-mdb-ripple='true'
-        data-mdb-ripple-color='light'
-        className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        Save
-      </button>
-    </div>
-    <div className='flex w-full items-center justify-center'>
-      <div className='grow overflow-y-scroll bg-white px-4'>
-        <form className='relative max-h-[70vh]'>
-          <div className='border-b border-gray-200 py-4'>
-            {currentSectionJsx[currentSection] && (
-              <>
-                <label
-                  htmlFor='description'
-                  className='form-label mb-2 inline-block text-gray-700'>
-                  Description
-                </label>
-                <input
-                  type='text'
-                  className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-                  placeholder='Text input'
-                  name='description'
-                  id='description'
-                  value={currentDescription}
-                  onChange={(event) =>
-                    setCurrentDescription(event.target.value)
-                  }
-                />
-                {/* <label htmlFor='description' className='bold my-2 py-1'>
+  return (
+    <>
+      <div className='relative z-20 flex items-center px-4 py-2 shadow-md'>
+        <button
+          aria-label='Delete section'
+          onClick={() => elementToggleClickHandler(1, elem)}
+          className='mr-2 flex items-center justify-center'>
+          <XCircleFill className='h-5 w-5 text-red-600' />
+        </button>{' '}
+        <h1 id='cv-section-builder' className='grow text-xl font-bold'>
+          {currentSection} section builder
+        </h1>
+        <button
+          type='submit'
+          onClick={handleSubmit}
+          data-mdb-ripple='true'
+          data-mdb-ripple-color='light'
+          className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+          Save
+        </button>
+      </div>
+      <div className='flex w-full items-center justify-center'>
+        <div className='grow overflow-y-scroll bg-white px-4'>
+          <form className='relative max-h-[70vh]'>
+            <div className='border-b border-gray-200 py-4'>
+              {currentSectionJsx[currentSection] && (
+                <>
+                  <label
+                    htmlFor='description'
+                    className='form-label mb-2 inline-block text-gray-700'>
+                    Description
+                  </label>
+                  <input
+                    type='text'
+                    className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                    placeholder='Text input'
+                    name='description'
+                    id='description'
+                    value={currentDescription}
+                    onChange={(event) =>
+                      setCurrentDescription(event.target.value)
+                    }
+                  />
+                  {/* <label htmlFor='description' className='bold my-2 py-1'>
                 Description
               </label>
               <input
@@ -489,13 +491,14 @@ const CvSectionBuilderEdit = ({
                 value={currentDescription}
                 onChange={(event) => setCurrentDescription(event.target.value)}
               /> */}
-              </>
-            )}
-          </div>
-          {currentSectionJsx[currentSection]}
-        </form>
+                </>
+              )}
+            </div>
+            {currentSectionJsx[currentSection]}
+          </form>
+        </div>
       </div>
-    </div></>
+    </>
   );
 };
 
