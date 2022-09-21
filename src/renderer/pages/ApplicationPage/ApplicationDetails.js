@@ -5,8 +5,8 @@ import {
   EmojiSmile,
   Tag,
 } from 'react-bootstrap-icons';
-import { GlobalContext } from '../context/GlobalContext';
-import { readDatabaseEntry } from '../util/CRUD';
+import { GlobalContext } from '../../context/GlobalContext';
+import { readDatabaseEntry } from '../../util/CRUD';
 
 const ApplicationDetails = ({ id, setPdfUrl }) => {
   const { appsData } = useContext(GlobalContext);
@@ -21,9 +21,8 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
   }, [setPdfUrl, id, AppsDetails]);
 
   return (
-    <div className='px-4'>
-      <div className='flex justify-center pt-6 pb-2'>
-        {' '}
+    <div className='px-4 flex flex-col sm:flex-row gap-x-4 items-center'>
+      <div className='flex justify-center pt-6 pb-2 w-fit'>
         <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow'>
           <div className='flex w-full items-center justify-center object-cover p-4'>
             {AppsDetails.status === 'Rejected' ? (
@@ -46,7 +45,8 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
           </div>
         </div>
       </div>
-      <div className='accordion' id='accordionJobDesc'>
+      <div className='flex items-center grow w-full'>
+      <div className='accordion w-full' id='accordionJobDesc'>
         <div className='accordion-item border border-gray-200 bg-white'>
           <h2 className='accordion-header mb-0' id='descriptionAccordionHeader'>
             <button
@@ -69,7 +69,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div></div>
     </div>
   );
 };
