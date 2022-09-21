@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AddApplicationForm from '../../components/AddApplicationForm';
+import NewApplicationForm from '../../components/NewApplicationForm';
 import {
   createDatabaseEntry,
   deleteDatabaseEntry,
@@ -22,18 +22,19 @@ import {
   FilePersonFill,
   PlusLg,
 } from 'react-bootstrap-icons';
+import { DropdownLinks } from '../../components/microComponents/';
 
 const columns = [
-  {
-    accessorKey: 'id',
-    header: 'Id',
-    headerCellProps: {
-      className: 'w-8',
-    },
-    bodyCellProps: {
-      className: 'w-8',
-    },
-  },
+  // {
+  //   accessorKey: 'id',
+  //   header: 'Id',
+  //   headerCellProps: {
+  //     className: 'w-8',
+  //   },
+  //   bodyCellProps: {
+  //     className: 'w-8',
+  //   },
+  // },
   {
     accessorKey: 'company',
     header: 'Company',
@@ -57,39 +58,38 @@ const columns = [
     cell: (info) => new Date(info.getValue()).toLocaleDateString(),
   },
   {
-    id: 'cv',
-    header: 'CV',
+    id: 'documents',
+    header: 'Docs',
     headerCellProps: {
-      className: 'w-8',
+      className: 'w-12',
     },
     bodyCellProps: {
-      className: 'w-8',
+      className: 'w-12 text-center',
     },
     cell: (info) => (
-      <Link to={`/application/${info.row.original.id}#cv-contructor`}>
-        <FilePersonFill
-          className='hoanimate-pulse inline h-5 w-5 hover:text-purple-700'
-          alt='CV Icon'
-        />
-      </Link>
-    ),
-  },
-  {
-    id: 'letter',
-    header: 'Letter',
-    headerCellProps: {
-      className: 'w-8',
-    },
-    bodyCellProps: {
-      className: 'w-8',
-    },
-    cell: (info) => (
-      <Link to={`/application/${info.row.original.id}`}>
-        <EnvelopeFill
-          className='inline h-5 w-5 hover:text-purple-700'
-          alt='Letter Icon'
-        />
-      </Link>
+      <DropdownLinks
+        values={[{
+          label: <><FilePersonFill
+            className='inline mb-1 mr-2 hover:text-blue-300'
+            alt='CV Icon'
+          />CV</>,
+          link: `/application/${info.row.original.id}#cv-contructor`,
+        },
+        {
+          label: <><EnvelopeFill
+            className='inline mb-1 mr-2 hover:text-blue-300'
+            alt='Letter Icon'
+          />Letter</>,
+          link: `/application/${info.row.original.id}`,
+        },
+        ]}
+      />
+      // <Link to={`/application/${info.row.original.id}`}>
+      //   <EnvelopeFill
+      //     className='inline h-5 w-5 hover:text-purple-700'
+      //     alt='Letter Icon'
+      //   />
+      // </Link>
     ),
   },
 ];
@@ -167,10 +167,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -204,13 +203,13 @@ const ApplicationSummaryPage = () => {
                     <tr
                       key={row.id}
                       className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'
-                      onClick={() => handleApplicationClick(row.original.id)}>
+                    // TODO remove this line onClick={() => handleApplicationClick(row.original.id)}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -235,7 +234,7 @@ const ApplicationSummaryPage = () => {
         <PlusLg className='mr-2 h-4 w-4' />
         Add new
       </button>
-      <AddApplicationForm handleSubmitCallback={handleSubmitCallback} />
+      <NewApplicationForm handleSubmitCallback={handleSubmitCallback} />
     </div>
   );
 };

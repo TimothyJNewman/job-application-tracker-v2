@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Notification from '../components/Notification';
+import Notification from './Notification';
 import { GlobalContext } from '../context/GlobalContext';
 
 const navLinks = [
@@ -8,7 +8,7 @@ const navLinks = [
   { name: 'Curriculam Vitae', url: '/cv-page' },
 ];
 
-export default function Nav() {
+const NavBar = () => {
   const { notification } = useContext(GlobalContext);
   return (
     <nav className='navbar navbar-light navbar-expand-sm relative flex w-full flex-wrap items-center justify-between bg-gray-100 py-4 text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700'>
@@ -62,4 +62,6 @@ export default function Nav() {
       </div>
     </nav>
   );
-}
+};
+
+export default NavBar;

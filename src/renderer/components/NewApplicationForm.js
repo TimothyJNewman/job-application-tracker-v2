@@ -7,7 +7,7 @@ const defaultState = {
   status: 'To Apply',
 };
 
-export default function AddApplicationForm({ handleSubmitCallback }) {
+export default function NewApplicationForm({ handleSubmitCallback }) {
   const [appInput, setAppInput] = useState(defaultState);
   return (
     <div

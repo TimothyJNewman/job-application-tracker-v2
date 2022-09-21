@@ -1,5 +1,5 @@
 import React from 'react';
-import Nav from './components/Nav';
+import NavBar from './components/NavBar';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import {
@@ -14,7 +14,7 @@ const App = () => {
     <div className='App w-screen overflow-hidden'>
       <Toaster />
       <Router>
-        <Nav />
+        <NavBar />
         <Routes>
           <Route path='/cv-page/:id' element={<CvConstructorPage />} />
           <Route path='/application/:id' element={<ApplicationPage />} />
