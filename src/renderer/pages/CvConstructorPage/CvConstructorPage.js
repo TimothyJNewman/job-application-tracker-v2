@@ -13,7 +13,7 @@ import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill, XCircleFill, TrashFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
-import { toast } from "react-hot-toast"
+import { toast } from 'react-hot-toast';
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
@@ -73,7 +73,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => { }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -210,7 +210,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -225,7 +225,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => { }
+      () => {}
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -235,7 +235,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const generatePdf = () => {
     if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
-      toast.error('Select cv elements before generating document')
+      toast.error('Select cv elements before generating document');
       return;
     }
 
@@ -250,11 +250,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             setPdfUrl({ isReady: true, url: result });
           }
         );
-        toast.success('Successfuly generated CV Pdf')
+        toast.success('Successfuly generated CV Pdf');
       })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
-        toast.error(`CV Pdf Error: ${error.message}`)
+        toast.error(`CV Pdf Error: ${error.message}`);
       });
   };
 
@@ -311,8 +311,9 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -392,11 +393,10 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 <table className='min-w-full'>
                   <thead className='border-b bg-white '>
                     <tr className='text-left text-gray-700 '>
-                      <th scope='col' className='w-3/12  px-6 py-2 font-normal'>
-                        Section
-                      </th>
-                      <th scope='col' className='w-7/12  px-6 py-2 font-normal'>
-                        Desc
+                      <th
+                        scope='col'
+                        className='w-10/12  px-6 py-2 font-normal'>
+                        Description
                       </th>
                       <th scope='col' className='w-1/12  px-6 py-2 font-normal'>
                         Toggle
@@ -414,11 +414,6 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                       .map((elem) => (
                         <React.Fragment key={elem.id}>
                           <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
-                            <td
-                              onClick={() => elementClickHandler(elem.id)}
-                              className='w-3/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                              {elem.cv_component_section}
-                            </td>
                             <td
                               onClick={() => elementClickHandler(elem.id)}
                               className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
@@ -473,7 +468,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
           onClick={generatePdf}
           data-mdb-ripple='true'
           data-mdb-ripple-color='light'
-          className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+          className='my-2 ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
           Generate CV PDF
         </button>
       </div>

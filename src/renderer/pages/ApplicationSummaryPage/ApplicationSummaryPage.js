@@ -68,20 +68,31 @@ const columns = [
     },
     cell: (info) => (
       <DropdownLinks
-        values={[{
-          label: <><FilePersonFill
-            className='inline mb-1 mr-2 hover:text-blue-300'
-            alt='CV Icon'
-          />CV</>,
-          link: `/application/${info.row.original.id}#cv-contructor`,
-        },
-        {
-          label: <><EnvelopeFill
-            className='inline mb-1 mr-2 hover:text-blue-300'
-            alt='Letter Icon'
-          />Letter</>,
-          link: `/application/${info.row.original.id}`,
-        },
+        values={[
+          {
+            label: (
+              <>
+                <FilePersonFill
+                  className='mb-1 mr-2 inline hover:text-blue-300'
+                  alt='CV Icon'
+                />
+                CV
+              </>
+            ),
+            link: `/application/${info.row.original.id}#cv-contructor`,
+          },
+          {
+            label: (
+              <>
+                <EnvelopeFill
+                  className='mb-1 mr-2 inline hover:text-blue-300'
+                  alt='Letter Icon'
+                />
+                Letter
+              </>
+            ),
+            link: `/application/${info.row.original.id}`,
+          },
         ]}
       />
       // <Link to={`/application/${info.row.original.id}`}>
@@ -167,9 +178,10 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
-                            }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -202,14 +214,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100 group'
-                    // TODO remove this line onClick={() => handleApplicationClick(row.original.id)}
+                      className='group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'
+                      // TODO remove this line onClick={() => handleApplicationClick(row.original.id)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
-                            }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

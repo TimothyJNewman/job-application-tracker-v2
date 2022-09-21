@@ -11,15 +11,20 @@ export default function ApplicationPage() {
   return (
     <div>
       <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
-      <div className='flex flex-col sm:flex-row'><div className='grow'><CvConstructorPage id={id} setPdfUrl={setPdfUrl} /></div><div className=''>
-        {pdfState.isReady ? (
-          <PdfDisplay url={pdfState.url} />
-        ) : (
-          <p className='pt-4 px-4'>
-            No CV PDF found. Click generate pdf to create a new one.
-          </p>
-        )}
-      </div></div>
+      <div className='flex flex-col sm:flex-row'>
+        <div className='grow'>
+          <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
+        </div>
+        <div className=''>
+          {pdfState.isReady ? (
+            <PdfDisplay url={pdfState.url} />
+          ) : (
+            <p className='px-4 pt-4'>
+              No CV PDF found. Click generate pdf to create a new one.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
     // <div className='flex flex-col sm:flex-row'>
     //   <div className='grow flex flex-col'>

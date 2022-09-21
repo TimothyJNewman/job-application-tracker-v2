@@ -87,13 +87,12 @@ const CvSectionBuilderEdit = ({
       // ),
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
-        <React.Fragment key={inputName}>
-          <p>{inputName}</p>
-          <br />
-        </React.Fragment>
+        <h2 key={inputName} className='mb-2 font-medium'>
+          {inputName}
+        </h2>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <React.Fragment key={`add-button-${inputName}`}>
+        <div key={`add-button-${inputName}`} className='py-2'>
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
             type='button'
@@ -103,17 +102,10 @@ const CvSectionBuilderEdit = ({
             <PlusLg className='mr-2 h-4 w-4' />
             {`Add ${inputName}`}
           </button>
-          <br />
-          {/* <button
-            onClick={(event) => addFieldHandler(event, breadCrumbs)}
-            className='std-button'
-            type='button'>
-            {`Add ${inputName}`}
-          </button> */}
-        </React.Fragment>
+        </div>
       ),
       shortText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -131,26 +123,10 @@ const CvSectionBuilderEdit = ({
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-          {/* <label
-            value={inputName}
-            htmlFor={inputName}
-            className='my-2 py-1 italic'>
-            {inputName}
-          </label>
-          <input
-            type='text'
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(event) =>
-              handleInputChange(event, currentFieldValues, breadCrumbs)
-            }
-          /> */}
-        </React.Fragment>
+        </div>
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             htmlFor={inputName}
             className='form-label mb-2 inline-block text-gray-700'>
@@ -166,21 +142,10 @@ const CvSectionBuilderEdit = ({
             }
             rows='3'
             placeholder='Your message'></textarea>
-          {/* <label htmlFor={inputName} className='my-2 py-1 italic'>
-            {inputName}
-          </label>
-          <textarea
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(event) =>
-              handleInputChange(event, currentFieldValues, breadCrumbs)
-            }></textarea> */}
-        </React.Fragment>
+        </div>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -198,26 +163,10 @@ const CvSectionBuilderEdit = ({
             }
             placeholder='Number input'
           />
-          {/* <label
-            value={inputName}
-            htmlFor={inputName}
-            className='my-2 py-1 italic'>
-            {inputName}
-          </label>
-          <input
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
-            type='number'
-            name={inputName}
-            id={inputName}
-            value={inputState}
-            onChange={(event) =>
-              handleInputChange(event, currentFieldValues, breadCrumbs)
-            }
-          /> */}
-        </React.Fragment>
+        </div>
       ),
       date: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -235,25 +184,7 @@ const CvSectionBuilderEdit = ({
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-          {/* <label
-            value={inputName}
-            htmlFor={inputName}
-            className='my-2 py-1 italic'>
-            {inputName}
-          </label>
-          <div className='mr-6'>
-            <input
-              className='my-1 mr-2 border-4 p-1 px-2 outline-none focus:border-purple-700'
-              type='date'
-              name={inputName}
-              id={inputName}
-              value={inputState}
-              onChange={(event) =>
-                handleInputChange(event, currentFieldValues, breadCrumbs)
-              }
-            />
-          </div> */}
-        </React.Fragment>
+        </div>
       ),
     };
     return inputFieldJsxDictionary[inputType]({
@@ -305,12 +236,18 @@ const CvSectionBuilderEdit = ({
           }
         }
         returnVal.push(
-          ...currentFieldValuesArray.map((elem, index) =>
-            getInputJsxRecursive(`${schemaKey}-${index}`, schemaValue[0], [
-              ...breadCrumbs,
-              index,
-            ])
-          )
+          <ol className='list-outside list-decimal pl-4'>
+            {currentFieldValuesArray.map((elem, index) => {
+              return (
+                <li key={index}>
+                  {getInputJsxRecursive('', schemaValue[0], [
+                    ...breadCrumbs,
+                    index,
+                  ])}
+                </li>
+              );
+            })}
+          </ol>
         );
         returnVal.push(
           getInputFieldJsx({
@@ -325,12 +262,14 @@ const CvSectionBuilderEdit = ({
           getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
         );
         returnVal.push(
-          ...Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
-            getInputJsxRecursive(subSchemaKey, subSchemaValue, [
-              ...breadCrumbs,
-              subSchemaKey,
-            ])
-          )
+          <div className='pl-4'>
+            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
+              getInputJsxRecursive(subSchemaKey, subSchemaValue, [
+                ...breadCrumbs,
+                subSchemaKey,
+              ])
+            )}
+          </div>
         );
       }
       return returnVal;
@@ -466,7 +405,7 @@ const CvSectionBuilderEdit = ({
       <div className='flex w-full items-center justify-center'>
         <div className='grow overflow-y-scroll bg-white p-4'>
           <form className='relative max-h-[70vh]'>
-            <div className='mb-2 pb-2 border-b border-gray-200'>
+            <div className='mb-2 border-b border-gray-200 pb-2'>
               {currentSectionJsx[currentSection] && (
                 <>
                   <label
@@ -485,16 +424,6 @@ const CvSectionBuilderEdit = ({
                       setCurrentDescription(event.target.value)
                     }
                   />
-                  {/* <label htmlFor='description' className='bold my-2 py-1'>
-                Description
-              </label>
-              <input
-                className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
-                type='text'
-                name='description'
-                value={currentDescription}
-                onChange={(event) => setCurrentDescription(event.target.value)}
-              /> */}
                 </>
               )}
             </div>
