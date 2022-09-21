@@ -6,12 +6,12 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 const PdfDisplay = ({ url }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const onDocumentLoadSuccess = ({ numPages })=> {
+  const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   }
   return (
-    <div className='pt-4'>
-      <h1 id='cv-pdf-viewer' className='text-xl font-bold'>
+    <div className='overflow-x-auto px-4'>
+      <h1 id='cv-pdf-viewer' className='text-xl font-bold my-2'>
         CV pdf viewer
       </h1>
       {/* <embed
@@ -20,8 +20,8 @@ const PdfDisplay = ({ url }) => {
         width={'100%'}
         style={{ height: 'calc(100vh - 3rem)' }}
       /> */}
-      <Document file={`data:application/pdf;base64,${url}`} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page width={400} pageNumber={pageNumber} />
+      <Document className="flex justify-center border-2" file={`data:application/pdf;base64,${url}`} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page width={500} pageNumber={pageNumber} />
       </Document>
     </div>
   );

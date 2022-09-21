@@ -11,7 +11,7 @@ import GlobalProvider from './context/GlobalProvider';
 
 const App = () => {
   return (
-    <div className='App w-screen overflow-hidden'>
+    <div className='App'>
       <Toaster />
       <Router>
         <NavBar />
