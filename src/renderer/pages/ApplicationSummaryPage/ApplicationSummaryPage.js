@@ -202,7 +202,7 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'
+                      className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100 group'
                     // TODO remove this line onClick={() => handleApplicationClick(row.original.id)}
                     >
                       {row.getVisibleCells().map((cell) => (

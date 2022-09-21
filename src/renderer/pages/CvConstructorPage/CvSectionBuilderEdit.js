@@ -464,9 +464,9 @@ const CvSectionBuilderEdit = ({
         </button>
       </div>
       <div className='flex w-full items-center justify-center'>
-        <div className='grow overflow-y-scroll bg-white px-4'>
+        <div className='grow overflow-y-scroll bg-white p-4'>
           <form className='relative max-h-[70vh]'>
-            <div className='mb-2 border-b border-gray-200 py-4'>
+            <div className='mb-2 pb-2 border-b border-gray-200'>
               {currentSectionJsx[currentSection] && (
                 <>
                   <label

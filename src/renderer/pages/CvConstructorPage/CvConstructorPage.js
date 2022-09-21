@@ -13,10 +13,10 @@ import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill, XCircleFill, TrashFill } from 'react-bootstrap-icons';
 import schema from '../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
+import { toast } from "react-hot-toast"
 
 const CvConstructorPage = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
-  const { setNotification } = useContext(GlobalContext);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
   const [noElementsAdded, setNoElementsAdded] = useState(0);
@@ -73,7 +73,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
+      () => { }
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -210,7 +210,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -225,7 +225,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -235,10 +235,7 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   const generatePdf = () => {
     if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
-      setNotification({
-        severity: 'high',
-        text: 'Select cv elements before generating document',
-      });
+      toast.error('Select cv elements before generating document')
       return;
     }
 
@@ -253,14 +250,11 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
             setPdfUrl({ isReady: true, url: result });
           }
         );
-        setNotification({
-          severity: 'low',
-          text: 'Successfuly generated CV Pdf',
-        });
+        toast.success('Successfuly generated CV Pdf')
       })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
-        setNotification({ severity: 'low', text: `CV Pdf Error: ${error}` });
+        toast.error(`CV Pdf Error: ${error.message}`)
       });
   };
 
@@ -317,9 +311,8 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

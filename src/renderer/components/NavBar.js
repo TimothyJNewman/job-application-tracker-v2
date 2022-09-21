@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Notification from './Notification';
-import { GlobalContext } from '../context/GlobalContext';
 
 const navLinks = [
   { name: 'Applications', url: '/' },
@@ -9,7 +7,6 @@ const navLinks = [
 ];
 
 const NavBar = () => {
-  const { notification } = useContext(GlobalContext);
   return (
     <nav className='navbar navbar-light navbar-expand-sm relative flex w-full flex-wrap items-center justify-between bg-gray-100 py-4 text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700'>
       <div className='container-fluid flex w-full flex-wrap items-center justify-between px-6'>
@@ -49,15 +46,6 @@ const NavBar = () => {
               </li>
             ))}
           </ul>
-          {notification.text ? (
-            <Notification
-              className={'grow'}
-              text={notification.text}
-              severity={'low'}
-            />
-          ) : (
-            ''
-          )}
         </div>
       </div>
     </nav>

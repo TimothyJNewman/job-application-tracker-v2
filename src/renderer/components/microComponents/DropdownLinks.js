@@ -1,18 +1,19 @@
 import React from 'react';
 import { Link } from "react-router-dom"
-import { ThreeDotsVertical } from 'react-bootstrap-icons';
+import { ArrowUpRightSquare, BoxArrowUpRight, DoorOpen, ThreeDotsVertical } from 'react-bootstrap-icons';
 
-const DropdownLinks = ({ values = [] }) => {
+const DropdownLinks = ({ values = [], className }) => {
   return (
-    <div className='flex justify-center'>
+    <div className={`flex justify-center ${className}`}>
       <div>
         <div className='dropdown relative'>
           <span
-            className='dropdown-toggle flex h-6 w-6 items-center justify-center whitespace-nowrap rounded-full bg-blue-600 text-xs font-medium leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:text-white active:shadow-lg'
+            className='cursor-pointer dropdown-toggle uppercase flex px-2 py-2 items-center justify-center whitespace-nowrap rounded bg-blue-600 text-xs font-medium leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:text-white active:shadow-lg'
             id='dropdownMenuButton2'
             data-bs-toggle='dropdown'
-            aria-expanded='false'>
-            <ThreeDotsVertical />
+            aria-expanded='false' data-mdb-ripple='true'
+            data-mdb-ripple-color='light'>
+            <ArrowUpRightSquare className='mr-1' />Open
           </span>
           <ul
             className=' dropdown-menu absolute z-50 float-left m-0 mt-1 hidden min-w-max list-none rounded-lg border-none bg-white bg-clip-padding py-2 text-left text-base shadow-lg'
