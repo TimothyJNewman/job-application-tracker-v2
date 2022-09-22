@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import useClickOutside from '../../util/useClickOutside';
-import schema from '../../constants/template2_schema';
+import useClickOutside from '../../../util/useClickOutside';
+import schema from '../../../constants/template2_schema';
 
 const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');

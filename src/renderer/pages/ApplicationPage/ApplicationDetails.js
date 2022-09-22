@@ -45,7 +45,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
           </div>
         </div>
       </div>
-      <div className='flex w-full grow items-center'>
+      {/* <div className='flex w-full grow items-center'>
         <div className='accordion w-full' id='accordionJobDesc'>
           <div className='accordion-item border border-gray-200 bg-white'>
             <h2
@@ -72,7 +72,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

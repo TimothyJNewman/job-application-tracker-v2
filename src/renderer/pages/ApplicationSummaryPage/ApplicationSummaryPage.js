@@ -72,10 +72,7 @@ const columns = [
           {
             label: (
               <>
-                <FilePersonFill
-                  className='mb-1 mr-2 inline hover:text-blue-300'
-                  alt='CV Icon'
-                />
+                <FilePersonFill className='mb-1 mr-2 inline' alt='CV Icon' />
                 CV
               </>
             ),
@@ -84,10 +81,7 @@ const columns = [
           {
             label: (
               <>
-                <EnvelopeFill
-                  className='mb-1 mr-2 inline hover:text-blue-300'
-                  alt='Letter Icon'
-                />
+                <EnvelopeFill className='mb-1 mr-2 inline' alt='Letter Icon' />
                 Letter
               </>
             ),

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -6,12 +6,11 @@ import {
   readDatabaseEntry,
   updateDatabaseEntry,
   deleteDatabaseEntry,
-} from '../../util/CRUD';
-import { GlobalContext } from '../../context/GlobalContext';
+} from '../../../util/CRUD';
 import CvSectionBuilder from './CvSectionBuilder';
 import CvSectionBuilderEdit from './CvSectionBuilderEdit';
 import { PlusCircleFill, XCircleFill, TrashFill } from 'react-bootstrap-icons';
-import schema from '../../constants/template2_schema';
+import schema from '../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
 

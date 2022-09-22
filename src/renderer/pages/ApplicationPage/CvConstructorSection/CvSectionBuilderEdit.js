@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import schema from '../../constants/template2_schema';
+import schema from '../../../constants/template2_schema';
 import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
 import { toast } from 'react-hot-toast';
 
