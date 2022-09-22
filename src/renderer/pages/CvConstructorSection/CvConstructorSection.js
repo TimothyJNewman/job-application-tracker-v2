@@ -15,7 +15,7 @@ import schema from '../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
 
-const CvConstructorPage = ({ id, setPdfUrl }) => {
+const CvConstructorSection = ({ id, setPdfUrl }) => {
   const [elements, setElements] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
@@ -482,4 +482,4 @@ const CvConstructorPage = ({ id, setPdfUrl }) => {
   );
 };
 
-export default CvConstructorPage;
+export default CvConstructorSection;

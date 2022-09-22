@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import CvConstructorPage from '../CvConstructorPage/CvConstructorPage';
+import CvConstructorSection from '../CvConstructorSection/CvConstructorSection';
 import { useParams } from 'react-router-dom';
-import LetterConstructorPage from '../LetterConstructorPage/LetterConstructorPage';
+import LetterConstructorSection from '../LetterConstructorSection/LetterConstructorSection';
 import PdfDisplay from '../../components/PdfDisplay';
 import ApplicationDetails from './ApplicationDetails';
 
@@ -11,9 +11,9 @@ export default function ApplicationPage() {
   return (
     <div>
       <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
-      <div className='flex flex-col sm:flex-row'>
+      <div className='flex flex-col sm:flex-row overflow-x-auto'>
         <div className='grow'>
-          <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
+          <CvConstructorSection id={id} setPdfUrl={setPdfUrl} />
         </div>
         <div className=''>
           {pdfState.isReady ? (
@@ -29,8 +29,8 @@ export default function ApplicationPage() {
     // <div className='flex flex-col sm:flex-row'>
     //   <div className='grow flex flex-col'>
     //     <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
-    //     <CvConstructorPage id={id} setPdfUrl={setPdfUrl} />
-    //     <LetterConstructorPage id={id} />
+    //     <CvConstructorSection id={id} setPdfUrl={setPdfUrl} />
+    //     <LetterConstructorSection id={id} />
     //   </div>
 
     // </div>

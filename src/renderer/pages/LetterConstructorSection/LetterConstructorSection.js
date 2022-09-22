@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LetterConstructorPage = (props) => {
+const LetterConstructorSection = (props) => {
   return (
     <div className='px-4'>
       <h1 id='letter-contructor' className='my-2 text-xl font-bold'>
@@ -11,4 +11,4 @@ const LetterConstructorPage = (props) => {
   );
 };
 
-export default LetterConstructorPage;
+export default LetterConstructorSection;
