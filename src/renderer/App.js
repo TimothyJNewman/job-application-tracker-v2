@@ -5,9 +5,9 @@ import { Toaster } from 'react-hot-toast';
 import {
   ApplicationPage,
   ApplicationSummaryPage,
-  CvConstructorSection,
 } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
+import HomePage from './pages/HomePage/HomePage';
 
 const App = () => {
   return (
@@ -16,9 +16,9 @@ const App = () => {
       <Router>
         <NavBar />
         <Routes>
-          <Route path='/cv-page/:id' element={<CvConstructorSection />} />
           <Route path='/application/:id' element={<ApplicationPage />} />
-          <Route path='/' element={<ApplicationSummaryPage />} />
+          <Route path='/applications' element={<ApplicationSummaryPage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </Router>
     </div>

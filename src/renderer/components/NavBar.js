@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 const navLinks = [
-  { name: 'Applications', url: '/' },
-  { name: 'Curriculam Vitae', url: '/cv-page' },
+  { name: 'Home', url: '/' },
+  { name: 'Applications', url: '/applications' },
 ];
 
 const NavBar = () => {
