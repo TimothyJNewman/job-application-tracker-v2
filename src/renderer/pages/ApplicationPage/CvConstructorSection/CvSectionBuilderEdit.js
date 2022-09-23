@@ -263,11 +263,11 @@ const CvSectionBuilderEdit = ({
         );
         returnVal.push(
           <div className='pl-4'>
-            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
-              getInputJsxRecursive(subSchemaKey, subSchemaValue, [
+            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue], index) =>
+              <React.Fragment key={index}>getInputJsxRecursive(subSchemaKey, subSchemaValue, [
                 ...breadCrumbs,
                 subSchemaKey,
-              ])
+                ])</React.Fragment>
             )}
           </div>
         );

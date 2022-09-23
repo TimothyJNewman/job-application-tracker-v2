@@ -23,7 +23,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
   return (
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
       <div className='flex w-fit justify-center pt-6 pb-2'>
-        <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow'>
+        <div className='flex max-w-xl flex-row rounded bg-blue-50 hover:bg-yellow-50 transition-colors duration-100 shadow'>
           <div className='flex w-full items-center justify-center object-cover p-4'>
             {AppsDetails.status === 'Rejected' ? (
               <EmojiFrown className='h-36 w-36' />

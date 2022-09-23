@@ -12,7 +12,7 @@ export default function ApplicationPage() {
   return (
     <div>
       <ApplicationDetails id={id} setPdfUrl={setPdfUrl} />
-     <div className='px-4'> <ul className="nav nav-pills flex flex-col sm:flex-row flex-wrap list-none pl-0" id="pills-tab" role="tablist">
+      <div className='px-4'> <ul className="nav nav-pills flex flex-col sm:flex-row flex-wrap list-none pl-0" id="pills-tab" role="tablist">
         <li className="nav-item" role="presentation">
           <a href="#pills-desc" className=" nav-link block font-medium text-xs leading-tight uppercase rounded px-6 py-3 my-2 sm:mr-2 focus:outline-none focus:ring-0 active" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-desc" role="tab" aria-controls="pills-desc"
             aria-selected="true">Job Description</a>
@@ -38,6 +38,7 @@ export default function ApplicationPage() {
             <div>
               {pdfState.isReady ? (
                 <PdfDisplay url={pdfState.url} />
+
               ) : (
                 <p className='px-4 pt-4'>
                   No CV PDF found. Click generate pdf to create a new one.

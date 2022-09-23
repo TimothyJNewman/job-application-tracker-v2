@@ -6,6 +6,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 const PdfDisplay = ({ url, title }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  // console.log(url)
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
@@ -20,9 +21,16 @@ const PdfDisplay = ({ url, title }) => {
         width={'100%'}
         style={{ height: 'calc(100vh - 3rem)' }}
       /> */}
-      <Document
+      {/* <Document
         className='flex justify-center border-2'
         file={`data:application/pdf;base64,${url}`}
+        onLoadSuccess={onDocumentLoadSuccess}>
+        <Page width={500} pageNumber={pageNumber} />
+      </Document> */}
+      {console.log(url)}
+      <Document
+        className='flex justify-center border-2'
+        file={url}
         onLoadSuccess={onDocumentLoadSuccess}>
         <Page width={500} pageNumber={pageNumber} />
       </Document>

@@ -77,7 +77,7 @@ const databaseHandler = (event, commandVerb, sql, params) => {
   try {
     db = new Database(
       path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
-      { verbose: console.log }
+      // { verbose: console.log }
     );
   } catch (error) {
     if (error) console.error('Database opening error: ', error);
@@ -110,7 +110,7 @@ const databaseHandler = (event, commandVerb, sql, params) => {
         })();
       } catch (error) {
         reject(error);
-        console.log(sql, params);
+        // console.log(sql, params);
         throw error;
       }
     });
