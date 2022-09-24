@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import useClickOutside from '../../util/useClickOutside';
-import schema from '../../constants/template2_schema';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
+import useClickOutside from '../../../util/useClickOutside';
+import schema from '../../../constants/template2_schema';
 
 const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   const [currentSection, setCurrentSection] = useState('basics');
@@ -74,16 +74,16 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     }
 
     const inputFieldJsxDictionary = {
-      // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
+      // unavailable: ({ inputName }) => <Fragment key={inputName}>{inputName}<span>Not available</span></Fragment>,
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <p>{inputName}</p>
           <br />
-        </React.Fragment>
+        </Fragment>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <React.Fragment key={`add-button-${inputName}`}>
+        <Fragment key={`add-button-${inputName}`}>
           <br />
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
@@ -91,10 +91,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             type='button'>
             {`Add ${inputName}`}
           </button>
-        </React.Fragment>
+        </Fragment>
       ),
       shortText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -111,10 +111,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </React.Fragment>
+        </Fragment>
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label htmlFor={inputName} className='my-2 py-1 italic'>
             {inputName}
           </label>
@@ -125,11 +125,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             value={inputState}
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
-            }></textarea>
-        </React.Fragment>
+            } />
+        </Fragment>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -146,10 +146,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </React.Fragment>
+        </Fragment>
       ),
       date: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -168,7 +168,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               }
             />
           </div>
-        </React.Fragment>
+        </Fragment>
       ),
     };
     return inputFieldJsxDictionary[inputType]({
@@ -343,12 +343,12 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed z-10 h-screen w-screen'></div>
+    <div className='fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
+      <div id='overlay-blur' className='fixed  h-screen w-screen'></div>
       <div
         ref={clickRef}
         className='m-8 flex w-full items-center justify-center'>
-        <div className='z-20 max-w-3xl grow bg-white p-4'>
+        <div className='relative z-30 max-w-3xl grow bg-white p-4'>
           <h1 id='cv-section-builder' className='text-xl font-bold'>
             {currentSection} section builder
           </h1>

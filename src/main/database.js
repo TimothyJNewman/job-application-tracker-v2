@@ -39,7 +39,7 @@ const databaseInit = () => {
       status VARCHAR(63),
       cv_url TEXT,
       cover_letter_url TEXT,
-      is_cv_ready TINYINT NOT NULL DEFAULT 0 CHECK(is_cv_ready IN (0,1)),
+      job_description_url TEXT,
       date_applied DATE
     )
   `
@@ -77,7 +77,7 @@ const databaseHandler = (event, commandVerb, sql, params) => {
   try {
     db = new Database(
       path.join(app.getPath('userData'), 'database', 'db.sqlite3'),
-      { verbose: console.log }
+      // { verbose: console.log }
     );
   } catch (error) {
     if (error) console.error('Database opening error: ', error);
@@ -110,7 +110,7 @@ const databaseHandler = (event, commandVerb, sql, params) => {
         })();
       } catch (error) {
         reject(error);
-        console.log(sql, params);
+        // console.log(sql, params);
         throw error;
       }
     });
