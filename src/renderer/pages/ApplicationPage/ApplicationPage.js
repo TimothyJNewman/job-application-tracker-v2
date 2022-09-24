@@ -36,8 +36,8 @@ export default function ApplicationPage() {
               <CvConstructorSection id={id} setPdfUrl={setPdfUrl} />
             </div>
             <div>
-              {pdfUrl.isReady ? (
-                <PdfDisplay url={pdfUrl.url} />
+              {pdfUrl !== null ? (
+                <PdfDisplay url={pdfUrl} />
 
               ) : (
                 <p className='px-4 pt-4'>
