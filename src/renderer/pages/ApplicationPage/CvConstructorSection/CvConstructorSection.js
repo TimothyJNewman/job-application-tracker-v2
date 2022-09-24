@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -72,7 +72,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
+      () => { }
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -208,8 +208,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
         sectionDesc,
         new Date().toISOString(),
-      ],
-      () => {}
+      ]
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -224,7 +223,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         new Date().toISOString(),
         id,
       ],
-      () => {}
+      () => { }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -238,18 +237,15 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
       return;
     }
 
-    // Generate pdf in the background
+    /** 
+     * Generate pdf in the background 
+    */
     window.electron
       .getPdf('get-pdf', generatePdfParams(schema, elements))
-      .then((result) => {
-        updateDatabaseEntry(
-          'UPDATE applications SET is_cv_ready=true, cv_url=? WHERE id=?',
-          [result, id],
-          () => {
-            setPdfUrl({ isReady: true, url: result });
-          }
-        );
-        toast.success('Successfuly generated CV Pdf');
+      .then((cvUrl) => {
+        setPdfUrl(cvUrl);
+        console.log("New CV PDF url: ", cvUrl)
+        toast.success('Successfuly generated CV PDF');
       })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
@@ -310,9 +306,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -411,7 +406,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
                         (elem) => elem.cv_component_section === currentSection
                       )
                       .map((elem) => (
-                        <React.Fragment key={elem.id}>
+                        <Fragment key={elem.id}>
                           <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
                             <td
                               onClick={() => elementClickHandler(elem.id)}
@@ -454,7 +449,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
                               </td>
                             </tr>
                           )}
-                        </React.Fragment>
+                        </Fragment>
                       ))}
                   </tbody>
                 </table>

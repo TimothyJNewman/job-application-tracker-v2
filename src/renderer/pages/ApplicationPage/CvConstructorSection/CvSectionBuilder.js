@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import useClickOutside from '../../../util/useClickOutside';
 import schema from '../../../constants/template2_schema';
 
@@ -74,16 +74,16 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     }
 
     const inputFieldJsxDictionary = {
-      // unavailable: ({ inputName }) => <React.Fragment key={inputName}>{inputName}<span>Not available</span></React.Fragment>,
+      // unavailable: ({ inputName }) => <Fragment key={inputName}>{inputName}<span>Not available</span></Fragment>,
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <p>{inputName}</p>
           <br />
-        </React.Fragment>
+        </Fragment>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <React.Fragment key={`add-button-${inputName}`}>
+        <Fragment key={`add-button-${inputName}`}>
           <br />
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
@@ -91,10 +91,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             type='button'>
             {`Add ${inputName}`}
           </button>
-        </React.Fragment>
+        </Fragment>
       ),
       shortText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -111,10 +111,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </React.Fragment>
+        </Fragment>
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label htmlFor={inputName} className='my-2 py-1 italic'>
             {inputName}
           </label>
@@ -125,11 +125,11 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             value={inputState}
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
-            }></textarea>
-        </React.Fragment>
+            } />
+        </Fragment>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -146,10 +146,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </React.Fragment>
+        </Fragment>
       ),
       date: ({ inputName, inputState, breadCrumbs }) => (
-        <React.Fragment key={inputName}>
+        <Fragment key={inputName}>
           <label
             value={inputName}
             htmlFor={inputName}
@@ -168,7 +168,7 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               }
             />
           </div>
-        </React.Fragment>
+        </Fragment>
       ),
     };
     return inputFieldJsxDictionary[inputType]({

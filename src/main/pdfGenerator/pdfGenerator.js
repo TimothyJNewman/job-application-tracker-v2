@@ -104,10 +104,10 @@ const pdfGeneratorHandler = async (event, args) => {
 
   try {
     const returnArray = await Promise.all([pdfFile, texFile]);
-    console.log("Created file: ",`atom://${returnArray[0]}`)
+    console.log("Created file: ", `atom://${returnArray[0]}`)
     return `atom://${returnArray[0]}`;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    throw error;
   }
 };
 

@@ -13,12 +13,8 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
   const AppsDetails = appsData.filter((elem) => elem.id === id)[0];
 
   useEffect(() => {
-    if (AppsDetails.is_cv_ready) {
-      setPdfUrl({ isReady: true, url: AppsDetails.cv_url });
-    } else {
-      setPdfUrl({ isReady: false, url: '' });
-    }
-  }, [setPdfUrl, id, AppsDetails]);
+    setPdfUrl(AppsDetails.cv_url);
+  }, [AppsDetails]);
 
   return (
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>

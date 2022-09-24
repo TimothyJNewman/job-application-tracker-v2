@@ -39,7 +39,7 @@ const databaseInit = () => {
       status VARCHAR(63),
       cv_url TEXT,
       cover_letter_url TEXT,
-      is_cv_ready TINYINT NOT NULL DEFAULT 0 CHECK(is_cv_ready IN (0,1)),
+      job_description_url TEXT,
       date_applied DATE
     )
   `

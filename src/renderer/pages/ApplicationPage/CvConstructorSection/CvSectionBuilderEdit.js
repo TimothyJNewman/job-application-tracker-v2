@@ -87,7 +87,7 @@ const CvSectionBuilderEdit = ({
       // ),
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
-        <h2 key={inputName} className='mb-2 font-medium'>
+        <h2 key={inputName} className='mb-2 font-medium capitalize'>
           {inputName}
         </h2>
       ),
@@ -109,7 +109,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700'>
+            className='form-label mb-2 inline-block text-gray-700 capitalize'>
             {inputName}
           </label>
           <input
@@ -129,7 +129,7 @@ const CvSectionBuilderEdit = ({
         <div key={inputName} className='mb-4'>
           <label
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700'>
+            className='form-label mb-2 inline-block text-gray-700 capitalize'>
             {inputName}
           </label>
           <textarea
@@ -149,7 +149,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700'>
+            className='form-label mb-2 inline-block text-gray-700 capitalize'>
             {inputName}
           </label>
           <input
@@ -170,7 +170,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700'>
+            className='form-label mb-2 inline-block text-gray-700 capitalize'>
             {inputName}
           </label>
           <input
@@ -211,7 +211,9 @@ const CvSectionBuilderEdit = ({
     return returnVal;
   };
 
-  // gets input jsx given a schema
+  /** 
+   * gets input jsx given a schema
+   */
   const getInputJsx = (schemaKey, schemaValue) => {
     const getInputJsxRecursive = (schemaKey, schemaValue, breadCrumbs) => {
       let returnVal;
@@ -237,16 +239,14 @@ const CvSectionBuilderEdit = ({
         }
         returnVal.push(
           <ol className='list-outside list-decimal pl-4'>
-            {currentFieldValuesArray.map((elem, index) => {
-              return (
-                <li key={index}>
-                  {getInputJsxRecursive('', schemaValue[0], [
-                    ...breadCrumbs,
-                    index,
-                  ])}
-                </li>
-              );
-            })}
+            {currentFieldValuesArray.map((elem, index) => (
+              <li key={index}>
+                {getInputJsxRecursive('', schemaValue[0], [
+                  ...breadCrumbs,
+                  index,
+                ])}
+              </li>
+            ))}
           </ol>
         );
         returnVal.push(
@@ -263,11 +263,11 @@ const CvSectionBuilderEdit = ({
         );
         returnVal.push(
           <div className='pl-4'>
-            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue], index) =>
-              <React.Fragment key={index}>{getInputJsxRecursive(subSchemaKey, subSchemaValue, [
+            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
+              getInputJsxRecursive(subSchemaKey, subSchemaValue, [
                 ...breadCrumbs,
                 subSchemaKey,
-              ])}</React.Fragment>
+              ])
             )}
           </div>
         );

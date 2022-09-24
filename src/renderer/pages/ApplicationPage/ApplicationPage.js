@@ -7,7 +7,7 @@ import JobDescriptionSection from './JobDescriptionSection/JobDescriptionSection
 import CvConstructorSection from './CvConstructorSection/CvConstructorSection';
 
 export default function ApplicationPage() {
-  const [pdfState, setPdfUrl] = useState({ isReady: false, url: '' });
+  const [pdfUrl, setPdfUrl] = useState("");
   const id = Number(useParams().id);
   return (
     <div>
@@ -36,8 +36,8 @@ export default function ApplicationPage() {
               <CvConstructorSection id={id} setPdfUrl={setPdfUrl} />
             </div>
             <div>
-              {pdfState.isReady ? (
-                <PdfDisplay url={pdfState.url} />
+              {pdfUrl.isReady ? (
+                <PdfDisplay url={pdfUrl.url} />
 
               ) : (
                 <p className='px-4 pt-4'>
