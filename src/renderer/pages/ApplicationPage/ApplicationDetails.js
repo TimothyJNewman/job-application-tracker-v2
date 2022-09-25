@@ -5,7 +5,7 @@ import {
   EmojiSmile,
   Tag,
 } from 'react-bootstrap-icons';
-import { readDatabaseEntry ,updateDatabaseEntry} from '../../util/CRUD';
+import { readDatabaseEntry, updateDatabaseEntry } from '../../util/CRUD';
 
 const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
   const updateValue = (newValue, field) => {
@@ -13,12 +13,16 @@ const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
       `UPDATE applications SET ${field}=? WHERE id=?`,
       [newValue, id],
       () => {
-        readDatabaseEntry('SELECT * FROM applications WHERE id=?', id, (result) => {
-          setAppsDetails(result)
-        });
+        readDatabaseEntry(
+          'SELECT * FROM applications WHERE id=?',
+          id,
+          (result) => {
+            setAppsDetails(result);
+          }
+        );
       }
     );
-  }
+  };
 
   return (
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
@@ -34,9 +38,21 @@ const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
             ) : null}
           </div> */}
           <div className='flex flex-col justify-start p-6'>
-            <input className='p-1 text-xl font-medium text-gray-900 bg-inherit outline-blue-500' type="text" placeholder='Company' value={appDetails.company} onChange={(event) => updateValue(event.target.value, "company")} />
-            <input className='p-1 text-base text-gray-700 bg-inherit outline-blue-500' type="text" placeholder='Role' value={appDetails.role} onChange={(event) => updateValue(event.target.value, "role")} />
-            <p className='text-xs text-gray-600 px-1'>
+            <input
+              className='bg-inherit p-1 text-xl font-medium text-gray-900 outline-blue-500'
+              type='text'
+              placeholder='Company'
+              value={appDetails.company}
+              onChange={(event) => updateValue(event.target.value, 'company')}
+            />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
+              type='text'
+              placeholder='Role'
+              value={appDetails.role}
+              onChange={(event) => updateValue(event.target.value, 'role')}
+            />
+            <p className='px-1 text-xs text-gray-600'>
               Date Applied{' '}
               {new Date(appDetails.date_applied).toLocaleDateString()}
             </p>

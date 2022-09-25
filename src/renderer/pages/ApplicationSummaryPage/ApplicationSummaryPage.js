@@ -112,8 +112,14 @@ const ApplicationSummaryPage = () => {
 
   const handleApplicationClick = (id) => {
     if (deleteMode) {
-      deleteDatabaseEntry('DELETE FROM applications WHERE id=?', id, () =>
-        setNoItemsChanged(noItemsChanged + 1)
+      deleteDatabaseEntry(
+        'DELETE FROM cv_component_in_application WHERE application_id=?',
+        id,
+        () => {
+          deleteDatabaseEntry('DELETE FROM applications WHERE id=?', id, () =>
+            setNoItemsChanged(noItemsChanged + 1)
+          );
+        }
       );
     }
   };
@@ -149,7 +155,7 @@ const ApplicationSummaryPage = () => {
           alt='Delete Entry Icon'
         />
       </p>
-      {deleteMode ? <p className='-mt-1'>Click on an item to delete 🡣</p> : ''}
+      {deleteMode ? <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p> : ''}
       <div className='flex flex-col'>
         <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
           <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
@@ -164,7 +170,7 @@ const ApplicationSummaryPage = () => {
                           colSpan={header.colSpan}
                           scope='col'
                           className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
+                              ?.className ?? ''
                             }`}>
                           {header.isPlaceholder ? null : (
                             <div

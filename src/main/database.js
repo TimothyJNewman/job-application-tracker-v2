@@ -70,7 +70,7 @@ const databaseInit = () => {
   })();
 };
 
-/** 
+/**
  * Handler for database request
  */
 const databaseHandler = (event, commandVerb, sql, params) => {

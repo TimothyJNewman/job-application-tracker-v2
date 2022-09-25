@@ -6,7 +6,7 @@ const path = require('path');
 const Readable = require('stream').Readable;
 const getLatex = require('../../main/pdfGenerator/templates/template2');
 
-/** 
+/**
  * Handler for get pdf request
  */
 const pdfGeneratorHandler = async (event, args) => {

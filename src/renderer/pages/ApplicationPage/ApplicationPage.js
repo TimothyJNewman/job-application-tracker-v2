@@ -5,7 +5,7 @@ import PdfDisplay from '../../components/PdfDisplay';
 import ApplicationDetails from './ApplicationDetails';
 import JobDescriptionSection from './JobDescriptionSection/JobDescriptionSection';
 import CvConstructorSection from './CvConstructorSection/CvConstructorSection';
-import {GlobalContext} from "../../context/GlobalContext"
+import { GlobalContext } from '../../context/GlobalContext';
 
 export default function ApplicationPage() {
   const { appsData, setAppsData } = useContext(GlobalContext);
@@ -19,7 +19,11 @@ export default function ApplicationPage() {
 
   return (
     <div>
-      <ApplicationDetails id={id} appDetails={appDetails} setAppsDetails={setAppsData}/>
+      <ApplicationDetails
+        id={id}
+        appDetails={appDetails}
+        setAppsDetails={setAppsData}
+      />
       <div className='px-4'>
         <ul
           className='nav nav-pills flex list-none flex-col flex-wrap pl-0 sm:flex-row'
