@@ -125,7 +125,8 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
             value={inputState}
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
-            } />
+            }
+          />
         </Fragment>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (

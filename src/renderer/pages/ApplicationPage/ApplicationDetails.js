@@ -5,38 +5,40 @@ import {
   EmojiSmile,
   Tag,
 } from 'react-bootstrap-icons';
-import { GlobalContext } from '../../context/GlobalContext';
-import { readDatabaseEntry } from '../../util/CRUD';
+import { readDatabaseEntry ,updateDatabaseEntry} from '../../util/CRUD';
 
-const ApplicationDetails = ({ id, setPdfUrl }) => {
-  const { appsData } = useContext(GlobalContext);
-  const AppsDetails = appsData.filter((elem) => elem.id === id)[0];
-
-  useEffect(() => {
-    setPdfUrl(AppsDetails.cv_url);
-  }, [AppsDetails]);
+const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
+  const updateValue = (newValue, field) => {
+    updateDatabaseEntry(
+      `UPDATE applications SET ${field}=? WHERE id=?`,
+      [newValue, id],
+      () => {
+        readDatabaseEntry('SELECT * FROM applications WHERE id=?', id, (result) => {
+          setAppsDetails(result)
+        });
+      }
+    );
+  }
 
   return (
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
       <div className='flex w-fit justify-center pt-6 pb-2'>
-        <div className='flex max-w-xl flex-row rounded bg-blue-50 hover:bg-yellow-50 transition-colors duration-100 shadow'>
-          <div className='flex w-full items-center justify-center object-cover p-4'>
-            {AppsDetails.status === 'Rejected' ? (
+        <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-yellow-50'>
+          {/* <div className='flex w-full items-center justify-center object-cover p-4'>
+            {appDetails.status === 'Rejected' ? (
               <EmojiFrown className='h-36 w-36' />
-            ) : AppsDetails.status === 'To Apply' ? (
+            ) : appDetails.status === 'To Apply' ? (
               <EmojiNeutral className='h-36 w-36' />
-            ) : AppsDetails.status === 'Applied' ? (
+            ) : appDetails.status === 'Applied' ? (
               <EmojiSmile className='h-36 w-36' />
             ) : null}
-          </div>
+          </div> */}
           <div className='flex flex-col justify-start p-6'>
-            <h5 className='mb-2 text-xl font-medium text-gray-900'>
-              {AppsDetails.company}
-            </h5>
-            <p className='mb-4 text-base text-gray-700'>{AppsDetails.role}</p>
-            <p className='text-xs text-gray-600'>
+            <input className='p-1 text-xl font-medium text-gray-900 bg-inherit outline-blue-500' type="text" placeholder='Company' value={appDetails.company} onChange={(event) => updateValue(event.target.value, "company")} />
+            <input className='p-1 text-base text-gray-700 bg-inherit outline-blue-500' type="text" placeholder='Role' value={appDetails.role} onChange={(event) => updateValue(event.target.value, "role")} />
+            <p className='text-xs text-gray-600 px-1'>
               Date Applied{' '}
-              {new Date(AppsDetails.date_applied).toLocaleDateString()}
+              {new Date(appDetails.date_applied).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -63,7 +65,7 @@ const ApplicationDetails = ({ id, setPdfUrl }) => {
               aria-labelledby='descriptionAccordionHeader'
               data-bs-parent='#accordionJobDesc'>
               <div className='accordion-body w-full px-4 py-2'>
-                {AppsDetails.job_description}
+                {appDetails.job_description}
               </div>
             </div>
           </div>

@@ -8,8 +8,8 @@ const navLinks = [
 
 const NavBar = () => {
   return (
-    <nav className='navbar navbar-light navbar-expand-sm relative flex w-full flex-wrap items-center justify-between bg-gray-100 py-2 text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700'>
-      <div className='container-fluid flex w-full flex-wrap items-center justify-between px-6'>
+    <nav className='navbar navbar-light navbar-expand-sm relative flex w-full flex-wrap items-center justify-between bg-gray-100 text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700'>
+      <div className='container-fluid box-border flex w-full flex-wrap items-center justify-between px-6 py-2'>
         <button
           className=' navbar-toggler border-0 bg-transparent py-1 px-1.5 text-gray-500 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0'
           type='button'
@@ -37,10 +37,12 @@ const NavBar = () => {
           id='navbarSupportedContent'>
           <ul className='list-style-none navbar-nav mr-auto flex flex-col pl-0'>
             {navLinks.map((elem) => (
-              <li className='nav-item pr-2 py-2' key={elem.name}>
+              <li className='nav-item pr-2' key={elem.name}>
                 <Link
                   to={elem.url}
-                  className='nav-link py-4 text-gray-500 focus:text-gray-700'>
+                  data-mdb-ripple='true'
+                  data-mdb-ripple-color='light'
+                  className='nav-link inline-block rounded py-2 text-gray-500 hover:bg-gray-200 focus:text-gray-700'>
                   {elem.name}
                 </Link>
               </li>

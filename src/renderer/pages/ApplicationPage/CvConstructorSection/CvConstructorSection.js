@@ -72,7 +72,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => { }
+      () => {}
     );
     // TODO add a check to make sure that component deleted is not referenced by another application component
     deleteDatabaseEntry(
@@ -222,8 +222,7 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
         id,
-      ],
-      () => { }
+      ]
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -237,14 +236,14 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
       return;
     }
 
-    /** 
-     * Generate pdf in the background 
-    */
+    /**
+     * Generate pdf in the background
+     */
     window.electron
       .getPdf('get-pdf', generatePdfParams(schema, elements))
       .then((cvUrl) => {
         setPdfUrl(cvUrl);
-        console.log("New CV PDF url: ", cvUrl)
+        console.log('New CV PDF url: ', cvUrl);
         toast.success('Successfuly generated CV PDF');
       })
       .catch((error) => {
@@ -306,8 +305,9 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

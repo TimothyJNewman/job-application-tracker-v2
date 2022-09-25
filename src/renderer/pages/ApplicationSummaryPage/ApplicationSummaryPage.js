@@ -108,7 +108,7 @@ const ApplicationSummaryPage = () => {
 
   useEffect(() => {
     readDatabaseEntry('SELECT * FROM applications', null, setAppsData);
-  }, [setAppsData, noItemsChanged]);
+  }, [noItemsChanged]);
 
   const handleApplicationClick = (id) => {
     if (deleteMode) {
@@ -199,8 +199,7 @@ const ApplicationSummaryPage = () => {
                     <tr
                       key={row.id}
                       className='group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'
-                      onClick={() => handleApplicationClick(row.original.id)}
-                    >
+                      onClick={() => handleApplicationClick(row.original.id)}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}

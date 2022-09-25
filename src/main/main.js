@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
 require('dotenv').config();
 const path = require('path');
-const url = require('url')
+const url = require('url');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
 const { databaseInit, databaseHandler } = require('./database');
@@ -64,20 +64,24 @@ app.on('ready', async () => {
   } catch (err) {
     console.error(err);
   }
-  
+
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ['default-src \'self\' \'unsafe-inline\'; object-src \'self\' data:; frame-src \'self\'; img-src \'self\' data:; connect-src \'self\' atom:']
-      }
-    })
-  })
+        'Content-Security-Policy': [
+          "default-src 'self' 'unsafe-inline'; object-src 'self' data:; frame-src 'self'; img-src 'self' data:; connect-src 'self' atom:",
+        ],
+      },
+    });
+  });
 
   protocol.registerFileProtocol('atom', (request, callback) => {
-    const filePath = url.fileURLToPath('file://' + request.url.slice('atom://'.length))
-    callback(filePath)
-  })
+    const filePath = url.fileURLToPath(
+      'file://' + request.url.slice('atom://'.length)
+    );
+    callback(filePath);
+  });
   databaseInit();
   createWindow();
 });

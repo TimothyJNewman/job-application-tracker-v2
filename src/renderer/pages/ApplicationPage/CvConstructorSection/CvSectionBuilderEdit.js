@@ -109,7 +109,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700 capitalize'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <input
@@ -129,7 +129,7 @@ const CvSectionBuilderEdit = ({
         <div key={inputName} className='mb-4'>
           <label
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700 capitalize'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <textarea
@@ -149,7 +149,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700 capitalize'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <input
@@ -170,7 +170,7 @@ const CvSectionBuilderEdit = ({
           <label
             value={inputName}
             htmlFor={inputName}
-            className='form-label mb-2 inline-block text-gray-700 capitalize'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <input
@@ -211,7 +211,7 @@ const CvSectionBuilderEdit = ({
     return returnVal;
   };
 
-  /** 
+  /**
    * gets input jsx given a schema
    */
   const getInputJsx = (schemaKey, schemaValue) => {
