@@ -36,7 +36,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         createDatabaseEntry(
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
           [id, deleteComponentID],
-          () => {
+          ({ error }) => {
+            if (error) console.error(error);
             setNoElementsClicked(noElementsClicked + 1);
           }
         );
@@ -46,7 +47,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         deleteDatabaseEntry(
           'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
           [id, deleteComponentID],
-          () => {
+          ({ error }) => {
+            if (error) console.error(error);
             setNoElementsClicked(noElementsClicked + 1);
           }
         );
@@ -57,7 +59,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
       deleteDatabaseEntry(
         'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
         [id, deleteComponentID],
-        () => {
+        ({ error }) => {
+          if (error) console.error(error);
           setNoElementsClicked(noElementsClicked + 1);
         }
       );
@@ -72,14 +75,17 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
     deleteDatabaseEntry(
       'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
       [id, componentId],
-      () => {}
-    );
-    // TODO add a check to make sure that component deleted is not referenced by another application component
-    deleteDatabaseEntry(
-      'DELETE FROM cv_components WHERE id = ?',
-      [componentId],
-      () => {
-        setNoElementsClicked(noElementsClicked + 1);
+      ({ error }) => {
+        if (error) console.error(error);
+        // TODO add a check to make sure that component deleted is not referenced by another application component
+        deleteDatabaseEntry(
+          'DELETE FROM cv_components WHERE id = ?',
+          [componentId],
+          ({ error }) => {
+            if (error) console.error(error);
+            setNoElementsClicked(noElementsClicked + 1);
+          }
+        );
       }
     );
   };
@@ -208,7 +214,10 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
         sectionDesc,
         new Date().toISOString(),
-      ]
+      ],
+      ({ error }) => {
+        if (error) console.error(error);
+      }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -222,7 +231,10 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
         sectionDesc,
         new Date().toISOString(),
         id,
-      ]
+      ],
+      ({ error }) => {
+        if (error) console.error(error);
+      }
     );
     setNoElementsAdded(noElementsAdded + 1);
     toggleCvBuilder(false);
@@ -259,7 +271,10 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
       LEFT JOIN cv_component_in_application 
       ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
       id,
-      setElements
+      ({ error, result }) => {
+        if (error) console.error(error);
+        setElements(result);
+      }
     );
   }, [noElementsAdded, noElementsClicked]);
 

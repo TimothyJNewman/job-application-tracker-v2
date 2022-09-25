@@ -11,7 +11,7 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
   const [appInput, setAppInput] = useState(defaultState);
   return (
     <div
-      className='modal fade fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
+      className='fade modal fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
       id='addNewModal'
       tabIndex='-1'
       aria-labelledby='addNewModalLabel'
@@ -19,11 +19,11 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
       <div className='modal-dialog pointer-events-none relative w-auto'>
         <div className='modal-content pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none'>
           <div className='modal-header flex flex-shrink-0 items-center justify-between rounded-t-md border-b border-gray-200 p-4'>
-            <h5
+            <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='addNewModalLabel'>
-              Modal title
-            </h5>
+              New Application
+            </h2>
             <button
               type='button'
               className='btn-close box-content h-4 w-4 rounded-none border-none p-1 text-black opacity-50 hover:text-black hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none'
@@ -127,6 +127,7 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
               type='button'
               data-mdb-ripple='true'
               data-mdb-ripple-color='light'
+              data-bs-dismiss='modal'
               onClick={(event) => {
                 event.preventDefault();
                 handleSubmitCallback(appInput);

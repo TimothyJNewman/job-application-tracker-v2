@@ -12,11 +12,13 @@ const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
     updateDatabaseEntry(
       `UPDATE applications SET ${field}=? WHERE id=?`,
       [newValue, id],
-      () => {
+      ({ error }) => {
+        if (error) console.error(error);
         readDatabaseEntry(
           'SELECT * FROM applications WHERE id=?',
           id,
-          (result) => {
+          ({ error, result }) => {
+            if (error) console.error(error);
             setAppsDetails(result);
           }
         );
