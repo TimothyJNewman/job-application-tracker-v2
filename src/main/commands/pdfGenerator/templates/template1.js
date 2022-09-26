@@ -271,7 +271,12 @@ const getLatex = (params) => {
     let output = String.raw``;
     output += projectHeader;
     projectArray.forEach((elem) => {
-      output += getProject(elem.title, elem.skillArray, elem.date, elem.itemArray);
+      output += getProject(
+        elem.title,
+        elem.skillArray,
+        elem.date,
+        elem.itemArray
+      );
     });
     output += experienceFooter;
     return output;

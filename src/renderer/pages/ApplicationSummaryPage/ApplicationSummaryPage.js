@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 import NewApplicationForm from '../../components/NewApplicationForm';
 import DeleteApplicationModal from '../../components/DeleteComponentModal';
 import {
@@ -38,16 +38,34 @@ const columns = [
   //   },
   // },
   {
+    accessorKey: 'status',
+    header: "",
+    cell: (info) => {
+      let color;
+      switch (info.getValue()) {
+        case "To Apply":
+          color = "bg-blue-500"
+          break;
+        case "Applied":
+          color = "bg-green-500"
+          break;
+        case "Rejected":
+          color = "bg-red-500"
+          break;
+        default:
+          break;
+      }
+      return <div className={`h-5 w-1 ${color}`}></div>
+    },
+    bodyCellProps:{className:"pr-0 w-1"}
+  },
+  {
     accessorKey: 'company',
     header: 'Company',
   },
   {
     accessorKey: 'role',
     header: 'Role',
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
   },
   {
     accessorKey: 'date_applied',
@@ -70,13 +88,14 @@ const columns = [
     },
     cell: (info) => (
       <Link
-        type="button"
+        type='button'
         to={`/application/${info.row.original.id}`}
-        data-mdb-ripple="true"
-        data-mdb-ripple-color="light"
-        className="flex p-2 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-      ><ArrowUpRightSquare className='mr-1' />
-        Open</Link>
+        data-mdb-ripple='true'
+        data-mdb-ripple-color='light'
+        className='flex rounded bg-blue-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        <ArrowUpRightSquare className='mr-1' />
+        Open
+      </Link>
     ),
   },
 ];
