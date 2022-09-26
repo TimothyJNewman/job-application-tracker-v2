@@ -51,7 +51,7 @@ const JobDescriptionSection = ({ id }) => {
       <div className='flex flex-col overflow-x-auto md:flex-row gap-x-4'>
         <div className='grow'>
           <textarea
-            className='mb-2 h-48 w-full outline-blue-500'
+            className='mb-2 h-48 w-full focus:border-blue-500 border-2 outline-none border-transparent rounded'
             value={textArea}
             onChange={(event) => setTextArea(event.target.value)}></textarea>
         </div>
