@@ -258,9 +258,8 @@ const CvConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -357,53 +356,57 @@ const CvConstructorSection = ({ id }) => {
                     {elements
                       .filter(
                         (elem) => elem.cv_component_section === currentSection
-                      )
-                      .map((elem) => (
-                        <Fragment key={elem.id}>
-                          <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
-                            <td
-                              onClick={() => elementClickHandler(elem.id)}
-                              className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                              {getDescription(elem)}
-                            </td>
-                            <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                              <button
-                                onClick={() =>
-                                  elementToggleClickHandler('unused', elem.id)
-                                }
-                                className='flex w-full items-center justify-center'>
-                                {elem.application_id ? (
-                                  <XCircleFill className='h-5 w-5 text-red-600' />
-                                ) : (
-                                  <PlusCircleFill className='h-5 w-5 text-green-600' />
-                                )}
-                              </button>
-                            </td>
-                            <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
-                              <button
-                                onClick={() =>
-                                  elementDeleteClickHandler(elem.id)
-                                }
-                                className='flex w-full items-center justify-center'>
-                                <TrashFill className='h-5 w-5 text-red-600' />
-                              </button>
-                            </td>
-                          </tr>
-                          {openJsonViewerArr.includes(elem.id) && (
-                            <tr>
-                              <td colSpan={'100%'}>
-                                <AceEditor
-                                  mode='json'
-                                  width='100%'
-                                  maxLines={15}
-                                  value={elem.cv_component_text}
-                                  readOnly={true}
-                                />
+                      ).length === 0 ? <tr><td>No entries available</td></tr> : elements
+                        .filter(
+                          (elem) => elem.cv_component_section === currentSection
+                        )
+                        .map((elem) => (
+                          <Fragment key={elem.id}>
+                            {console.log()}
+                            <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
+                              <td
+                                onClick={() => elementClickHandler(elem.id)}
+                                className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                                {getDescription(elem)}
+                              </td>
+                              <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                                <button
+                                  onClick={() =>
+                                    elementToggleClickHandler('unused', elem.id)
+                                  }
+                                  className='flex w-full items-center justify-center'>
+                                  {elem.application_id ? (
+                                    <XCircleFill className='h-5 w-5 text-red-600' />
+                                  ) : (
+                                    <PlusCircleFill className='h-5 w-5 text-green-600' />
+                                  )}
+                                </button>
+                              </td>
+                              <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                                <button
+                                  onClick={() =>
+                                    elementDeleteClickHandler(elem.id)
+                                  }
+                                  className='flex w-full items-center justify-center'>
+                                  <TrashFill className='h-5 w-5 text-red-600' />
+                                </button>
                               </td>
                             </tr>
-                          )}
-                        </Fragment>
-                      ))}
+                            {openJsonViewerArr.includes(elem.id) && (
+                              <tr>
+                                <td colSpan={'100%'}>
+                                  <AceEditor
+                                    mode='json'
+                                    width='100%'
+                                    maxLines={15}
+                                    value={elem.cv_component_text}
+                                    readOnly={true}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        ))}
                   </tbody>
                 </table>
               </div>
