@@ -4,7 +4,7 @@ const fsPromises = require('fs/promises');
 const { app } = require('electron');
 const path = require('path');
 const Readable = require('stream').Readable;
-const getLatex = require('../../main/pdfGenerator/templates/template2');
+const getLatex = require('./templates/template2');
 
 /**
  * Handler for get pdf request
@@ -23,7 +23,7 @@ const pdfGeneratorHandler = async (event, args) => {
     const output = fs.createWriteStream(savePdfPath);
     latexPdf.pipe(output);
     latexPdf.on('error', (err) => reject(err));
-    latexPdf.on('finish', () => resolve(savePdfPath));
+    latexPdf.on('finish', () => resolve(`\\pdf_files\\output${args.id}.pdf`));
   });
 
   // save tex file
@@ -36,8 +36,8 @@ const pdfGeneratorHandler = async (event, args) => {
 
   try {
     const returnArray = await Promise.all([pdfFile, texFile]);
-    console.log('Created file: ', `atom://${returnArray[0]}`);
-    return `atom://${returnArray[0]}`;
+    console.log('Created file: ', returnArray[0]);
+    return returnArray[0];
   } catch (error) {
     throw error;
   }

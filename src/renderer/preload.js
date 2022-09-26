@@ -5,10 +5,16 @@ const { contextBridge, ipcRenderer } = require('electron');
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electron', {
+  getPath: (channel) => {
+    return ipcRenderer.invoke(channel)
+  },
   getPdf: (channel, data) => {
     return ipcRenderer.invoke(channel, data);
   },
   database: (channel, commandVerb, sql, params) => {
     return ipcRenderer.invoke(channel, commandVerb, sql, params);
+  },
+  saveJobDescPdf: (channel, args) => {
+    return ipcRenderer.invoke(channel, args);
   },
 });

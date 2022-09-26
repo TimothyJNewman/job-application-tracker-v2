@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
+import { GlobalContext } from '../../../context/GlobalContext';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -14,7 +15,8 @@ import schema from '../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
 
-const CvConstructorSection = ({ id, setPdfUrl }) => {
+const CvConstructorSection = ({ id }) => {
+  const { setAppsData } = useContext(GlobalContext);
   const [elements, setElements] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
@@ -100,87 +102,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
     }
   };
 
-  /* const generatePdfParams = {
-     id: id,
-     name: 'CompanyA',
-     paramsArray: [
-       {
-         section: 'summary',
-         text: 'This is a summary',
-       },
-       {
-         section: 'heading',
-         name: 'Timothy Newman',
-         phone: 123345,
-         address: '123 Street Name, Town, State 12345',
-         email: 'email@email.com',
-         linkedIn: 'linkedin.com/in/timothy-jabez-newman-1406aa213/',
-         gitHub: 'github.com/TimothyJNewman',
-       },
-       {
-         section: 'education',
-         institution: 'Imperial College London',
-         date: 'May 2020 -- August 2020',
-         course: 'Electrical and Electronic Engineering',
-         location: 'London',
-       },
-       {
-         section: 'coursework',
-         itemArray: [
-           'Data Structures',
-           'Software Methodology',
-           'Algorithms Analysis',
-           'Database Management',
-           'Artificial Intelligence',
-           'Internet Technology',
-           'Systems Programming',
-           'Computer Architecture',
-         ],
-       },
-       {
-         section: 'experience',
-         company: 'Company B',
-         role: 'Intern',
-         date: 'May 2020 -- August 2020',
-         location: 'Singapore, Singapore',
-         itemArray: ['ItemA', 'ItemB', 'ItemC'],
-       },
-       {
-         section: 'project',
-         title: 'Gym Reservation Bot',
-         skillArray: ['Python', 'Selenium', 'Google Cloud Console'],
-         date: 'January 2021',
-         itemArray: [
-           'Developed an automatic bot using Python and Google Cloud Console to register myself for a timeslot at my school gym.',
-           'Implemented Selenium to create an instance of Chrome in order to interact with the correct elements of the web page.',
-           'Created a Linux virtual machine to run on Google Cloud so that the program is able to run everyday from the cloud.',
-           'Used Cron to schedule the program to execute automatically at 11 AM every morning so a reservation is made for me.',
-         ],
-       },
-       {
-         section: 'technical',
-         languages: ['Python', 'Java', 'C', 'HTML/CSS', 'JavaScript', 'SQL'],
-         tools: ['VS Code', 'Eclipse', 'Google Cloud Platform', 'Android Studio'],
-         technologies: ['Linux', 'Jenkins', 'GitHub', 'JUnit', 'WordPress'],
-       },
-       {
-         section: 'involvement',
-         organisation: 'Fraternity',
-         date: 'Spring 2020 -- Present',
-         role: 'President',
-         misc: 'University Name',
-         itemArray: [
-           'Achieved a 4 star fraternity ranking by the Office of Fraternity and Sorority Affairs (highest possible ranking).',
-           'Managed executive board of 5 members and ran weekly meetings to oversee progress in essential parts of the chapter.',
-           'Led chapter of 30+ members to work towards goals that improve and promote community service, academics, and unity.',
-         ],
-       },
-     ],
-   };*/
-
   const generatePdfParams = (schemaLocal, elementsLocal) => {
     const resumeObject = {};
-
     elementsLocal
       .filter((elem) => elem.application_id)
       .forEach(({ cv_component_section, cv_component_text }) => {
@@ -240,28 +163,43 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
     toggleCvBuilder(false);
   };
 
-  // TODO add loading animation when pdf is generating
   const generatePdf = () => {
     if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select cv elements before generating document!');
       toast.error('Select cv elements before generating document');
       return;
     }
-
     /**
      * Generate pdf in the background
      */
-    window.electron
+    const getPdfPromise = window.electron
       .getPdf('get-pdf', generatePdfParams(schema, elements))
-      .then((cvUrl) => {
-        setPdfUrl(cvUrl);
-        console.log('New CV PDF url: ', cvUrl);
-        toast.success('Successfuly generated CV PDF');
+      .then((relativeCVUrl) => {
+        updateDatabaseEntry(
+          'UPDATE applications SET cv_url=? WHERE id=?',
+          [relativeCVUrl, id],
+          ({ error }) => {
+            if (error) console.error(error);
+            readDatabaseEntry(
+              'SELECT * FROM applications',
+              null,
+              ({ error, result }) => {
+                if (error) console.error(error);
+                setAppsData(result);
+              }
+            );
+          }
+        );
+        console.log('New CV PDF url: ', relativeCVUrl);
       })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
-        toast.error(`CV Pdf Error: ${error.message}`);
       });
+    toast.promise(getPdfPromise, {
+      loading: 'Loading',
+      success: 'Successfully generated CV PDF',
+      error: 'Error generating CV PDF',
+    });
   };
 
   useEffect(() => {
@@ -320,9 +258,8 @@ const CvConstructorSection = ({ id, setPdfUrl }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

@@ -4,8 +4,10 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
-const { databaseInit, databaseHandler } = require('./database');
-const pdfGeneratorHandler = require('./pdfGenerator/pdfGenerator');
+const { databaseInit, databaseHandler } = require("./commands/database");
+const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
+const { saveJobDescription } = require('./commands/saveJobDescription');
+const { getUserDataPath } = require('./commands/getPaths');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -27,6 +29,13 @@ const texFilesDir = path.join(
 );
 if (!fs.existsSync(texFilesDir)) {
   fs.mkdirSync(texFilesDir, { recursive: true });
+}
+const uploadPdfFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/job_desc_files'
+);
+if (!fs.existsSync(uploadPdfFilesDir)) {
+  fs.mkdirSync(uploadPdfFilesDir, { recursive: true });
 }
 
 const createWindow = () => {
@@ -107,5 +116,7 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 // ipcMain handlers
+ipcMain.handle("get-user-data-path",getUserDataPath)
 ipcMain.handle('get-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
+ipcMain.handle('save-job-description', saveJobDescription);

@@ -1,6 +1,5 @@
 const getLatex = (resumeObject) => {
-  const texPreamble = String.raw
-    `%-------------------------
+  const texPreamble = String.raw`%-------------------------
 % Resume in Latex
 % Author : Jake Gutierrez
 % Based off of: https://github.com/sb2nov/resume
@@ -126,18 +125,18 @@ const getLatex = (resumeObject) => {
     let output = String.raw``;
     const getLinkedIn = (profiles) => {
       if (profiles.find(({ network }) => network === 'linkedIn')) {
-        return { network, username, url } = profiles.find(
+        return ({ network, username, url } = profiles.find(
           ({ network, username, url }) => network === 'linkedIn'
-        );
+        ));
       } else {
         return null;
       }
     };
     const getGithub = (profiles) => {
       if (profiles.find(({ network }) => network === 'gitHub')) {
-        return { network, username, url } = profiles.find(
+        return ({ network, username, url } = profiles.find(
           ({ network, username, url }) => network === 'gitHub'
-        );
+        ));
       } else {
         return null;
       }
@@ -146,25 +145,35 @@ const getLatex = (resumeObject) => {
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape ${basics.name}} \\ \vspace{1pt}
-    ${basics.location.address && String.raw`${basics.location.address}\\ \vspace{1pt}`}
+    ${
+      basics.location.address &&
+      String.raw`${basics.location.address}\\ \vspace{1pt}`
+    }
     \small \raisebox{-0.1\height}
     ${basics.phone !== '' ? String.raw`\faPhone\ ${basics.phone}` : ''}
-    ${basics.email !== ''
+    ${
+      basics.email !== ''
         ? String.raw`~ \href{mailto:${basics.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${basics.email}}}`
         : ''
-      }
-    ${getLinkedIn(basics.profiles)
-        ? String.raw` ~ \href{${getLinkedIn(basics.profiles).url
-          }}{\raisebox{-0.2\height}\faLinkedin\ \underline{${getLinkedIn(basics.profiles).url
+    }
+    ${
+      getLinkedIn(basics.profiles)
+        ? String.raw` ~ \href{${
+            getLinkedIn(basics.profiles).url
+          }}{\raisebox{-0.2\height}\faLinkedin\ \underline{${
+            getLinkedIn(basics.profiles).url
           }}}`
         : ''
-      } 
-    ${getGithub(basics.profiles)
-        ? String.raw`~ \href{${getGithub(basics.profiles).url
-          }{\raisebox{-0.2\height}\faGithub\ \underline{${getGithub(basics.profiles).url
+    } 
+    ${
+      getGithub(basics.profiles)
+        ? String.raw`~ \href{${
+            getGithub(basics.profiles).url
+          }{\raisebox{-0.2\height}\faGithub\ \underline{${
+            getGithub(basics.profiles).url
           }}}`
         : ''
-      }
+    }
 \vspace{-8pt}
 \end{center}
 `;
@@ -231,12 +240,12 @@ const getLatex = (resumeObject) => {
 \resumeSubheading{${organization}} {${startDate}-${endDate}} {${position}} {${location}}
 \resumeItemListStart
         ${highlights.reduce((prev, curr) => {
-        return (
-          prev +
-          String.raw`
+          return (
+            prev +
+            String.raw`
         \resumeItem{${curr}}`
-        );
-      }, String.raw``)}
+          );
+        }, String.raw``)}
 \resumeItemListEnd`;
     };
     const involvementFooter = String.raw`
