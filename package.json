@@ -109,7 +109,6 @@
     "react-hot-toast": "^2.4.0",
     "react-pdf": "^5.7.2",
     "react-router-dom": "^6.3.0",
-    "resume-cli": "^3.0.7",
     "tw-elements": "^1.0.0-alpha12"
   },
   "engines": {

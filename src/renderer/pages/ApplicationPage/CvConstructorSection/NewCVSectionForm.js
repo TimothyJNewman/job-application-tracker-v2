@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, Fragment } from 'react';
 import useClickOutside from '../../../util/useClickOutside';
 import schema from '../../../constants/template2_schema';
-import { PlusLg } from "react-bootstrap-icons"
+import { PlusLg } from 'react-bootstrap-icons';
 
 const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   const [currentSchema, setCurrentSchema] = useState({});
@@ -84,13 +84,13 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
         </h2>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <div key={`add-button-${inputName}`} className='py-2'>
+        <div key={`add-button-${inputName}`} className='my-2'>
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
             type='button'
             data-mdb-ripple='true'
             data-mdb-ripple-color='light'
-            className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+            className='align-center ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
             <PlusLg className='mr-2 h-4 w-4' />
             {`Add ${inputName}`}
           </button>
@@ -381,9 +381,9 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
         <div className='modal-content pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none'>
           <div className='modal-header flex flex-shrink-0 items-center justify-between rounded-t-md border-b border-gray-200 p-4'>
             <h2
-              className='text-xl font-medium leading-normal text-gray-800 capitalize'
+              className='text-xl font-medium capitalize leading-normal text-gray-800'
               id='newCVSectionModalLabel'>
-              {currentSection} <span className="text-sm">section builder</span>
+              {currentSection} <span className='text-sm'>section builder</span>
             </h2>
             <button
               type='button'
@@ -398,7 +398,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
                   <>
                     <label
                       htmlFor='description'
-                      className='form-label font-medium mb-2 inline-block text-gray-700'>
+                      className='form-label mb-2 inline-block font-medium text-gray-700'>
                       Description
                     </label>
                     <input
@@ -428,12 +428,13 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
               Cancel
             </button>
             <button
-              type="submit"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="light"
+              type='submit'
+              data-mdb-ripple='true'
+              data-mdb-ripple-color='light'
               onClick={handleSubmit}
-              class="ml-1 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-            >Submit</button>
+              className='ml-1 inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+              Submit
+            </button>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ export default function DeleteApplicationModal({
 }) {
   return (
     <div
-      className='modal fade fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
+      className='fade modal fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
       id='deleteModal'
       tabIndex='-1'
       aria-labelledby='deleteModalLabel'

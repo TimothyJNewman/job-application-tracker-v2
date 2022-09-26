@@ -6,7 +6,7 @@ import {
   Tag,
 } from 'react-bootstrap-icons';
 import { updateDatabaseEntry } from '../../util/CRUD';
-import {Selector} from '../../components/microComponents';
+import { Selector } from '../../components/microComponents';
 
 const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   const appDetails = appsData.find((elem) => elem.id === id);

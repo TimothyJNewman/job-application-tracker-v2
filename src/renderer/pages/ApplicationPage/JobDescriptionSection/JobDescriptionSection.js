@@ -10,8 +10,8 @@ const JobDescriptionSection = ({ id }) => {
   const [textArea, setTextArea] = useState('');
 
   useEffect(() => {
-    setTextArea(appDetails.job_description)
-  }, [appDetails.job_description])
+    setTextArea(appDetails.job_description);
+  }, [appDetails.job_description]);
 
   const saveJobDescPdfHandler = (uploadPdfUrl) => {
     const saveJobDescPdfPromise = window.electron
@@ -53,7 +53,7 @@ const JobDescriptionSection = ({ id }) => {
       ({ error }) => {
         if (error) {
           console.error(error);
-          toast.error("Error: Job description text not saved")
+          toast.error('Error: Job description text not saved');
         }
         readDatabaseEntry(
           'SELECT * FROM applications',
@@ -61,9 +61,9 @@ const JobDescriptionSection = ({ id }) => {
           ({ error, result }) => {
             if (error) {
               console.error(error);
-              toast.error("Error: Job description text not saved")
+              toast.error('Error: Job description text not saved');
             }
-            toast.success("Successfully saved job description text")
+            toast.success('Successfully saved job description text');
             setAppsData(result);
           }
         );
@@ -76,20 +76,22 @@ const JobDescriptionSection = ({ id }) => {
       <h1 id='job-description' className='my-2 text-xl font-bold'>
         Job Description
       </h1>
-      <div className='flex flex-col overflow-x-auto md:flex-row gap-y-4 md:gap-x-4'>
+      <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
         <div className='grow'>
           <textarea
-            className='mb-2 h-48 w-full rounded border-2 border-green-500 outline-none focus:border-blue-500 p-1 px-2Z'
+            className='px-2Z mb-2 h-48 w-full rounded border-2 border-green-500 p-1 outline-none focus:border-blue-500'
             value={textArea}
             onChange={(event) => setTextArea(event.target.value)}></textarea>
-          <div className='flex justify-end'><button
-            type='button'
-            data-mdb-ripple='true'
-            data-mdb-ripple-color='light'
-            onClick={saveJobDescTextHandler}
-            className='inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-            Save
-          </button></div>
+          <div className='flex justify-end'>
+            <button
+              type='button'
+              data-mdb-ripple='true'
+              data-mdb-ripple-color='light'
+              onClick={saveJobDescTextHandler}
+              className='inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+              Save
+            </button>
+          </div>
         </div>
         <div>
           {appDetails.job_description_url !== null ? (
@@ -97,7 +99,9 @@ const JobDescriptionSection = ({ id }) => {
               url={`atom://${userPath}${appDetails.job_description_url}`}
             />
           ) : (
-            <div className="bg-yellow-100 rounded-lg py-5 px-6 text-base text-yellow-700 mb-3" role="alert">
+            <div
+              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+              role='alert'>
               No Job Description PDF found. Upload a PDF.
             </div>
           )}

@@ -27,24 +27,26 @@ const PdfDisplay = ({ url, title }) => {
         onLoadSuccess={onDocumentLoadSuccess}>
         <Page width={500} pageNumber={pageNumber} />
       </Document>
-      <div className='my-2 flex'>
-        <button
-          onClick={prevPagePagination}
-          data-mdb-ripple='true'
-          data-mdb-ripple-color='light'
-          className='flex h-8  w-8 items-center justify-center rounded bg-blue-700 text-white hover:bg-blue-500'>
-          <ChevronLeft />
-        </button>
-        <span className='p-1'>
-          {pageNumber} of {numPages}
-        </span>
-        <button
-          onClick={nextPagePagination}
-          data-mdb-ripple='true'
-          data-mdb-ripple-color='light'
-          className='flex h-8  w-8 items-center justify-center rounded bg-blue-700 text-white hover:bg-blue-500'>
-          <ChevronRight />
-        </button>
+      <div className='my-2 flex justify-end'>
+        <div className='flex'>
+          <button
+            onClick={prevPagePagination}
+            data-mdb-ripple='true'
+            data-mdb-ripple-color='light'
+            className='flex h-8  w-8 items-center justify-center rounded bg-blue-700 text-white hover:bg-blue-500'>
+            <ChevronLeft />
+          </button>
+          <span className='p-1'>
+            {pageNumber} of {numPages}
+          </span>
+          <button
+            onClick={nextPagePagination}
+            data-mdb-ripple='true'
+            data-mdb-ripple-color='light'
+            className='flex h-8  w-8 items-center justify-center rounded bg-blue-700 text-white hover:bg-blue-500'>
+            <ChevronRight />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -8,9 +8,14 @@ import {
   updateDatabaseEntry,
   deleteDatabaseEntry,
 } from '../../../util/CRUD';
-import CVSectionBuilder from "./NewCVSectionForm"
+import CVSectionBuilder from './NewCVSectionForm';
 import CVSectionBuilderEdit from './EditCVSectionForm';
-import { PlusCircleFill, XCircleFill, TrashFill, PlusLg } from 'react-bootstrap-icons';
+import {
+  PlusCircleFill,
+  XCircleFill,
+  TrashFill,
+  PlusLg,
+} from 'react-bootstrap-icons';
 import schema from '../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
@@ -226,7 +231,7 @@ const CVConstructorSection = ({ id }) => {
 
   return (
     <div className='mb-2'>
-      <div className='flex my-2 justify-between'>
+      <div className='my-2 flex justify-between'>
         <h1 id='cv-contructor' className='text-xl font-bold'>
           CV constructor
         </h1>
@@ -254,8 +259,9 @@ const CVConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -431,7 +437,8 @@ const CVConstructorSection = ({ id }) => {
           data-bs-toggle='modal'
           data-bs-target='#newCVSectionModal'
           className='my-2 ml-auto flex items-center rounded bg-purple-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
-          <PlusLg className='h-4 w-4 mr-2' />Add section
+          <PlusLg className='mr-2 h-4 w-4' />
+          Add section
         </button>
       </div>
       <CVSectionBuilder

@@ -411,7 +411,7 @@ const EditCVSectionForm = ({
                 <>
                   <label
                     htmlFor='description'
-                    className='form-label font-medium mb-2 inline-block text-gray-700'>
+                    className='form-label mb-2 inline-block font-medium text-gray-700'>
                     Description
                   </label>
                   <input
