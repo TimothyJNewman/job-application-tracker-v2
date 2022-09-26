@@ -6,7 +6,7 @@ import {
   Tag,
 } from 'react-bootstrap-icons';
 import { updateDatabaseEntry } from '../../util/CRUD';
-import Selector from "../../components/microComponents/Selector"
+import {Selector} from '../../components/microComponents';
 
 const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
@@ -47,7 +47,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
       <div className='flex w-fit justify-center pt-6 pb-2'>
         <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-yellow-50'>
-          <div className='flex w-full items-center justify-center object-cover p-4 flex-col gap-y-2'>
+          <div className='flex w-full flex-col items-center justify-center gap-y-2 object-cover p-4'>
             {appDetails.status === 'Rejected' ? (
               <EmojiFrown className='h-36 w-36' />
             ) : appDetails.status === 'To Apply' ? (
@@ -55,7 +55,15 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
             ) : appDetails.status === 'Applied' ? (
               <EmojiSmile className='h-36 w-36' />
             ) : null}
-            <Selector options={[{ k: "Rejected", v: "Rejected" }, { k: "To Apply", v: "To Apply" }, { k: "Applied", v: "Applied" }]} selected={appDetails.status} onChange={(event) => updateValue(event.target.value, 'status')} />
+            <Selector
+              options={[
+                { k: 'Rejected', v: 'Rejected' },
+                { k: 'To Apply', v: 'To Apply' },
+                { k: 'Applied', v: 'Applied' },
+              ]}
+              selected={appDetails.status}
+              onChange={(event) => updateValue(event.target.value, 'status')}
+            />
           </div>
           <div className='flex flex-col justify-start p-6'>
             <input

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import NewApplicationForm from '../../components/NewApplicationForm';
-import DeleteApplicationModal from '../../components/DeleteComponentModal';
+import NewApplicationForm from './NewApplicationForm';
+import DeleteApplicationModal from './DeleteComponentModal';
 import {
   createDatabaseEntry,
   deleteDatabaseEntry,
@@ -39,25 +39,25 @@ const columns = [
   // },
   {
     accessorKey: 'status',
-    header: "",
+    header: '',
     cell: (info) => {
       let color;
       switch (info.getValue()) {
-        case "To Apply":
-          color = "bg-blue-500"
+        case 'To Apply':
+          color = 'bg-blue-500';
           break;
-        case "Applied":
-          color = "bg-green-500"
+        case 'Applied':
+          color = 'bg-green-500';
           break;
-        case "Rejected":
-          color = "bg-red-500"
+        case 'Rejected':
+          color = 'bg-red-500';
           break;
         default:
           break;
       }
-      return <div className={`h-5 w-1 ${color}`}></div>
+      return <div className={`h-5 w-1 ${color}`}></div>;
     },
-    bodyCellProps: { className: "pr-0 w-0.5" }
+    bodyCellProps: { className: 'pr-0 w-0.5' },
   },
   {
     accessorKey: 'company',
@@ -189,18 +189,25 @@ const ApplicationSummaryPage = () => {
 
   return (
     <div className='p-4'>
-      <div className="flex justify-between">
+      <div className='flex justify-between'>
         <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
-        <div className="relative flex flex-col items-center group h-6 w-6">
-          <button onClick={() => setDeleteMode(!deleteMode)} className='mx-1 inline hover:text-purple-700'><TrashFill
-            style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
-            className="h-6 w-6"
-            alt='Delete Entry Icon'
-          /></button>
-          <div className="absolute bottom-0 flex-col items-center hidden mb-6 group-hover:flex">
-            <span className="relative z-10 p-2 text-xs leading-none whitespace-no-wrap bg-gray-200 rounded w-fit min-w-[6rem] flex justify-center">Delete button</span>
-            <div className="w-3 h-3 -mt-2 rotate-45 bg-gray-200"></div>
-          </div></div>
+        <div className='group relative flex h-6 w-6 flex-col items-center'>
+          <button
+            onClick={() => setDeleteMode(!deleteMode)}
+            className='mx-1 inline hover:text-purple-700'>
+            <TrashFill
+              style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
+              className='h-6 w-6'
+              alt='Delete Entry Icon'
+            />
+          </button>
+          <div className='absolute bottom-0 mb-6 hidden flex-col items-center group-hover:flex'>
+            <span className='whitespace-no-wrap relative z-10 flex w-fit min-w-[6rem] justify-center rounded bg-gray-200 p-2 text-xs leading-none'>
+              Delete button
+            </span>
+            <div className='-mt-2 h-3 w-3 rotate-45 bg-gray-200'></div>
+          </div>
+        </div>
       </div>
       {deleteMode ? (
         <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
@@ -220,9 +227,10 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
-                            }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -255,15 +263,17 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${deleteMode && 'cursor-pointer'
-                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${
+                        deleteMode && 'cursor-pointer'
+                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
-                            }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

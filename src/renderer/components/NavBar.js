@@ -42,7 +42,7 @@ const NavBar = () => {
                   to={elem.url}
                   data-mdb-ripple='true'
                   data-mdb-ripple-color='light'
-                  className='nav-link inline-block rounded px-2 sm:px-0 py-2 text-gray-500 hover:bg-gray-200 focus:text-gray-700'>
+                  className='nav-link inline-block rounded px-2 py-2 text-gray-500 hover:bg-gray-200 focus:text-gray-700 sm:px-0'>
                   {elem.name}
                 </Link>
               </li>

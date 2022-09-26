@@ -5,7 +5,7 @@ import LetterConstructorSection from './LetterConstructorSection/LetterConstruct
 import PdfDisplay from '../../components/PdfDisplay';
 import ApplicationDetails from './ApplicationDetails';
 import JobDescriptionSection from './JobDescriptionSection/JobDescriptionSection';
-import CvConstructorSection from './CvConstructorSection/CvConstructorSection';
+import CVConstructorSection from './CVConstructorSection/CVConstructorSection';
 
 const ApplicationPage = () => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -78,15 +78,17 @@ const ApplicationPage = () => {
           id='pills-cv'
           role='tabpanel'
           aria-labelledby='pills-cv-tab'>
-          <div className='flex flex-col overflow-x-auto md:flex-row gap-y-4 md:gap-x-4'>
+          <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
             <div className='grow'>
-              <CvConstructorSection id={id} />
+              <CVConstructorSection id={id} />
             </div>
             <div>
               {appDetails.cv_url !== null ? (
                 <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
               ) : (
-                <div className="bg-yellow-100 rounded-lg py-5 px-6 text-base text-yellow-700 mb-3" role="alert">
+                <div
+                  className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+                  role='alert'>
                   No CV PDF found. Click generate pdf to create a new one.
                 </div>
               )}

@@ -40,7 +40,9 @@ const databaseInit = () => {
       cv_url TEXT,
       cover_letter_url TEXT,
       job_description_url TEXT,
-      date_applied DATE
+      date_applied DATE,
+      date_created DATE,
+      date_modified DATE
     )
   `
     ).run();
@@ -62,7 +64,7 @@ const databaseInit = () => {
       cv_component_section VARCHAR(127) NOT NULL,
       cv_component_text TEXT,
       cv_component_description TEXT,
-      date_created DATE
+      date_created DATE,
       date_modified DATE
     )
   `

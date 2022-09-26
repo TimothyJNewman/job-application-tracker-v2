@@ -1,16 +1,20 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
-import useClickOutside from '../../../util/useClickOutside';
+import React, { useEffect, useState } from 'react';
 import schema from '../../../constants/template2_schema';
+import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
+import { toast } from 'react-hot-toast';
 
-const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
-  const [currentSection, setCurrentSection] = useState('basics');
+const EditCVSectionForm = ({
+  elementToggleClickHandler,
+  editSectionCallback,
+  id,
+  currentSection,
+  currentFieldValuesDatabase,
+  currentDescriptionDatabase,
+}) => {
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentDescription, setCurrentDescription] = useState('');
   const [currentSectionJsx, setCurrentSectionJsx] = useState({});
-
-  const clickRef = useRef();
-  useClickOutside(clickRef, 'overlay-blur', onClickOutside);
 
   useEffect(() => {
     let newSchemaValue = schema[currentSection];
@@ -28,14 +32,15 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
       Object.keys(currentSchema).length !== 0 &&
       Object.keys(currentFieldValues).length === 0
     ) {
-      const newFieldValues = getDefaultFieldValues(
-        currentSchema[currentSection]
-      );
+      const newFieldValues = currentFieldValuesDatabase
+        ? currentFieldValuesDatabase
+        : getDefaultFieldValues(currentSchema[currentSection]);
       setCurrentFieldValues({
         [currentSection]: newFieldValues,
         section: currentSection,
         description: '',
       });
+      setCurrentDescription(currentDescriptionDatabase);
     }
   }, [currentSchema]);
 
@@ -74,36 +79,43 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     }
 
     const inputFieldJsxDictionary = {
-      // unavailable: ({ inputName }) => <Fragment key={inputName}>{inputName}<span>Not available</span></Fragment>,
+      // unavailable: ({ inputName }) => (
+      //   <>
+      //     {inputName}
+      //     <span>Not available</span>
+      //   </>
+      // ),
       unavailable: () => null,
       objectLabel: ({ inputName }) => (
-        <Fragment key={inputName}>
-          <p>{inputName}</p>
-          <br />
-        </Fragment>
+        <h2 key={inputName} className='mb-2 font-medium capitalize'>
+          {inputName}
+        </h2>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <Fragment key={`add-button-${inputName}`}>
-          <br />
+        <div key={`add-button-${inputName}`} className='py-2'>
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
-            className='std-button'
-            type='button'>
+            type='button'
+            data-mdb-ripple='true'
+            data-mdb-ripple-color='light'
+            className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+            <PlusLg className='mr-2 h-4 w-4' />
             {`Add ${inputName}`}
           </button>
-        </Fragment>
+        </div>
       ),
       shortText: ({ inputName, inputState, breadCrumbs }) => (
-        <Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             value={inputName}
             htmlFor={inputName}
-            className='my-2 py-1 italic'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <input
             type='text'
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
+            className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            placeholder='Text input'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -111,35 +123,60 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </Fragment>
+        </div>
       ),
       longText: ({ inputName, inputState, breadCrumbs }) => (
-        <Fragment key={inputName}>
-          <label htmlFor={inputName} className='my-2 py-1 italic'>
+        <div key={inputName} className='mb-4'>
+          <label
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <textarea
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
+            className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
             name={inputName}
             id={inputName}
             value={inputState}
             onChange={(event) =>
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
-          />
-        </Fragment>
+            rows='3'
+            placeholder='Your message'></textarea>
+        </div>
       ),
       number: ({ inputName, inputState, breadCrumbs }) => (
-        <Fragment key={inputName}>
+        <div key={inputName} className='mb-4'>
           <label
             value={inputName}
             htmlFor={inputName}
-            className='my-2 py-1 italic'>
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
           </label>
           <input
-            className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
             type='number'
+            className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            name={inputName}
+            id={inputName}
+            value={inputState}
+            onChange={(event) =>
+              handleInputChange(event, currentFieldValues, breadCrumbs)
+            }
+            placeholder='Number input'
+          />
+        </div>
+      ),
+      date: ({ inputName, inputState, breadCrumbs }) => (
+        <div key={inputName} className='mb-4'>
+          <label
+            value={inputName}
+            htmlFor={inputName}
+            className='form-label mb-2 inline-block capitalize text-gray-700'>
+            {inputName}
+          </label>
+          <input
+            type='date'
+            className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            placeholder='Text input'
             name={inputName}
             id={inputName}
             value={inputState}
@@ -147,31 +184,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
               handleInputChange(event, currentFieldValues, breadCrumbs)
             }
           />
-        </Fragment>
-      ),
-      date: ({ inputName, inputState, breadCrumbs }) => (
-        <Fragment key={inputName}>
-          <label
-            value={inputName}
-            htmlFor={inputName}
-            className='my-2 py-1 italic'>
-            {inputName}
-          </label>
-          <div className='mr-6'>
-            <input
-              className='my-1 mr-2 border-4 p-1 px-2 outline-none focus:border-purple-700'
-              type='date'
-              name={inputName}
-              id={inputName}
-              value={inputState}
-              onChange={(event) =>
-                handleInputChange(event, currentFieldValues, breadCrumbs)
-              }
-            />
-          </div>
-        </Fragment>
+        </div>
       ),
     };
+
     return inputFieldJsxDictionary[inputType]({
       inputName,
       inputState,
@@ -196,7 +212,9 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     return returnVal;
   };
 
-  // gets input jsx given a schema
+  /**
+   * gets input jsx given a schema
+   */
   const getInputJsx = (schemaKey, schemaValue) => {
     const getInputJsxRecursive = (schemaKey, schemaValue, breadCrumbs) => {
       let returnVal;
@@ -211,13 +229,26 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
         returnVal.push(
           getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
         );
+        let currentFieldValuesArray;
+        let currentFieldValuesSub = currentFieldValues;
+        for (let i = 0; i < breadCrumbs.length; i++) {
+          if (i === breadCrumbs.length - 1) {
+            currentFieldValuesArray = currentFieldValuesSub[breadCrumbs[i]];
+          } else {
+            currentFieldValuesSub = currentFieldValuesSub[breadCrumbs[i]];
+          }
+        }
         returnVal.push(
-          ...schemaValue.map((subSchemaValue, index) =>
-            getInputJsxRecursive(`${schemaKey}-${index}`, subSchemaValue, [
-              ...breadCrumbs,
-              index,
-            ])
-          )
+          <ol className='list-outside list-decimal pl-4'>
+            {currentFieldValuesArray.map((elem, index) => (
+              <li key={index}>
+                {getInputJsxRecursive('', schemaValue[0], [
+                  ...breadCrumbs,
+                  index,
+                ])}
+              </li>
+            ))}
+          </ol>
         );
         returnVal.push(
           getInputFieldJsx({
@@ -232,12 +263,14 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
           getInputFieldJsx({ inputType: 'objectLabel', inputName: schemaKey })
         );
         returnVal.push(
-          ...Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
-            getInputJsxRecursive(subSchemaKey, subSchemaValue, [
-              ...breadCrumbs,
-              subSchemaKey,
-            ])
-          )
+          <div className='pl-4'>
+            {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
+              getInputJsxRecursive(subSchemaKey, subSchemaValue, [
+                ...breadCrumbs,
+                subSchemaKey,
+              ])
+            )}
+          </div>
         );
       }
       return returnVal;
@@ -265,8 +298,10 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
     }
   };
 
-  // adds or deletes input fields for array inputs
-  // if deleteIndex is null, add of not delete
+  /**
+   * adds or deletes input fields for array inputs
+   * if deleteIndex is null, add of not delete
+   */
   const modifyInputFields = (
     schema,
     fieldValues,
@@ -320,7 +355,8 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addSectionCallback(currentFieldValues, currentDescription);
+    toast.success('Successfully saved');
+    editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
   const handleInputChange = (event, fieldValues, breadCrumbs) => {
@@ -344,56 +380,60 @@ const CvSectionBuilder = ({ addSectionCallback, onClickOutside }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center backdrop-blur-md backdrop-brightness-75'>
-      <div id='overlay-blur' className='fixed  h-screen w-screen'></div>
-      <div
-        ref={clickRef}
-        className='m-8 flex w-full items-center justify-center'>
-        <div className='relative z-30 max-w-3xl grow bg-white p-4'>
-          <h1 id='cv-section-builder' className='text-xl font-bold'>
-            {currentSection} section builder
-          </h1>
-          <ul className='mb-2 flex flex-wrap gap-2'>
-            {Object.entries(schema)
-              .filter(([key, value]) => value !== 'unavailable')
-              .map(([key, value]) => (
-                <li
-                  key={key}
-                  onClick={() => setCurrentSection(key)}
-                  className='underline hover:cursor-pointer hover:underline-offset-4'>
-                  {key}
-                </li>
-              ))}
-          </ul>
-          <form className='relative grid max-h-[70vh] grid-cols-2 gap-4 overflow-y-auto'>
-            {currentSectionJsx[currentSection] && (
-              <>
-                <label htmlFor='description' className='bold my-2 py-1'>
-                  Description
-                </label>
-                <input
-                  className='my-1 mr-8 border-4 p-1 px-2 outline-none focus:border-purple-700'
-                  type='text'
-                  name='description'
-                  value={currentDescription}
-                  onChange={(event) =>
-                    setCurrentDescription(event.target.value)
-                  }
-                />
-              </>
-            )}
+    <>
+      <div className='group relative z-20 flex items-center px-4 py-2 shadow-md'>
+        <div className='ease h-5 w-1 bg-red-600 opacity-80 duration-500 group-hover:h-0 group-hover:w-0 group-hover:opacity-0'></div>
+        <button
+          aria-label='Delete section'
+          onClick={() => elementToggleClickHandler('used', id)}
+          className='ease mr-2 flex w-0 items-center justify-center opacity-20 transition transition-[width] duration-500 group-hover:w-6 group-hover:opacity-100 '>
+          <XCircleFill className='h-5 w-5 text-red-600' />
+        </button>
+        <h1
+          id='cv-section-builder'
+          className='grow text-xl font-bold capitalize'>
+          {currentSection} section builder
+        </h1>
+        <button
+          type='submit'
+          onClick={handleSubmit}
+          data-mdb-ripple='true'
+          data-mdb-ripple-color='light'
+          className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+          Save
+        </button>
+      </div>
+      <div className='flex w-full items-center justify-center'>
+        <div className='grow overflow-y-scroll bg-white p-4'>
+          <form className='relative max-h-[70vh]'>
+            <div className='mb-2 border-b border-gray-200 pb-2'>
+              {currentSectionJsx[currentSection] && (
+                <>
+                  <label
+                    htmlFor='description'
+                    className='form-label font-medium mb-2 inline-block text-gray-700'>
+                    Description
+                  </label>
+                  <input
+                    type='text'
+                    className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                    placeholder='Text input'
+                    name='description'
+                    id='description'
+                    value={currentDescription}
+                    onChange={(event) =>
+                      setCurrentDescription(event.target.value)
+                    }
+                  />
+                </>
+              )}
+            </div>
             {currentSectionJsx[currentSection]}
-            <br />
-            <input
-              type='submit'
-              onClick={handleSubmit}
-              className='std-button my-2 ml-auto block'
-            />
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default CvSectionBuilder;
+export default EditCVSectionForm;

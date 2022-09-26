@@ -72,14 +72,14 @@ const JobDescriptionSection = ({ id }) => {
   };
 
   return (
-    <div>
+    <div className='mb-2'>
       <h1 id='job-description' className='my-2 text-xl font-bold'>
         Job Description
       </h1>
       <div className='flex flex-col overflow-x-auto md:flex-row gap-y-4 md:gap-x-4'>
         <div className='grow'>
           <textarea
-            className='mb-2 h-48 w-full rounded border-2 border-transparent outline-none focus:border-blue-500'
+            className='mb-2 h-48 w-full rounded border-2 border-green-500 outline-none focus:border-blue-500 p-1 px-2Z'
             value={textArea}
             onChange={(event) => setTextArea(event.target.value)}></textarea>
           <div className='flex justify-end'><button
