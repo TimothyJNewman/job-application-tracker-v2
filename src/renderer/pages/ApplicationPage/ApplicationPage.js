@@ -11,7 +11,8 @@ export default function ApplicationPage() {
   const { appsData, setAppsData } = useContext(GlobalContext);
   const [pdfUrl, setPdfUrl] = useState('');
   const id = Number(useParams().id);
-  const appDetails = appsData.filter((elem) => elem.id === id)[0];
+  console.log(appsData)
+  const appDetails = appsData.find((elem) => elem.id === id);
 
   useEffect(() => {
     setPdfUrl(appDetails.cv_url);
@@ -21,8 +22,8 @@ export default function ApplicationPage() {
     <div>
       <ApplicationDetails
         id={id}
-        appDetails={appDetails}
-        setAppsDetails={setAppsData}
+        appsData={appsData}
+        setAppsData={setAppsData}
       />
       <div className='px-4'>
         <ul

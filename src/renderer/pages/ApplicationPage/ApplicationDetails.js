@@ -7,24 +7,34 @@ import {
 } from 'react-bootstrap-icons';
 import { readDatabaseEntry, updateDatabaseEntry } from '../../util/CRUD';
 
-const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
+const ApplicationDetails = ({ id, appsData, setAppsData }) => {
+  const appDetails = appsData.find((elem) => elem.id === id);
+
   const updateValue = (newValue, field) => {
+    if (field === "company") {
+      const newAppsData = appsData.map(elem => {
+        if (elem.id === id) return ({ ...elem, company: newValue })
+        return elem
+      })
+      setAppsData(newAppsData);
+    } else if (field === "role") {
+      const newAppsData = appsData.map(elem => {
+        if (elem.id === id) return ({ ...elem, role: newValue })
+        return elem
+      })
+      setAppsData(newAppsData);
+    }
+  };
+
+  const saveValue = (field) => {
     updateDatabaseEntry(
       `UPDATE applications SET ${field}=? WHERE id=?`,
-      [newValue, id],
+      [appDetails[field], id],
       ({ error }) => {
         if (error) console.error(error);
-        readDatabaseEntry(
-          'SELECT * FROM applications WHERE id=?',
-          id,
-          ({ error, result }) => {
-            if (error) console.error(error);
-            setAppsDetails(result);
-          }
-        );
       }
     );
-  };
+  }
 
   return (
     <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
@@ -46,6 +56,7 @@ const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
               placeholder='Company'
               value={appDetails.company}
               onChange={(event) => updateValue(event.target.value, 'company')}
+              onBlur={() => saveValue("company")}
             />
             <input
               className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
@@ -53,6 +64,7 @@ const ApplicationDetails = ({ id, appDetails, setAppsDetails }) => {
               placeholder='Role'
               value={appDetails.role}
               onChange={(event) => updateValue(event.target.value, 'role')}
+              onBlur={() => saveValue("role")}
             />
             <p className='px-1 text-xs text-gray-600'>
               Date Applied{' '}
