@@ -38,16 +38,34 @@ const columns = [
   //   },
   // },
   {
+    accessorKey: 'status',
+    header: "",
+    cell: (info) => {
+      let color;
+      switch (info.getValue()) {
+        case "To Apply":
+          color = "bg-blue-500"
+          break;
+        case "Applied":
+          color = "bg-green-500"
+          break;
+        case "Rejected":
+          color = "bg-red-500"
+          break;
+        default:
+          break;
+      }
+      return <div className={`h-5 w-1 ${color}`}></div>
+    },
+    bodyCellProps:{className:"pr-0 w-1"}
+  },
+  {
     accessorKey: 'company',
     header: 'Company',
   },
   {
     accessorKey: 'role',
     header: 'Role',
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
   },
   {
     accessorKey: 'date_applied',
@@ -202,10 +220,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -238,17 +255,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${
-                        deleteMode && 'cursor-pointer'
-                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${deleteMode && 'cursor-pointer'
+                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

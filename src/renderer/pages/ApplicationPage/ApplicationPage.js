@@ -82,7 +82,7 @@ const ApplicationPage = () => {
             <div className='grow'>
               <CvConstructorSection id={id} />
             </div>
-            <div className="px-4">
+            <div className='px-4'>
               {appDetails.cv_url !== null ? (
                 <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
               ) : (
