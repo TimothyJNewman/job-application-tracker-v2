@@ -6,7 +6,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electron', {
   getPath: (channel) => {
-    return ipcRenderer.invoke(channel)
+    return ipcRenderer.invoke(channel);
   },
   getPdf: (channel, data) => {
     return ipcRenderer.invoke(channel, data);

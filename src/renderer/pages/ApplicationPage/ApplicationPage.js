@@ -82,11 +82,11 @@ const ApplicationPage = () => {
             <div className='grow'>
               <CvConstructorSection id={id} />
             </div>
-            <div>
+            <div className="px-4">
               {appDetails.cv_url !== null ? (
                 <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
               ) : (
-                <p className='px-4 pt-4'>
+                <p className='pt-4'>
                   No CV PDF found. Click generate pdf to create a new one.
                 </p>
               )}
@@ -103,6 +103,6 @@ const ApplicationPage = () => {
       </div>
     </div>
   );
-}
+};
 
-export default ApplicationPage
+export default ApplicationPage;

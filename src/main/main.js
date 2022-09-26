@@ -4,7 +4,7 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
-const { databaseInit, databaseHandler } = require("./commands/database");
+const { databaseInit, databaseHandler } = require('./commands/database');
 const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
 const { saveJobDescription } = require('./commands/saveJobDescription');
 const { getUserDataPath } = require('./commands/getPaths');
@@ -79,7 +79,7 @@ app.on('ready', async () => {
       responseHeaders: {
         ...details.responseHeaders,
         'Content-Security-Policy': [
-          "default-src 'self' 'unsafe-inline'; object-src 'self' data:; frame-src 'self'; img-src 'self' data:; connect-src 'self' atom:",
+          "default-src 'self' 'unsafe-inline'; object-src 'self' atom:; frame-src 'self' atom:; img-src 'self' data: atom:; connect-src 'self' atom:",
         ],
       },
     });
@@ -116,7 +116,7 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 // ipcMain handlers
-ipcMain.handle("get-user-data-path",getUserDataPath)
+ipcMain.handle('get-user-data-path', getUserDataPath);
 ipcMain.handle('get-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);

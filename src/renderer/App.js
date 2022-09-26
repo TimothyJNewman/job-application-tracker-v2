@@ -8,10 +8,12 @@ import HomePage from './pages/HomePage/HomePage';
 import { GlobalContext } from './context/GlobalContext';
 
 const App = () => {
-  const { setUserPath } = useContext(GlobalContext)
+  const { setUserPath } = useContext(GlobalContext);
   useEffect(() => {
-    window.electron.getPath("get-user-data-path").then((path) => { setUserPath(path) })
-  }, [])
+    window.electron.getPath('get-user-data-path').then((path) => {
+      setUserPath(path);
+    });
+  }, []);
   return (
     <div className='App'>
       <Toaster />

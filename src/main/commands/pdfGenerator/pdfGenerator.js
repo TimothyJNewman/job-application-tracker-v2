@@ -23,7 +23,9 @@ const pdfGeneratorHandler = async (event, args) => {
     const output = fs.createWriteStream(savePdfPath);
     latexPdf.pipe(output);
     latexPdf.on('error', (err) => reject(err));
-    latexPdf.on('finish', () => resolve(`\\pdf_files\\output${args.id}.pdf`));
+    latexPdf.on('finish', () =>
+      resolve(`\\output_files\\pdf_files\\output${args.id}.pdf`)
+    );
   });
 
   // save tex file
