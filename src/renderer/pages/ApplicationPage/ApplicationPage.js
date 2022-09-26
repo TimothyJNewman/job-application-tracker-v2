@@ -103,7 +103,7 @@ export default function ApplicationPage() {
           id='pills-letter'
           role='tabpanel'
           aria-labelledby='pills-letter-tab'>
-          <div className='px-4'>Letter constructor</div>
+          <LetterConstructorSection />
         </div>
       </div>
     </div>

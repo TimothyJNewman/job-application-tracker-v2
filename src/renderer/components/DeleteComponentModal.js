@@ -24,7 +24,7 @@ export default function DeleteApplicationModal({
               className='btn-close box-content h-4 w-4 rounded-none border-none p-1 text-black opacity-50 hover:text-black hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none'
               data-bs-dismiss='modal'
               aria-label='Close'></button>
-          </div>{' '}
+          </div>
           <div className='modal-body relative p-4'>
             Are you sure you want to delete {deleteApplicationName}?
           </div>
