@@ -13,13 +13,13 @@ const ApplicationPage = () => {
   const appDetails = appsData.find((elem) => elem.id === id);
 
   return (
-    <div>
+    <div className='px-4'>
       <ApplicationDetails
         id={id}
         appsData={appsData}
         setAppsData={setAppsData}
       />
-      <div className='px-4'>
+      <div>
         <ul
           className='nav nav-pills flex list-none flex-col flex-wrap pl-0 sm:flex-row'
           id='pills-tab'
@@ -78,17 +78,17 @@ const ApplicationPage = () => {
           id='pills-cv'
           role='tabpanel'
           aria-labelledby='pills-cv-tab'>
-          <div className='flex flex-col overflow-x-auto md:flex-row'>
+          <div className='flex flex-col overflow-x-auto md:flex-row gap-y-4 md:gap-x-4'>
             <div className='grow'>
               <CvConstructorSection id={id} />
             </div>
-            <div className='px-4'>
+            <div>
               {appDetails.cv_url !== null ? (
                 <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
               ) : (
-                <p className='pt-4'>
+                <div className="bg-yellow-100 rounded-lg py-5 px-6 text-base text-yellow-700 mb-3" role="alert">
                   No CV PDF found. Click generate pdf to create a new one.
-                </p>
+                </div>
               )}
             </div>
           </div>

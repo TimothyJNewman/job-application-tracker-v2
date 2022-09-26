@@ -57,7 +57,7 @@ const columns = [
       }
       return <div className={`h-5 w-1 ${color}`}></div>
     },
-    bodyCellProps:{className:"pr-0 w-1"}
+    bodyCellProps: { className: "pr-0 w-0.5" }
   },
   {
     accessorKey: 'company',
@@ -189,19 +189,19 @@ const ApplicationSummaryPage = () => {
 
   return (
     <div className='p-4'>
-      <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
-      <p
-        className='has-tooltip inline px-1'
-        onClick={() => setDeleteMode(!deleteMode)}>
-        <span className='tooltip -mt-8 rounded bg-slate-100 p-1 shadow-md'>
-          Delete button
-        </span>
-        <TrashFill
-          style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
-          className={'mx-1 mb-1 inline h-6 w-6 hover:text-purple-700'}
-          alt='Delete Entry Icon'
-        />
-      </p>
+      <div className="flex justify-between">
+        <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
+        <div className="relative flex flex-col items-center group h-6 w-6">
+          <button onClick={() => setDeleteMode(!deleteMode)} className='mx-1 inline hover:text-purple-700'><TrashFill
+            style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
+            className="h-6 w-6"
+            alt='Delete Entry Icon'
+          /></button>
+          <div className="absolute bottom-0 flex-col items-center hidden mb-6 group-hover:flex">
+            <span className="relative z-10 p-2 text-xs leading-none whitespace-no-wrap bg-gray-200 rounded w-fit min-w-[6rem] flex justify-center">Delete button</span>
+            <div className="w-3 h-3 -mt-2 rotate-45 bg-gray-200"></div>
+          </div></div>
+      </div>
       {deleteMode ? (
         <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
       ) : (

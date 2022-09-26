@@ -72,11 +72,11 @@ const JobDescriptionSection = ({ id }) => {
   };
 
   return (
-    <div className='px-4'>
+    <div>
       <h1 id='job-description' className='my-2 text-xl font-bold'>
         Job Description
       </h1>
-      <div className='flex flex-col gap-x-4 overflow-x-auto md:flex-row'>
+      <div className='flex flex-col overflow-x-auto md:flex-row gap-y-4 md:gap-x-4'>
         <div className='grow'>
           <textarea
             className='mb-2 h-48 w-full rounded border-2 border-transparent outline-none focus:border-blue-500'
@@ -97,9 +97,11 @@ const JobDescriptionSection = ({ id }) => {
               url={`atom://${userPath}${appDetails.job_description_url}`}
             />
           ) : (
-            <p className='pt-4'>No Job Description PDF found. Upload a PDF.</p>
+            <div className="bg-yellow-100 rounded-lg py-5 px-6 text-base text-yellow-700 mb-3" role="alert">
+              No Job Description PDF found. Upload a PDF.
+            </div>
           )}
-          <div className='my-2 w-96 px-4'>
+          <div className='my-2 w-96'>
             <label
               htmlFor='uploadPdfPicker'
               className='form-label mb-2 inline-block text-gray-700'>

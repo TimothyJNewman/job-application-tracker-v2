@@ -226,9 +226,9 @@ const CvConstructorSection = ({ id }) => {
   };
 
   return (
-    <div className='px-4'>
+    <div>
       <h1 id='cv-contructor' className='my-2 text-xl font-bold'>
-        CV constructor{' '}
+        CV constructor
         <button
           className='has-tooltip inline px-1'
           onClick={() => toggleCvBuilder(!showCvBuilder)}
@@ -301,7 +301,7 @@ const CvConstructorSection = ({ id }) => {
                   className='accordion-header mb-0'
                   id={`accordion_builder_header_${elem.id}`}>
                   <button
-                    className='accordion-button relative flex w-full items-center rounded-none border-0 bg-white py-2 px-5 text-left text-base text-gray-800 transition focus:outline-none'
+                    className='accordion-button relative flex w-full items-center rounded-none border-0 bg-white py-2 px-4 text-left text-base text-gray-800 transition focus:outline-none'
                     type='button'
                     data-bs-toggle='collapse'
                     data-bs-target={`#accordion_builder_collapse_${elem.id}`}
@@ -336,7 +336,7 @@ const CvConstructorSection = ({ id }) => {
         {elements.filter((elem) => elem.cv_component_section === currentSection)
           .length === 0 ? (
           <div
-            className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+            className='mb-3 rounded-lg bg-yellow-100 py-5 px-4 text-base text-yellow-700'
             role='alert'>
             No entries available
           </div>
@@ -350,17 +350,17 @@ const CvConstructorSection = ({ id }) => {
                       <tr className='text-left text-gray-700 '>
                         <th
                           scope='col'
-                          className='w-10/12  px-6 py-2 font-normal'>
+                          className='w-10/12 px-4 py-2 font-normal'>
                           Description
                         </th>
                         <th
                           scope='col'
-                          className='w-1/12  px-6 py-2 font-normal'>
+                          className='w-1/12 px-4 py-2 font-normal'>
                           Toggle
                         </th>
                         <th
                           scope='col'
-                          className='w-1/12  px-6 py-2 font-normal'>
+                          className='w-1/12 px-4 py-2 font-normal'>
                           Delete
                         </th>
                       </tr>
@@ -376,10 +376,10 @@ const CvConstructorSection = ({ id }) => {
                             <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
                               <td
                                 onClick={() => elementClickHandler(elem.id)}
-                                className='w-7/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                                className='w-7/12 whitespace-nowrap px-4 py-2 font-light text-gray-900'>
                                 {getDescription(elem)}
                               </td>
-                              <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              <td className='w-1/12 whitespace-nowrap px-4 py-2 font-light text-gray-900'>
                                 <button
                                   onClick={() =>
                                     elementToggleClickHandler('unused', elem.id)
@@ -392,7 +392,7 @@ const CvConstructorSection = ({ id }) => {
                                   )}
                                 </button>
                               </td>
-                              <td className='w-1/12  whitespace-nowrap px-6 py-2 font-light text-gray-900'>
+                              <td className='w-1/12  whitespace-nowrap px-4 py-2 font-light text-gray-900'>
                                 <button
                                   onClick={() =>
                                     elementDeleteClickHandler(elem.id)

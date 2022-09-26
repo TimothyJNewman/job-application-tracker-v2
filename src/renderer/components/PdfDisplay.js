@@ -27,7 +27,7 @@ const PdfDisplay = ({ url, title }) => {
         onLoadSuccess={onDocumentLoadSuccess}>
         <Page width={500} pageNumber={pageNumber} />
       </Document>
-      <div className='my-1 flex'>
+      <div className='my-2 flex'>
         <button
           onClick={prevPagePagination}
           data-mdb-ripple='true'
