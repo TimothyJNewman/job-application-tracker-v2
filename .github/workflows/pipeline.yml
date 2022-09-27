@@ -1,34 +1,74 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: electron-forge-make
+# name: electron-forge-make
 
-# on:
-#   pull_request:
-#     branches: [ "dev" ]
-on: push
+# # on:
+# #   pull_request:
+# #     branches: [ "dev" ]
+# on: push
+
+# jobs:
+#   build:
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
+#         os: [ubuntu-latest, windows-latest]
+
+#     runs-on: ${{ matrix.os }}
+
+#     steps:
+#       - name: Check out Git repository
+#         uses: actions/checkout@v3
+
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#           cache: 'npm'
+
+#       - name: Install NPM packages
+#         run: npm install
+      
+#       - name: Make Electron app
+#         run: npm run make
+
+name: Build
+on: [push, pull_request]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        node-version: [14.x]
-        os: [ubuntu-latest, windows-latest]
-
-    runs-on: ${{ matrix.os }}
-
+  build_on_linux:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run make
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+  build_on_mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run make
 
-      - name: Install NPM packages
-        run: npm install
-      
-      - name: Make Electron app
-        run: npm run make
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run make
