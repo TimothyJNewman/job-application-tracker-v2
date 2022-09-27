@@ -44,6 +44,10 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 14
+    - name: Install required linux packages
+      run: | 
+        sudo dnf install dpkg
+        sudo dnf install fakeroot
     - name: install dependencies
       run: npm install
     - name: build
