@@ -1,29 +1,29 @@
-const createDatabaseEntry = (sql, params, callback) => {
+const createDatabaseEntry = (sql, params, callback = () => {}) => {
   window.electron
     .database('database', 'POST', sql, params)
-    .then(callback)
-    .catch((error) => console.error(`Database error: ${error}`));
+    .then((result) => callback({ error: null, result }))
+    .catch((error) => callback({ error, result: null }));
 };
 
-const readDatabaseEntry = (sql, params, callback) => {
+const readDatabaseEntry = (sql, params, callback = () => {}) => {
   window.electron
     .database('database', 'GET', sql, params)
-    .then(callback)
-    .catch((error) => console.error(`Database error: ${error}`));
+    .then((result) => callback({ error: null, result }))
+    .catch((error) => callback({ error, result: null }));
 };
 
-const updateDatabaseEntry = (sql, params, callback) => {
+const updateDatabaseEntry = (sql, params, callback = () => {}) => {
   window.electron
     .database('database', 'PUT', sql, params)
-    .then(callback)
-    .catch((error) => console.error(`Database error: ${error}`));
+    .then((result) => callback({ error: null, result }))
+    .catch((error) => callback({ error, result: null }));
 };
 
-const deleteDatabaseEntry = (sql, params, callback) => {
+const deleteDatabaseEntry = (sql, params, callback = () => {}) => {
   window.electron
     .database('database', 'DELETE', sql, params)
-    .then(callback)
-    .catch((error) => console.error(`Database error: ${error}`));
+    .then((result) => callback({ error: null, result }))
+    .catch((error) => callback({ error, result: null }));
 };
 
 export {

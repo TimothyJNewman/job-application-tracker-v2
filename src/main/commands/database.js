@@ -39,8 +39,10 @@ const databaseInit = () => {
       status VARCHAR(63),
       cv_url TEXT,
       cover_letter_url TEXT,
-      is_cv_ready TINYINT NOT NULL DEFAULT 0 CHECK(is_cv_ready IN (0,1)),
-      date_applied DATE
+      job_description_url TEXT,
+      date_applied DATE,
+      date_created DATE,
+      date_modified DATE
     )
   `
     ).run();
@@ -62,7 +64,7 @@ const databaseInit = () => {
       cv_component_section VARCHAR(127) NOT NULL,
       cv_component_text TEXT,
       cv_component_description TEXT,
-      date_created DATE
+      date_created DATE,
       date_modified DATE
     )
   `
@@ -70,7 +72,9 @@ const databaseInit = () => {
   })();
 };
 
-// Handler for database request
+/**
+ * Handler for database request
+ */
 const databaseHandler = (event, commandVerb, sql, params) => {
   // using better-sqlite3
   let db;
@@ -110,7 +114,6 @@ const databaseHandler = (event, commandVerb, sql, params) => {
         })();
       } catch (error) {
         reject(error);
-        console.log(sql, params);
         throw error;
       }
     });

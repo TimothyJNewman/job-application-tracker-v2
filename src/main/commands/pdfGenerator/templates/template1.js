@@ -123,28 +123,28 @@ const getLatex = (params) => {
   `;
 
   const getHeading = (headingsArray) => {
-    const e = headingsArray[0];
+    const elem = headingsArray[0];
     let output = String.raw``;
     output += String.raw`
 %----------HEADING----------
 \begin{center}
-    {\Huge \scshape ${e.name}} \\ \vspace{1pt}
-    ${e.address} \\ \vspace{1pt}
+    {\Huge \scshape ${elem.name}} \\ \vspace{1pt}
+    ${elem.address} \\ \vspace{1pt}
     \small \raisebox{-0.1\height}
-    ${e.phone !== '' ? String.raw`\faPhone\ ${e.phone}` : ''}
+    ${elem.phone !== '' ? String.raw`\faPhone\ ${elem.phone}` : ''}
     ${
-      e.email !== ''
-        ? String.raw`~ \href{mailto:${e.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${e.email}}}`
+      elem.email !== ''
+        ? String.raw`~ \href{mailto:${elem.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${elem.email}}}`
         : ''
     }
     ${
-      e.linkedIn !== ''
-        ? String.raw` ~ \href{${e.linkedIn}}{\raisebox{-0.2\height}\faLinkedin\ \underline{${e.linkedIn}}}`
+      elem.linkedIn !== ''
+        ? String.raw` ~ \href{${elem.linkedIn}}{\raisebox{-0.2\height}\faLinkedin\ \underline{${elem.linkedIn}}}`
         : ''
     } 
     ${
-      e.gitHub !== ''
-        ? String.raw`~ \href{${e.gitHub}}{\raisebox{-0.2\height}\faGithub\ \underline{${e.gitHub}}}`
+      elem.gitHub !== ''
+        ? String.raw`~ \href{${elem.gitHub}}{\raisebox{-0.2\height}\faGithub\ \underline{${elem.gitHub}}}`
         : ''
     }
     \vspace{-8pt}
@@ -164,11 +164,11 @@ const getLatex = (params) => {
   `;
     let output = String.raw``;
     output += educationHeader;
-    educationArray.forEach((e) => {
+    educationArray.forEach((elem) => {
       output += String.raw` 
     \resumeSubheading
-      {${e.institution}}{${e.date}}
-      {${e.course}}{${e.location}}`;
+      {${elem.institution}}{${elem.date}}
+      {${elem.course}}{${elem.location}}`;
     });
     output += educationFooter;
 
@@ -192,9 +192,9 @@ const getLatex = (params) => {
     `;
     let output = String.raw``;
     output += courseworkHeader;
-    courseworkArray[0].itemArray.forEach((e) => {
+    courseworkArray[0].itemArray.forEach((elem) => {
       output += String.raw`
-          \item ${e}`;
+          \item ${elem}`;
     });
     output += courseworkFooter;
     return output;
@@ -228,13 +228,13 @@ const getLatex = (params) => {
 
     let output = String.raw``;
     output += experienceHeader;
-    experienceArray.forEach((e) => {
+    experienceArray.forEach((elem) => {
       output += getExperience(
-        e.company,
-        e.role,
-        e.date,
-        e.location,
-        e.itemArray
+        elem.company,
+        elem.role,
+        elem.date,
+        elem.location,
+        elem.itemArray
       );
     });
     output += experienceFooter;
@@ -270,8 +270,13 @@ const getLatex = (params) => {
 `;
     let output = String.raw``;
     output += projectHeader;
-    projectArray.forEach((e) => {
-      output += getProject(e.title, e.skillArray, e.date, e.itemArray);
+    projectArray.forEach((elem) => {
+      output += getProject(
+        elem.title,
+        elem.skillArray,
+        elem.date,
+        elem.itemArray
+      );
     });
     output += experienceFooter;
     return output;
@@ -329,13 +334,13 @@ const getLatex = (params) => {
 `;
     let output = String.raw``;
     output += involvementHeader;
-    involvementArray.forEach((e) => {
+    involvementArray.forEach((elem) => {
       output += getInvolvement(
-        e.organisation,
-        e.date,
-        e.role,
-        e.misc,
-        e.itemArray
+        elem.organisation,
+        elem.date,
+        elem.role,
+        elem.misc,
+        elem.itemArray
       );
     });
     output += involvementFooter;

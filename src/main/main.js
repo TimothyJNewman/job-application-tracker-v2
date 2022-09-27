@@ -1,9 +1,13 @@
 const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
+require('dotenv').config();
 const path = require('path');
+const url = require('url');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
-const { databaseInit, databaseHandler } = require('./database');
-const pdfGeneratorHandler = require('./pdfGenerator/pdfGenerator');
+const { databaseInit, databaseHandler } = require('./commands/database');
+const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
+const { saveJobDescription } = require('./commands/saveJobDescription');
+const { getUserDataPath } = require('./commands/getPaths');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -26,12 +30,21 @@ const texFilesDir = path.join(
 if (!fs.existsSync(texFilesDir)) {
   fs.mkdirSync(texFilesDir, { recursive: true });
 }
+const uploadPdfFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/job_desc_files'
+);
+if (!fs.existsSync(uploadPdfFilesDir)) {
+  fs.mkdirSync(uploadPdfFilesDir, { recursive: true });
+}
 
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    // TODO add next line after adding top bar
+    // frame: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -55,14 +68,28 @@ app.on('ready', async () => {
   // react developer extension
   try {
     await session.defaultSession.loadExtension(
-      'C:/Users/timot/AppData/Local/Google/Chrome/User Data/Profile 2/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.25.0_0'
+      process.env.REACT_DEV_TOOLS_PATH
     );
   } catch (err) {
     console.error(err);
   }
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          "default-src 'self' 'unsafe-inline'; object-src 'self' atom:; frame-src 'self' atom:; img-src 'self' data: atom:; connect-src 'self' atom:",
+        ],
+      },
+    });
+  });
+
   protocol.registerFileProtocol('atom', (request, callback) => {
-    const url = request.url.substr(7);
-    callback({ path: path.normalize(`${__dirname}/${url}`) });
+    const filePath = url.fileURLToPath(
+      'file://' + request.url.slice('atom://'.length)
+    );
+    callback(filePath);
   });
   databaseInit();
   createWindow();
@@ -89,5 +116,7 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 // ipcMain handlers
+ipcMain.handle('get-user-data-path', getUserDataPath);
 ipcMain.handle('get-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
+ipcMain.handle('save-job-description', saveJobDescription);

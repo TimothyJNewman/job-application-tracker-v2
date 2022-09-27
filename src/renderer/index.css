@@ -3,13 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  form.form > input {
-    @apply border-2 border-slate-500;
-  }
-
-  .std-button {
-    @apply p-2 border-b-2 border-purple-700 bg-slate-200 hover:bg-slate-500 hover:text-slate-100;
-  }
 
   .tooltip {
     @apply invisible absolute;

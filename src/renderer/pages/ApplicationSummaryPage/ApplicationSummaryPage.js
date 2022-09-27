@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import AddApplicationForm from '../../components/AddApplicationForm';
+import { Link } from 'react-router-dom';
+import NewApplicationForm from './NewApplicationForm';
+import DeleteApplicationModal from './DeleteComponentModal';
 import {
   createDatabaseEntry,
   deleteDatabaseEntry,
@@ -20,72 +21,80 @@ import {
   EnvelopeFill,
   TrashFill,
   FilePersonFill,
+  PlusLg,
+  ArrowUpRightSquare,
 } from 'react-bootstrap-icons';
+import { DropdownLinks } from '../../components/microComponents/';
 
 const columns = [
+  // {
+  //   accessorKey: 'id',
+  //   header: 'Id',
+  //   headerCellProps: {
+  //     className: 'w-8',
+  //   },
+  //   bodyCellProps: {
+  //     className: 'w-8',
+  //   },
+  // },
   {
-    accessorKey: 'id',
-    header: 'Id',
-    headerCellProps: { className: 'pr-2 w-1/12' },
-    bodyCellProps: { className: 'pr-2 w-1/12 text-center' },
+    accessorKey: 'status',
+    header: '',
+    cell: (info) => {
+      let color;
+      switch (info.getValue()) {
+        case 'To Apply':
+          color = 'bg-blue-500';
+          break;
+        case 'Applied':
+          color = 'bg-green-500';
+          break;
+        case 'Rejected':
+          color = 'bg-red-500';
+          break;
+        default:
+          break;
+      }
+      return <div className={`h-5 w-1 ${color}`}></div>;
+    },
+    bodyCellProps: { className: 'pr-0 w-0.5' },
   },
   {
     accessorKey: 'company',
     header: 'Company',
-    headerCellProps: { className: 'px-2 w-3/12' },
-    bodyCellProps: { className: 'px-2 w-3/12' },
   },
   {
     accessorKey: 'role',
     header: 'Role',
-    headerCellProps: { className: 'px-2 w-4/12' },
-    bodyCellProps: { className: 'px-2 w-4/12' },
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    headerCellProps: { className: 'px-2 w-2/12' },
-    bodyCellProps: { className: 'px-2 w-2/12 text-center' },
   },
   {
     accessorKey: 'date_applied',
     header: () => (
       <>
-        <CalendarCheck className='w-4 h-4 mb-1 mr-1 inline' />
+        <CalendarCheck className='mb-1 mr-2 inline h-4 w-4' />
         Applied
       </>
     ),
-    headerCellProps: { className: 'px-2 w-2/12 text-center' },
-    bodyCellProps: { className: 'px-2 w-2/12 text-center' },
     cell: (info) => new Date(info.getValue()).toLocaleDateString(),
   },
   {
-    id: 'cv',
-    header: 'CV',
-    headerCellProps: { className: 'px-2' },
-    bodyCellProps: { className: 'px-2 text-center' },
+    id: 'documents',
+    header: 'Docs',
+    headerCellProps: {
+      className: 'w-12',
+    },
+    bodyCellProps: {
+      className: 'w-12 text-center',
+    },
     cell: (info) => (
       <Link
-        className='w-12'
-        to={`/application/${info.row.original.id}#cv-contructor`}>
-        <FilePersonFill
-          className='w-6 h-6 inline hover:text-purple-700 hoanimate-pulse'
-          alt='CV Icon'
-        />
-      </Link>
-    ),
-  },
-  {
-    id: 'letter',
-    header: 'Letter',
-    headerCellProps: { className: 'px-2' },
-    bodyCellProps: { className: 'px-2 text-center' },
-    cell: (info) => (
-      <Link className='w-12' to={`/application/${info.row.original.id}`}>
-        <EnvelopeFill
-          className='w-6 h-6 inline hover:text-purple-700'
-          alt='Letter Icon'
-        />
+        type='button'
+        to={`/application/${info.row.original.id}`}
+        data-mdb-ripple='true'
+        data-mdb-ripple-color='light'
+        className='flex rounded bg-blue-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        <ArrowUpRightSquare className='mr-1' />
+        Open
       </Link>
     ),
   },
@@ -93,9 +102,14 @@ const columns = [
 
 const ApplicationSummaryPage = () => {
   const { appsData, setAppsData } = useContext(GlobalContext);
-  const [showForm, toggleForm] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
-  const [noItemsRemoved, setNoItemsRemoved] = useState(0);
+  const [bsToggleContent, setBSToggleContent] = useState({});
+  const [deleteItemDetails, setDeleteItemDetails] = useState({
+    comapny: '',
+    role: '',
+    id: null,
+  });
+  const [noItemsChanged, setNoItemsChanged] = useState(0);
 
   const table = useReactTable({
     data: appsData,
@@ -106,17 +120,53 @@ const ApplicationSummaryPage = () => {
   });
 
   useEffect(() => {
-    readDatabaseEntry('SELECT * FROM applications', null, setAppsData);
-  }, [showForm, setAppsData, noItemsRemoved]);
+    readDatabaseEntry(
+      'SELECT * FROM applications',
+      null,
+      ({ error, result }) => {
+        if (error) console.error(error);
+        setAppsData(result);
+      }
+    );
+  }, [noItemsChanged]);
 
-  let navigate = useNavigate();
-  const handleApplicationClick = (id) => {
+  useEffect(() => {
     if (deleteMode) {
-      deleteDatabaseEntry('DELETE FROM applications WHERE id=?', id, () =>
-        setNoItemsRemoved(noItemsRemoved + 1)
-      );
+      setBSToggleContent({
+        'data-bs-toggle': 'modal',
+        'data-bs-target': '#deleteModal',
+      });
     } else {
-      navigate('/application/' + id, { replace: true });
+      setBSToggleContent({});
+    }
+  }, [deleteMode]);
+
+  const handleApplicationClick = (id) => {
+    const appDetails = appsData.find((elem) => elem.id === id);
+    setDeleteItemDetails({
+      company: appDetails.company,
+      role: appDetails.role,
+      id,
+    });
+  };
+
+  const handleDeleteConfirmationCallback = () => {
+    if (deleteMode) {
+      deleteDatabaseEntry(
+        'DELETE FROM cv_component_in_application WHERE application_id=?',
+        deleteItemDetails.id,
+        ({ error }) => {
+          if (error) console.error(error);
+          deleteDatabaseEntry(
+            'DELETE FROM applications WHERE id=?',
+            deleteItemDetails.id,
+            ({ error }) => {
+              if (error) console.error(error);
+              setNoItemsChanged(noItemsChanged + 1);
+            }
+          );
+        }
+      );
     }
   };
 
@@ -130,105 +180,129 @@ const ApplicationSummaryPage = () => {
         params.status,
         new Date().toISOString(),
       ],
-      () => {
-        toggleForm(!showForm);
+      ({ error }) => {
+        if (error) console.error(error);
+        setNoItemsChanged(noItemsChanged + 1);
       }
     );
   };
 
-  const handleCancelCallback = () => {
-    toggleForm(!showForm);
-  };
-
   return (
-    <div className='mx-2 absolute'>
-      <h1 className='font-bold text-xl w-fit inline'>All Applications</h1>
-      <p
-        className='has-tooltip inline px-1'
-        onClick={() => setDeleteMode(!deleteMode)}>
-        <span className='tooltip rounded shadow-md p-1 bg-slate-100 -mt-8'>
-          {' '}
-          Delete button{' '}
-        </span>
-        <TrashFill
-          style={{ color: `${deleteMode ? 'red' : ''}` }}
-          className={'w-6 h-6 mx-1 mb-1 inline hover:text-purple-700'}
-          alt='Delete Entry Icon'
-        />
-      </p>
-      {deleteMode ? <p className='-mt-1'>Click on an item to delete 🡣</p> : ''}
-      <table className='w-full'>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className='border-y border-slate-500 divide-x divide-slate-200'>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  colSpan={header.colSpan}
-                  {...header.column.columnDef.headerCellProps}>
-                  {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort()
-                          ? 'cursor-pointer select-none'
-                          : '',
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: (
-                          <SortAlphaDown className='w-4 h-4 mb-1 ml-1 inline' />
-                        ),
-                        desc: (
-                          <SortAlphaDownAlt className='w-4 h-4 mb-1 ml-1 inline' />
-                        ),
-                      }[header.column.getIsSorted()] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className='w-full border-y border-slate-200 hover:bg-slate-100 cursor-pointer'
-              onClick={() => handleApplicationClick(row.original.id)}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className='px-2'
-                  {...cell.column.columnDef.bodyCellProps}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className='p-4'>
+      <div className='flex justify-between'>
+        <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
+        <div className='group relative flex h-6 w-6 flex-col items-center'>
+          <button
+            onClick={() => setDeleteMode(!deleteMode)}
+            className='mx-1 inline hover:text-purple-700'>
+            <TrashFill
+              style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
+              className='h-6 w-6'
+              alt='Delete Entry Icon'
+            />
+          </button>
+          <div className='absolute bottom-0 mb-6 hidden flex-col items-center group-hover:flex'>
+            <span className='whitespace-no-wrap relative z-10 flex w-fit min-w-[6rem] justify-center rounded bg-gray-200 p-2 text-xs leading-none'>
+              Delete button
+            </span>
+            <div className='-mt-2 h-3 w-3 rotate-45 bg-gray-200'></div>
+          </div>
+        </div>
+      </div>
+      {deleteMode ? (
+        <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
+      ) : (
+        ''
+      )}
+      <div className='flex flex-col'>
+        <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
+          <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
+            <div className='overflow-hidden'>
+              <table className='min-w-full'>
+                <thead className='border-b bg-white'>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          scope='col'
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
+                          {header.isPlaceholder ? null : (
+                            <div
+                              {...{
+                                className: header.column.getCanSort()
+                                  ? 'cursor-pointer select-none'
+                                  : '',
+                                onClick:
+                                  header.column.getToggleSortingHandler(),
+                              }}>
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {{
+                                asc: (
+                                  <SortAlphaDown className='mb-1 ml-1 inline h-4 w-4' />
+                                ),
+                                desc: (
+                                  <SortAlphaDownAlt className='mb-1 ml-1 inline h-4 w-4' />
+                                ),
+                              }[header.column.getIsSorted()] ?? null}
+                            </div>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr
+                      key={row.id}
+                      className={`${
+                        deleteMode && 'cursor-pointer'
+                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      onClick={() => handleApplicationClick(row.original.id)}
+                      {...bsToggleContent}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td
+                          key={cell.id}
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <button
         type='button'
-        onClick={(e) => {
-          e.preventDefault();
-          toggleForm(!showForm);
-        }}
-        className='block my-2 ml-auto std-button'>
+        data-mdb-ripple='true'
+        data-mdb-ripple-color='light'
+        data-bs-toggle='modal'
+        data-bs-target='#addNewModal'
+        className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+        <PlusLg className='mr-2 h-4 w-4' />
         Add new
       </button>
-      {showForm ? (
-        <AddApplicationForm
-          className={`block w-full h-full absolute top-0 bg-white`}
-          handleSubmitCallback={handleSubmitCallback}
-          handleCancelCallback={handleCancelCallback}
-        />
-      ) : null}
+      <NewApplicationForm handleSubmitCallback={handleSubmitCallback} />
+      <DeleteApplicationModal
+        handleSubmitCallback={handleDeleteConfirmationCallback}
+        deleteApplicationName={`${deleteItemDetails.role} at ${deleteItemDetails.company}`}
+      />
     </div>
   );
 };

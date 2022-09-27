@@ -1,22 +1,28 @@
-import React from 'react';
-import Nav from './components/Nav';
+import React, { useContext, useEffect } from 'react';
+import NavBar from './components/NavBar';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import {
-  ApplicationPage,
-  ApplicationSummaryPage,
-  CvConstructorPage,
-} from './pages/index';
+import { Toaster } from 'react-hot-toast';
+import { ApplicationPage, ApplicationSummaryPage } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
+import HomePage from './pages/HomePage/HomePage';
+import { GlobalContext } from './context/GlobalContext';
 
 const App = () => {
+  const { setUserPath } = useContext(GlobalContext);
+  useEffect(() => {
+    window.electron.getPath('get-user-data-path').then((path) => {
+      setUserPath(path);
+    });
+  }, []);
   return (
     <div className='App'>
+      <Toaster />
       <Router>
-        <Nav />
+        <NavBar />
         <Routes>
-          <Route path='/cv-page/:id' element={<CvConstructorPage />} />
           <Route path='/application/:id' element={<ApplicationPage />} />
-          <Route path='/' element={<ApplicationSummaryPage />} />
+          <Route path='/applications' element={<ApplicationSummaryPage />} />
+          <Route path='/' element={<HomePage />} />
         </Routes>
       </Router>
     </div>

@@ -3,17 +3,14 @@ import { GlobalContext } from './GlobalContext';
 
 const GlobalProvider = (props) => {
   const [appsData, setAppsData] = useState([]);
-  const [notification, setNotification] = useState({
-    severity: 'low',
-    text: '',
-  });
+  const [userPath, setUserPath] = useState('');
   return (
     <GlobalContext.Provider
       value={{
         appsData,
         setAppsData,
-        notification,
-        setNotification,
+        userPath,
+        setUserPath,
       }}>
       {props.children}
     </GlobalContext.Provider>
