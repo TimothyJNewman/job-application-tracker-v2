@@ -96,6 +96,7 @@
     "@tanstack/react-table": "^8.2.6",
     "aws-sdk": "^2.1181.0",
     "better-sqlite3": "^7.6.2",
+    "dotenv": "^16.0.2",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "mock-aws-s3": "^4.0.2",
