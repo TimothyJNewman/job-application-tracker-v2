@@ -44,5 +44,5 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Archive
+          name: archive-${{ matrix.os }}
           path: out/make/
