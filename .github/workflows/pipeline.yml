@@ -46,8 +46,8 @@ jobs:
         node-version: 14
     - name: Install required linux packages
       run: | 
-        sudo dnf install dpkg
-        sudo dnf install fakeroot
+        sudo apt-get install dpkg
+        sudo apt-get install fakeroot
     - name: install dependencies
       run: npm install
     - name: build
