@@ -49,6 +49,17 @@
           "config": {}
         }
       ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "TimothyJNewman",
+              "name": "job-application-tracker-v2"
+            }
+          }
+        }
+      ],
       "plugins": [
         [
           "@electron-forge/plugin-webpack",
