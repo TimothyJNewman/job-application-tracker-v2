@@ -29,7 +29,7 @@
 
 #       - name: Install NPM packages
 #         run: npm install
-      
+
 #       - name: Make Electron app
 #         run: npm run make
 
@@ -40,20 +40,20 @@ jobs:
   build_on_linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 14
-    - name: Delete package-lock.json
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 14
+      - name: Delete package-lock.json
         run: rm -f package-lock.json
-    - name: Install required linux packages
-      run: | 
-        sudo apt-get install dpkg
-        sudo apt-get install fakeroot
-    - name: install dependencies
-      run: npm install
-    - name: build
-      run: npm run make
+      - name: Install required linux packages
+        run: |
+          sudo apt-get install dpkg
+          sudo apt-get install fakeroot
+      - name: install dependencies
+        run: npm install
+      - name: build
+        run: npm run make
 
   # build_on_mac:
   #   runs-on: macos-latest
