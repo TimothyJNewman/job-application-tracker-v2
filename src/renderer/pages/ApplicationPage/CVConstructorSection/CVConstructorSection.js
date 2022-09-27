@@ -147,7 +147,6 @@ const CVConstructorSection = ({ id }) => {
       }
     );
     setNoElementsAdded(noElementsAdded + 1);
-    toggleCVBuilder(false);
   };
 
   const editCVSectionBuilderHandler = (sectionObj, sectionDesc, id) => {
@@ -164,7 +163,6 @@ const CVConstructorSection = ({ id }) => {
       }
     );
     setNoElementsAdded(noElementsAdded + 1);
-    toggleCVBuilder(false);
   };
 
   const generatePdf = () => {
