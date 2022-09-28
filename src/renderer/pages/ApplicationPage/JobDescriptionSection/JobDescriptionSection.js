@@ -3,6 +3,7 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { toast } from 'react-hot-toast';
 import { updateDatabaseEntry, readDatabaseEntry } from '../../../util/CRUD';
 import PdfDisplay from '../../../components/PdfDisplay';
+import { Button } from '../../../components/microComponents';
 
 const JobDescriptionSection = ({ id }) => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -83,14 +84,11 @@ const JobDescriptionSection = ({ id }) => {
             value={textArea}
             onChange={(event) => setTextArea(event.target.value)}></textarea>
           <div className='flex justify-end'>
-            <button
-              type='button'
-              data-mdb-ripple='true'
-              data-mdb-ripple-color='light'
+            <Button
               onClick={saveJobDescTextHandler}
-              className='inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-              Save
-            </button>
+              value='Save'
+              color='blue'
+            />
           </div>
         </div>
         <div>

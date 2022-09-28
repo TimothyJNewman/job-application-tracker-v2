@@ -8,6 +8,7 @@ const { databaseInit, databaseHandler } = require('./commands/database');
 const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
 const { saveJobDescription } = require('./commands/saveJobDescription');
 const { getUserDataPath } = require('./commands/getPaths');
+const { exportToCsv } = require("./commands/export")
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -36,6 +37,12 @@ const uploadPdfFilesDir = path.join(
 );
 if (!fs.existsSync(uploadPdfFilesDir)) {
   fs.mkdirSync(uploadPdfFilesDir, { recursive: true });
+}
+const csvFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/csv_files')
+if (!fs.existsSync(csvFilesDir)) {
+  fs.mkdirSync(csvFilesDir, { recursive: true });
 }
 
 const createWindow = () => {
@@ -120,3 +127,4 @@ ipcMain.handle('get-user-data-path', getUserDataPath);
 ipcMain.handle('get-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);
+ipcMain.handle("export-to-csv", exportToCsv)
