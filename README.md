@@ -2,7 +2,7 @@
 
 # A Simple Job Application Tracker
 
-This is a simple application to help me track my applications and create personalised CVs and cover letters.
+This is a simple desktop application to help you track your applications and create personalised CVs and cover letters. All of your information is stored locally on your PC.
 
 ## Motivation
 > When applying for my summer 2022 internship, I used an Excel sheet to track my applications. This was perfect for tracking details such as application links, status and job description. However, there were features that I wanted in addition a spreadsheet. 
@@ -14,4 +14,4 @@ This is a simple application to help me track my applications and create persona
 ## Requirements
 This application is built using the Electron framework and has releases for MacOS, Windows, and Linux (Debian and Redhat). 
 
-LaTeX must be installed on your machine. You can download it [here](https://www.latex-project.org/get/]).
+LaTeX must be installed on your machine. You can download it [here](https://www.latex-project.org/get]).
