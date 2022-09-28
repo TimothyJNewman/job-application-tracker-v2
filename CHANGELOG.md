@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.1] - 27/09/2022
-###
+
+### Added
+
 - Tailwind Elements for design
 - React PDF for displaying PDFs since embedding causes app to crash
+
+## [0.1.2] - 27/09/2022
+
+### Added
+
+- Github workflow to generate versions for macos, linux and windows
