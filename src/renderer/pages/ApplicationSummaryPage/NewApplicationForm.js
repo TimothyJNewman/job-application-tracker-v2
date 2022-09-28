@@ -116,9 +116,10 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
             </div>
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex gap-x-2'><Button
+            <div className='flex gap-x-2 items-center'>
+              <Button
               additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
-              value='Close'
+              value='Cancel'
               color='purple'
             />
             <Button
@@ -130,7 +131,8 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
               }}
               value='Save changes'
               color='blue'
-            /></div>
+            />
+            </div>
           </div>
         </div>
       </div>
