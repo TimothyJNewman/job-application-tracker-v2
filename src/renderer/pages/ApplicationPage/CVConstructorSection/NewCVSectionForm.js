@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
-import useClickOutside from '../../../util/useClickOutside';
+import React, { useEffect, useState } from 'react';
 import schema from '../../../constants/template2_schema';
 import { PlusLg } from 'react-bootstrap-icons';
+import { Button } from "../../../components/microComponents"
 
 const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   const [currentSchema, setCurrentSchema] = useState({});
@@ -419,22 +419,19 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
             </form>
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <button
-              type='button'
-              className='rounded bg-purple-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'
-              data-bs-dismiss='modal'
-              data-mdb-ripple='true'
-              data-mdb-ripple-color='light'>
-              Cancel
-            </button>
-            <button
-              type='submit'
-              data-mdb-ripple='true'
-              data-mdb-ripple-color='light'
-              onClick={handleSubmit}
-              className='ml-1 inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-              Submit
-            </button>
+            <div className='flex gap-x-2 items-center'>
+              <Button
+                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
+                value='Cancel'
+                color='purple'
+              />
+              <Button
+                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
+                onClick={handleSubmit}
+                value='Submit'
+                color='blue'
+              />
+            </div>
           </div>
         </div>
       </div>

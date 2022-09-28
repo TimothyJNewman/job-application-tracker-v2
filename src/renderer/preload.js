@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld('electron', {
   getPdf: (channel, data) => {
     return ipcRenderer.invoke(channel, data);
   },
+  exportToCsv: (channel, arrayOfObjects) => {
+    return ipcRenderer.invoke(channel, arrayOfObjects)
+  },
   database: (channel, commandVerb, sql, params) => {
     return ipcRenderer.invoke(channel, commandVerb, sql, params);
   },

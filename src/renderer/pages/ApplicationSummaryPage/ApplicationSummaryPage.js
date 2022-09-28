@@ -18,13 +18,13 @@ import {
   SortAlphaDown,
   SortAlphaDownAlt,
   CalendarCheck,
-  EnvelopeFill,
   TrashFill,
-  FilePersonFill,
+  FiletypeCsv,
   PlusLg,
   ArrowUpRightSquare,
 } from 'react-bootstrap-icons';
-import { DropdownLinks } from '../../components/microComponents/';
+import { Button } from '../../components/microComponents/';
+import toast from 'react-hot-toast';
 
 const columns = [
   // {
@@ -172,7 +172,7 @@ const ApplicationSummaryPage = () => {
 
   const handleSubmitCallback = (params) => {
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, date_applied) VALUES (?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, date_created) VALUES (?,?,?,?,?)',
       [
         params.company,
         params.role,
@@ -187,27 +187,33 @@ const ApplicationSummaryPage = () => {
     );
   };
 
+  const exportClickHandler = () => {
+    const exportCsvPromise = window.electron.exportToCsv("export-to-csv", appsData).catch((error) => {
+      console.error(error)
+    })
+    toast.promise(exportCsvPromise, {
+      loading: 'Loading',
+      success: 'Successfully exported to CSV',
+      error: 'Error exporting CSV',
+    });
+  }
+
   return (
     <div className='p-4'>
       <div className='flex justify-between'>
         <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
-        <div className='group relative flex h-6 w-6 flex-col items-center'>
-          <button
+        <div className='flex gap-x-2'><Button
+          Icon={FiletypeCsv}
+          value='Export'
+          color='purple'
+          onClick={exportClickHandler}
+        />
+          <Button
+            Icon={TrashFill}
+            value='Delete'
+            color='red'
             onClick={() => setDeleteMode(!deleteMode)}
-            className='mx-1 inline hover:text-purple-700'>
-            <TrashFill
-              style={{ color: `${deleteMode ? 'red' : ''}`, stroke: 1 }}
-              className='h-6 w-6'
-              alt='Delete Entry Icon'
-            />
-          </button>
-          <div className='absolute bottom-0 mb-6 hidden flex-col items-center group-hover:flex'>
-            <span className='whitespace-no-wrap relative z-10 flex w-fit min-w-[6rem] justify-center rounded bg-gray-200 p-2 text-xs leading-none'>
-              Delete button
-            </span>
-            <div className='-mt-2 h-3 w-3 rotate-45 bg-gray-200'></div>
-          </div>
-        </div>
+          /></div>
       </div>
       {deleteMode ? (
         <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
@@ -227,10 +233,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -263,17 +268,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${
-                        deleteMode && 'cursor-pointer'
-                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${deleteMode && 'cursor-pointer'
+                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -288,16 +291,17 @@ const ApplicationSummaryPage = () => {
           </div>
         </div>
       </div>
-      <button
-        type='button'
-        data-mdb-ripple='true'
-        data-mdb-ripple-color='light'
-        data-bs-toggle='modal'
-        data-bs-target='#addNewModal'
-        className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        <PlusLg className='mr-2 h-4 w-4' />
-        Add new
-      </button>
+      <div className='my-2'>
+        <Button
+          Icon={PlusLg}
+          color='blue'
+          value='Add new'
+          additionalAttributes={{
+            'data-bs-toggle': 'modal',
+            'data-bs-target': '#addNewModal',
+          }}
+        />
+      </div>
       <NewApplicationForm handleSubmitCallback={handleSubmitCallback} />
       <DeleteApplicationModal
         handleSubmitCallback={handleDeleteConfirmationCallback}

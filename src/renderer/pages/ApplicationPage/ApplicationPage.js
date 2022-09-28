@@ -67,7 +67,7 @@ const ApplicationPage = () => {
       </div>
       <div className='tab-content' id='pills-tabContent'>
         <div
-          className='active fade tab-pane show'
+          className='active tab-pane show fade'
           id='pills-desc'
           role='tabpanel'
           aria-labelledby='pills-desc-tab'>
