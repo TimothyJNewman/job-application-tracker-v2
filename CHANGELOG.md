@@ -14,4 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Github workflow to generate versions for macos, linux and windows
+- Github actions workflow to generate versions for macos, linux and windows
+- MIT licence
+- Export applications to CSV file
+
+### Changed
+- Close add new component modal on submit
