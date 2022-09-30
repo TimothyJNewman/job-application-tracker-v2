@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react';
-import { GlobalContext } from '../../../context/GlobalContext';
+import { GlobalContext } from '../../../../context/GlobalContext';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -7,7 +7,7 @@ import {
   readDatabaseEntry,
   updateDatabaseEntry,
   deleteDatabaseEntry,
-} from '../../../util/CRUD';
+} from '../../../../util/CRUD';
 import CVSectionBuilder from './NewCVSectionForm';
 import CVSectionBuilderEdit from './EditCVSectionForm';
 import {
@@ -16,7 +16,7 @@ import {
   TrashFill,
   PlusLg,
 } from 'react-bootstrap-icons';
-import schema from '../../../constants/template2_schema';
+import schema from '../../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
 
@@ -176,30 +176,30 @@ const CVConstructorSection = ({ id }) => {
      */
     const getPdfPromise = window.electron
       .getPdf('get-pdf', generatePdfParams(schema, elements))
-      .then((relativeCVUrl) => {
-        updateDatabaseEntry(
-          'UPDATE applications SET cv_url=? WHERE id=?',
-          [relativeCVUrl, id],
-          ({ error }) => {
-            if (error) console.error(error);
-            readDatabaseEntry(
-              'SELECT * FROM applications',
-              null,
-              ({ error, result }) => {
-                if (error) console.error(error);
-                setAppsData(result);
-              }
-            );
-          }
-        );
-        console.log('New CV PDF url: ', relativeCVUrl);
-      })
+    getPdfPromise.then((relativeCVUrl) => {
+      updateDatabaseEntry(
+        'UPDATE applications SET cv_url=? WHERE id=?',
+        [relativeCVUrl, id],
+        ({ error }) => {
+          if (error) console.error(error);
+          readDatabaseEntry(
+            'SELECT * FROM applications',
+            null,
+            ({ error, result }) => {
+              if (error) console.error(error);
+              setAppsData(result);
+            }
+          );
+        }
+      );
+      console.log('New CV PDF url: ', relativeCVUrl);
+    })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
       });
     toast.promise(getPdfPromise, {
       loading: 'Loading',
-      success: 'Successfully generated CV PDF',
+      success: (savePath) => `Successfully generated CV PDF at ${savePath}`,
       error: 'Error generating CV PDF',
     });
   };
@@ -230,7 +230,7 @@ const CVConstructorSection = ({ id }) => {
   return (
     <div className='mb-2'>
       <div className='my-2 flex justify-between'>
-        <h1 id='cv-contructor' className='text-xl font-bold'>
+        <h1 id='cv-contructor' className='text-lg font-bold'>
           CV constructor
         </h1>
         <button
@@ -257,9 +257,8 @@ const CVConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

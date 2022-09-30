@@ -172,12 +172,13 @@ const ApplicationSummaryPage = () => {
 
   const handleSubmitCallback = (params) => {
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, date_created) VALUES (?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, date_created) VALUES (?,?,?,?,?)',
       [
         params.company,
         params.role,
         params.job_description,
         params.status,
+        params.link,
         new Date().toISOString(),
       ],
       ({ error }) => {
@@ -193,7 +194,7 @@ const ApplicationSummaryPage = () => {
     })
     toast.promise(exportCsvPromise, {
       loading: 'Loading',
-      success: 'Successfully exported to CSV',
+      success: (savePath) => `Successfully exported to CSV at ${savePath}`,
       error: 'Error exporting CSV',
     });
   }

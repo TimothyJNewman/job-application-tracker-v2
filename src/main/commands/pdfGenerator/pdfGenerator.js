@@ -3,7 +3,6 @@ const fs = require('fs');
 const fsPromises = require('fs/promises');
 const { app } = require('electron');
 const path = require('path');
-const Readable = require('stream').Readable;
 const getLatex = require('./templates/template2');
 
 /**
@@ -17,22 +16,22 @@ const pdfGeneratorHandler = async (event, args) => {
   const pdfFile = new Promise((resolve, reject) => {
     const savePdfPath = path.join(
       app.getPath('userData'),
-      'output_files/pdf_files',
-      `output${args.id}.pdf`
+      'output_files/cv_pdf',
+      `cv_${args.id}.pdf`
     );
     const output = fs.createWriteStream(savePdfPath);
     latexPdf.pipe(output);
     latexPdf.on('error', (err) => reject(err));
     latexPdf.on('finish', () =>
-      resolve(`\\output_files\\pdf_files\\output${args.id}.pdf`)
+      resolve(`\\output_files\\cv_pdf\\cv_${args.id}_${new Date().toISOString().split(/[:.-]/).join("_")}.pdf`)
     );
   });
 
   // save tex file
   const saveTexPath = path.join(
     app.getPath('userData'),
-    'output_files/tex_files',
-    `input${args.id}.tex`
+    'output_files/cv_tex',
+    `cv_${args.id}_${new Date().toISOString().split(/[:.-]/).join("_")}.tex`
   );
   const texFile = fsPromises.writeFile(saveTexPath, latexString);
 

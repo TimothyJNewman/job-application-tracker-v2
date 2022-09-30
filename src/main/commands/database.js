@@ -36,10 +36,12 @@ const databaseInit = () => {
       company VARCHAR(127) NOT NULL,
       role TEXT,
       job_description TEXT,
+      is_open INTEGER NOT NULL DEFAULT 0 CHECK(is_open IN (0,1)),
       status VARCHAR(63),
       cv_url TEXT,
       cover_letter_url TEXT,
       job_description_url TEXT,
+      link TEXT,
       date_applied DATE,
       date_created DATE,
       date_modified DATE

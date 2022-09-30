@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-bootstrap-icons';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 

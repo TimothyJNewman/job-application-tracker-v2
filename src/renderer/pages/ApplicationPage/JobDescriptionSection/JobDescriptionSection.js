@@ -3,7 +3,7 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { toast } from 'react-hot-toast';
 import { updateDatabaseEntry, readDatabaseEntry } from '../../../util/CRUD';
 import PdfDisplay from '../../../components/PdfDisplay';
-import { Button } from '../../../components/microComponents';
+import { Button, FilePicker } from '../../../components/microComponents';
 
 const JobDescriptionSection = ({ id }) => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -12,37 +12,36 @@ const JobDescriptionSection = ({ id }) => {
 
   useEffect(() => {
     setTextArea(appDetails.job_description);
-  }, [appDetails.job_description]);
+  }, [appDetails]);
 
   const saveJobDescPdfHandler = (uploadPdfUrl) => {
     const saveJobDescPdfPromise = window.electron
-      .saveJobDescPdf('save-job-description', {
+      .savePdf('save-job-description', {
         applicationID: id,
         uploadPdfUrl,
       })
-      .then((savedRelativeUrl) => {
-        updateDatabaseEntry(
-          'UPDATE applications SET job_description_url=? WHERE id=?',
-          [savedRelativeUrl, id],
-          ({ error }) => {
-            if (error) console.error(error);
-            readDatabaseEntry(
-              'SELECT * FROM applications',
-              null,
-              ({ error, result }) => {
-                if (error) console.error(error);
-                setAppsData(result);
-              }
-            );
-          }
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    saveJobDescPdfPromise.then((savedRelativeUrl) => {
+      updateDatabaseEntry(
+        'UPDATE applications SET job_description_url=? WHERE id=?',
+        [savedRelativeUrl, id],
+        ({ error }) => {
+          if (error) console.error(error);
+          readDatabaseEntry(
+            'SELECT * FROM applications',
+            null,
+            ({ error, result }) => {
+              if (error) console.error(error);
+              setAppsData(result);
+            }
+          );
+        }
+      );
+    }).catch((error) => {
+      console.error(error);
+    });
     toast.promise(saveJobDescPdfPromise, {
-      loading: 'Loading',
-      success: 'Successfully uploaded PDF',
+      loading: 'Saving PDF',
+      success: (savePath) => `Successfully uploaded PDF at ${savePath}`,
       error: 'Error uploading job description PDF',
     });
   };
@@ -103,22 +102,9 @@ const JobDescriptionSection = ({ id }) => {
               No Job Description PDF found. Upload a PDF.
             </div>
           )}
-          <div className='my-2 w-96'>
-            <label
-              htmlFor='uploadPdfPicker'
-              className='form-label mb-2 inline-block text-gray-700'>
-              Upload Job Description File
-            </label>
-            <input
-              accept='.pdf'
-              onChange={(event) =>
-                saveJobDescPdfHandler(event.target.files[0].path)
-              }
-              className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-              type='file'
-              id='uploadPdfPicker'
-            />
-          </div>
+          <FilePicker label="Upload Job Description PDF" accept=".pdf" onChange={(event) =>
+            saveJobDescPdfHandler(event.target.files[0].path)
+          } id="uploadJobDescPdfPicker" />
         </div>
       </div>
     </div>

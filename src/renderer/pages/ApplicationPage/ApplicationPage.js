@@ -5,7 +5,10 @@ import LetterConstructorSection from './LetterConstructorSection/LetterConstruct
 import PdfDisplay from '../../components/PdfDisplay';
 import ApplicationDetails from './ApplicationDetails';
 import JobDescriptionSection from './JobDescriptionSection/JobDescriptionSection';
-import CVConstructorSection from './CVConstructorSection/CVConstructorSection';
+import CVConstructorSection from './CVSection/CVConstructorSection/CVConstructorSection';
+import Switch from '../../components/microComponents/Switch';
+import CVUpload from "./CVSection/CVUpload"
+import CVSection from "./CVSection/CVSection"
 
 const ApplicationPage = () => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -47,7 +50,7 @@ const ApplicationPage = () => {
               role='tab'
               aria-controls='pills-cv'
               aria-selected='false'>
-              CV Builder
+              Curriculam Vitae
             </a>
           </li>
           <li className='nav-item' role='presentation'>
@@ -78,9 +81,13 @@ const ApplicationPage = () => {
           id='pills-cv'
           role='tabpanel'
           aria-labelledby='pills-cv-tab'>
+          {/* <h1 id='job-description' className='my-2 text-xl font-bold'>
+            Curriculam Vitae
+          </h1>
           <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
             <div className='grow'>
-              <CVConstructorSection id={id} />
+              <Switch isChecked={useCVBuilder} setIsChecked={setUseCVBuilder} id="cvBuilderToggle" name="cvBuilderToggle" label="Use CV Builder" />
+              {useCVBuilder ? <CVConstructorSection id={id} /> : <CVUpload id={id} />}
             </div>
             <div>
               {appDetails.cv_url !== null ? (
@@ -93,7 +100,8 @@ const ApplicationPage = () => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
+          <CVSection id={id} />
         </div>
         <div
           className='fade tab-pane'

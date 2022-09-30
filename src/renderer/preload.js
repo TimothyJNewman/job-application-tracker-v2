@@ -17,7 +17,7 @@ contextBridge.exposeInMainWorld('electron', {
   database: (channel, commandVerb, sql, params) => {
     return ipcRenderer.invoke(channel, commandVerb, sql, params);
   },
-  saveJobDescPdf: (channel, args) => {
+  savePdf: (channel, args) => {
     return ipcRenderer.invoke(channel, args);
   },
 });

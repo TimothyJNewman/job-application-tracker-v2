@@ -48,18 +48,22 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
       <div className='flex w-fit justify-center pt-6 pb-2'>
         <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-yellow-50'>
           <div className='flex w-full flex-col items-center justify-center gap-y-2 object-cover p-4'>
-            {appDetails.status === 'Rejected' ? (
+            {/* {appDetails.status === 'Rejected' ? (
               <EmojiFrown className='h-36 w-36' />
             ) : appDetails.status === 'To Apply' ? (
               <EmojiNeutral className='h-36 w-36' />
             ) : appDetails.status === 'Applied' ? (
               <EmojiSmile className='h-36 w-36' />
-            ) : null}
+            ) : null} */}
             <Selector
               options={[
-                { k: 'Rejected', v: 'Rejected' },
-                { k: 'To Apply', v: 'To Apply' },
+                { k: 'To apply', v: 'To apply' },
                 { k: 'Applied', v: 'Applied' },
+                { k: "Assessment", v: "Assessment" },
+                { k: "Interview", v: "Interview" },
+                { k: "Waiting for result", v: "Waiting for result" },
+                { k: 'Rejected', v: 'Rejected' },
+                { k: "Offer", v: "Offer" }
               ]}
               selected={appDetails.status}
               onChange={(event) => updateValue(event.target.value, 'status')}
