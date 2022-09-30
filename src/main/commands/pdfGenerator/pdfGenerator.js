@@ -14,6 +14,7 @@ const pdfGeneratorHandler = async (event, args) => {
 
   // save pdf file
   const pdfFile = new Promise((resolve, reject) => {
+    const pdfFileName = `cv_${args.id}_${new Date().toISOString().split(/[:.-]/).join("_")}.pdf`
     const savePdfPath = path.join(
       app.getPath('userData'),
       'output_files/cv_pdf',
@@ -23,7 +24,7 @@ const pdfGeneratorHandler = async (event, args) => {
     latexPdf.pipe(output);
     latexPdf.on('error', (err) => reject(err));
     latexPdf.on('finish', () =>
-      resolve(`\\output_files\\cv_pdf\\cv_${args.id}_${new Date().toISOString().split(/[:.-]/).join("_")}.pdf`)
+      resolve(`\\output_files\\cv_pdf\\${pdfFileName}`)
     );
   });
 

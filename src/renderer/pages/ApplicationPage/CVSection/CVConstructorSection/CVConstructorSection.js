@@ -15,13 +15,15 @@ import {
   XCircleFill,
   TrashFill,
   PlusLg,
+  Folder2Open,
 } from 'react-bootstrap-icons';
 import schema from '../../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
+import { Button } from '../../../../components/microComponents';
 
 const CVConstructorSection = ({ id }) => {
-  const { setAppsData } = useContext(GlobalContext);
+  const { setAppsData, userPath } = useContext(GlobalContext);
   const [elements, setElements] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
@@ -177,6 +179,7 @@ const CVConstructorSection = ({ id }) => {
     const getPdfPromise = window.electron
       .getPdf('get-pdf', generatePdfParams(schema, elements))
     getPdfPromise.then((relativeCVUrl) => {
+      console.log(relativeCVUrl)
       updateDatabaseEntry(
         'UPDATE applications SET cv_url=? WHERE id=?',
         [relativeCVUrl, id],
@@ -199,8 +202,21 @@ const CVConstructorSection = ({ id }) => {
       });
     toast.promise(getPdfPromise, {
       loading: 'Loading',
-      success: (savePath) => `Successfully generated CV PDF at ${savePath}`,
+      success: (savePath) => {
+        return (
+          <div className='flex'>
+            <span className='grow'>Successfully generated CV PDF{" "}
+              <Button Icon={Folder2Open} value="Open" onClick={openFileExplorer(`${userPath}${savePath}`)} />
+            </span>
+            {/* <button onClick><XLg /></button> */}
+          </div>
+        )
+      },
       error: 'Error generating CV PDF',
+    }, {
+      success: {
+        duration: 10000,
+      },
     });
   };
 
@@ -226,6 +242,10 @@ const CVConstructorSection = ({ id }) => {
       ? cv_component_description
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
+
+  const openFileExplorer = (path) => {
+
+  }
 
   return (
     <div className='mb-2'>

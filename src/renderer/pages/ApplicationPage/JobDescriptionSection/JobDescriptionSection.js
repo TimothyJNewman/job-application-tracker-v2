@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { updateDatabaseEntry, readDatabaseEntry } from '../../../util/CRUD';
 import PdfDisplay from '../../../components/PdfDisplay';
 import { Button, FilePicker } from '../../../components/microComponents';
+import { Folder2Open } from 'react-bootstrap-icons';
 
 const JobDescriptionSection = ({ id }) => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -41,8 +42,21 @@ const JobDescriptionSection = ({ id }) => {
     });
     toast.promise(saveJobDescPdfPromise, {
       loading: 'Saving PDF',
-      success: (savePath) => `Successfully uploaded PDF at ${savePath}`,
+      success: (savePath) => {
+        return (
+          <div className='flex'>
+            <span className='grow'>Successfully uploaded PDF{" "}
+              <Button Icon={Folder2Open} value="Open" onClick={openFileExplorer(`${userPath}${savePath}`)} />
+            </span>
+            {/* <button onClick><XLg /></button> */}
+          </div>
+        )
+      },
       error: 'Error uploading job description PDF',
+    }, {
+      success: {
+        duration: 10000,
+      },
     });
   };
 
@@ -70,6 +84,10 @@ const JobDescriptionSection = ({ id }) => {
       }
     );
   };
+
+  const openFileExplorer = (path) => {
+
+  }
 
   return (
     <div className='mb-2'>

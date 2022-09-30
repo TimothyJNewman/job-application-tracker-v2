@@ -22,6 +22,8 @@ import {
   FiletypeCsv,
   PlusLg,
   ArrowUpRightSquare,
+  Folder2Open,
+  XLg,
 } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents/';
 import toast from 'react-hot-toast';
@@ -101,7 +103,7 @@ const columns = [
 ];
 
 const ApplicationSummaryPage = () => {
-  const { appsData, setAppsData } = useContext(GlobalContext);
+  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
   const [deleteMode, setDeleteMode] = useState(false);
   const [bsToggleContent, setBSToggleContent] = useState({});
   const [deleteItemDetails, setDeleteItemDetails] = useState({
@@ -194,9 +196,26 @@ const ApplicationSummaryPage = () => {
     })
     toast.promise(exportCsvPromise, {
       loading: 'Loading',
-      success: (savePath) => `Successfully exported to CSV at ${savePath}`,
+      success: (savePath) => {
+        return (
+          <div className='flex'>
+            <span className='grow'>Successfully exported to CSV{" "}
+              <Button Icon={Folder2Open} value="Open" onClick={openFileExplorer(`${userPath}${savePath}`)} />
+            </span>
+            {/* <button onClick><XLg /></button> */}
+          </div>
+        )
+      },
       error: 'Error exporting CSV',
+    }, {
+      success: {
+        duration: 10000,
+      },
     });
+  }
+
+  const openFileExplorer = (path) => {
+
   }
 
   return (
