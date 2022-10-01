@@ -19,4 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export applications to CSV file
 
 ### Changed
-- Close add new component modal on submit
+
+- Close "new component" modal on submit
+
+## [0.1.3] - 01/10/2022
+
+### Added
+
+- Letter generator with a single template to create simple formal letter
+- Option to upload custom letter and CV PDFs instead of document generator
