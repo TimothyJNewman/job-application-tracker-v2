@@ -11,7 +11,9 @@ const CVSection = ({ id }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
   return (
     <>
-      <h1 id='job-description' className='my-2 text-xl font-bold tracking-tight'>
+      <h1
+        id='job-description'
+        className='my-2 text-xl font-bold tracking-tight'>
         Curriculam Vitae
       </h1>
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>

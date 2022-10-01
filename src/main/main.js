@@ -1,4 +1,11 @@
-const { app, BrowserWindow, ipcMain, session, protocol, shell } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  session,
+  protocol,
+  shell,
+} = require('electron');
 require('dotenv').config();
 const path = require('path');
 const url = require('url');

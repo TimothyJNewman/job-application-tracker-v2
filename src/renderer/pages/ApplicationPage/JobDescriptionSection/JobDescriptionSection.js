@@ -102,7 +102,9 @@ const JobDescriptionSection = ({ id }) => {
 
   return (
     <div className='mb-2'>
-      <h1 id='job-description' className='my-2 text-xl font-bold tracking-tight'>
+      <h1
+        id='job-description'
+        className='my-2 text-xl font-bold tracking-tight'>
         Job Description
       </h1>
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
@@ -126,7 +128,7 @@ const JobDescriptionSection = ({ id }) => {
             />
           ) : (
             <div
-              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700 w-[500px]'
+              className='mb-3 w-[500px] rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
               role='alert'>
               No Job Description PDF found. Upload a PDF.
             </div>

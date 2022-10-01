@@ -19,7 +19,8 @@ export default function DeleteApplicationModal({
             <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='deleteModalLabel'>
-             <XCircleFill className='inline mb-1 text-red-500'/> Delete confirmation
+              <XCircleFill className='mb-1 inline text-red-500' /> Delete
+              confirmation
             </h2>
             <button
               type='button'

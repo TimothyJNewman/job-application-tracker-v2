@@ -33,7 +33,13 @@ const SettingsPage = () => {
       .modifySettings('settings', 'season', currentSeasonLocal)
       .then(() => {
         setCurrentSeason(currentSeasonLocal);
-        if (seasonValues.every(({ season }) => season !== currentSeasonLocal)) {
+        if (
+          !seasonValues.every(({ season }) => season !== currentSeasonLocal)
+        ) {
+          return;
+        } else if (currentSeasonLocal !== '') {
+          return;
+        } else {
           createDatabaseEntry(
             'INSERT INTO seasons (season) VALUES (?)',
             [currentSeasonLocal],
@@ -65,7 +71,10 @@ const SettingsPage = () => {
       <h1 id='settings-page' className='text-xl font-bold tracking-tight'>
         Settings page
       </h1>
-      <p>Select an existing season or create a new season. Current season: <span className='font-bold'>{currentSeason}</span></p>
+      <p>
+        Select an existing season or create a new season. Current season:{' '}
+        <span className='font-bold'>{currentSeason}</span>
+      </p>
       <div className='mb-4'>
         <label
           htmlFor='salutation'

@@ -41,8 +41,8 @@ const columns = [
   // },
   {
     accessorKey: 'status',
-    id: "status_color"
-    , header: '',
+    id: 'status_color',
+    header: '',
     cell: (info) => {
       let color;
       switch (info.getValue()) {
@@ -78,10 +78,10 @@ const columns = [
   {
     accessorKey: 'priority',
     header: 'Priority',
-    cell: (info)=>{
-      const str = info.getValue()
+    cell: (info) => {
+      const str = info.getValue();
       return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    },
   },
   {
     id: 'documents',
@@ -179,10 +179,12 @@ const ApplicationSummaryPage = () => {
 
   const handleSubmitCallback = (params) => {
     const currentDate = new Date().toISOString();
-    const seasonID = seasonValues.find(({ season }) => season === currentSeason)?.id
+    const seasonID = seasonValues.find(
+      ({ season }) => season === currentSeason
+    )?.id;
     if (seasonID === undefined) {
-      toast.error("Error: No season selected. Go to settings.")
-      return
+      toast.error('Error: No season selected. Go to settings.');
+      return;
     }
     createDatabaseEntry(
       'INSERT INTO applications (company, role, job_description, status, link, priority, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?)',
@@ -239,12 +241,14 @@ const ApplicationSummaryPage = () => {
     );
   };
 
-  const openFileExplorer = (path) => { };
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='p-4'>
       <div className='flex justify-between'>
-        <h1 className='inline w-fit text-xl font-bold tracking-tight'>All Applications</h1>
+        <h1 className='inline w-fit text-xl font-bold tracking-tight'>
+          All Applications
+        </h1>
         <div className='flex gap-x-2'>
           <Button
             Icon={FiletypeCsv}
@@ -278,9 +282,10 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
-                            }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -313,15 +318,17 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${deleteMode && 'cursor-pointer'
-                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${
+                        deleteMode && 'cursor-pointer'
+                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
-                            }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

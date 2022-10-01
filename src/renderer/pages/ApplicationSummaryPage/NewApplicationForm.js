@@ -26,7 +26,8 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='addNewModalLabel'>
-              <PlusCircleFill className='inline mb-1 text-green-500'/> New Application
+              <PlusCircleFill className='mb-1 inline text-green-500' /> New
+              Application
             </h2>
             <button
               type='button'
@@ -38,7 +39,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='company'
-                className='form-label mb-2 inline-block text-gray-700 font-medium'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Company
               </label>
               <input
@@ -59,7 +60,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='role'
-                className='form-label mb-2 inline-block text-gray-700 font-medium'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Role
               </label>
               <input
@@ -80,7 +81,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='link'
-                className='form-label mb-2 inline-block text-gray-700 font-medium'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Link
               </label>
               <input
@@ -101,7 +102,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='job_description'
-                className='form-label mb-2 inline-block text-gray-700 font-medium'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 [Optional] Job Description
               </label>
               <textarea
@@ -120,7 +121,11 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
               />
             </div>
             <div>
-              <label htmlFor='status' className='form-label mb-2 inline-block text-gray-700 font-medium'>Status:</label>
+              <label
+                htmlFor='status'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Status:
+              </label>
               <select
                 value={appInput.status}
                 onChange={(event) => {
@@ -143,7 +148,11 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
               </select>
             </div>
             <div>
-            <label htmlFor='priority' className='form-label mb-2 inline-block text-gray-700 font-medium'>Priority:</label>
+              <label
+                htmlFor='priority'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Priority:
+              </label>
               <select
                 value={appInput.priority}
                 onChange={(event) => {
