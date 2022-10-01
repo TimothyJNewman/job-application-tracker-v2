@@ -48,7 +48,7 @@ const LetterSection = ({ id }) => {
             />
           ) : (
             <div
-              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700 w-[500px]'
               role='alert'>
               No Letter found
             </div>

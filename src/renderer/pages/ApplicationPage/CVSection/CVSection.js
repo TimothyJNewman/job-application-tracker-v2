@@ -34,7 +34,7 @@ const CVSection = ({ id }) => {
             <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
           ) : (
             <div
-              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700 w-[500px]'
               role='alert'>
               No CV PDF found. Click generate PDF to create a new one.
             </div>

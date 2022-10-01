@@ -179,13 +179,14 @@ const ApplicationSummaryPage = () => {
 
   const handleSubmitCallback = (params) => {
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, link, date_created) VALUES (?,?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created) VALUES (?,?,?,?,?,?,?)',
       [
         params.company,
         params.role,
         params.job_description,
         params.status,
         params.link,
+        params.priority,
         new Date().toISOString(),
       ],
       ({ error }) => {

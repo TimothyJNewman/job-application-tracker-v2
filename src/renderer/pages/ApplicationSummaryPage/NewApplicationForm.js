@@ -7,6 +7,7 @@ const defaultState = {
   job_description: '',
   link: '',
   status: 'To apply',
+  priority: "medium"
 };
 
 const NewApplicationForm = ({ handleSubmitCallback }) => {
@@ -129,11 +130,33 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                 }}
                 name='status'
                 className='form-select m-0 block w-full appearance-none rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-                aria-label='Default select example'>
+                aria-label='Default select status'>
                 {/* <option selected>Open this select menu</option> */}
                 <option value='To apply'>To apply</option>
                 <option value='Applied'>Applied</option>
+                <option value="Assessment">Assessment</option>
+                <option value="Interview">Interview</option>
+                <option value="Waiting for result">Waiting for result</option>
                 <option value='Rejected'>Rejected</option>
+                <option value="Offer">Offer</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor='priority'>Priority:</label>
+              <select
+                value={appInput.priority}
+                onChange={(event) => {
+                  setAppInput((arr) => ({
+                    ...arr,
+                    priority: event.target.value,
+                  }));
+                }}
+                name='priority'
+                className='form-select m-0 block w-full appearance-none rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                aria-label='Default select priority'>
+                <option value='low'>Low</option>
+                <option value='medium'>Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
           </div>

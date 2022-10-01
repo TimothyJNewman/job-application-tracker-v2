@@ -33,19 +33,32 @@ const databaseInit = () => {
       `
     CREATE TABLE IF NOT EXISTS applications (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      company VARCHAR(127) NOT NULL,
+      company VARCHAR(127),
       role TEXT,
       job_description TEXT,
       is_open INTEGER NOT NULL DEFAULT 0 CHECK(is_open IN (0,1)),
-      status VARCHAR(63),
+      status VARCHAR(63) NOT NULL DEFAULT "To apply",
       cv_url TEXT,
       cover_letter_url TEXT,
       cover_letter_json TEXT,
       job_description_url TEXT,
       link TEXT,
-      date_applied DATE,
+      priority VARCHAR(63) NOT NULL DEFAULT "medium",
       date_created DATE,
-      date_modified DATE
+      date_modified DATE,
+      season_id INTEGER NOT NULL,
+      FOREIGN KEY (season_id) REFERENCES seasons (id)
+    )
+  `
+    ).run();
+    db.prepare(
+      `
+    CREATE TABLE IF NOT EXISTS application_events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      application_id INTEGER NOT NULL,
+      event_name VARCHAR(63),
+      date_occurred DATE,
+      FOREIGN KEY (application_id) REFERENCES applications (id)
     )
   `
     ).run();
