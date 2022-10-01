@@ -14,18 +14,20 @@ const SettingsPage = () => {
   }, []);
 
   const updateSeason = () => {
-    window.electron
-      .modifySettings('settings', 'season', currentSeasonLocal)
-      .then((result) => {
-        if (result !== undefined) {
-          setCurrentSeason(currentSeasonLocal);
-          toast.success(`Season updated to ${result.value}!`);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        console.error(error);
-      });
+    if (currentSeasonLocal !== undefined && currentSeasonLocal !== "") {
+      window.electron
+        .modifySettings('settings', 'season', currentSeasonLocal)
+        .then((result) => {
+          if (result !== undefined) {
+            setCurrentSeason(currentSeasonLocal);
+            toast.success(`Season updated to ${result.value}!`);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
+          console.error(error);
+        });
+    }
   };
 
   const createSeason = () => {
@@ -33,17 +35,15 @@ const SettingsPage = () => {
       .modifySettings('settings', 'season', currentSeasonLocal)
       .then(() => {
         setCurrentSeason(currentSeasonLocal);
-        console.log(seasonValues, currentSeasonLocal,seasonValues.every(({ season }) => season !== currentSeasonLocal))
         if (
           !seasonValues.every(({ season }) => season !== currentSeasonLocal)
         ) {
-          console.log("New season cannot be duplicate of existing season")
+          console.error("New season cannot be duplicate of existing season")
           return;
         } else if (currentSeasonLocal === '') {
           console.error("New season cannot be empty string")
           return;
         } else {
-          console.log("New entry")
           createDatabaseEntry(
             'INSERT INTO seasons (season) VALUES (?)',
             [currentSeasonLocal],
