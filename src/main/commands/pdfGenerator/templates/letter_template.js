@@ -51,11 +51,11 @@ const getLetterLatex = ({
 %	YOUR INFORMATION AND LETTER DATE
 %----------------------------------------------------------------------------------------
 
-\setkomavar{fromname}{${senderName}} % Your name used in the from address
+\setkomavar{fromname}{${senderName === "" ? String.raw`\quad` : senderName}} % Your name used in the from address
 
-\setkomavar{fromaddress}{${senderAddress1} ${senderAddress2 !== "" ? string.raw`\\${senderAddress2}` : ""}} % Your address
+\setkomavar{fromaddress}{${senderAddress1 === "" ? String.raw`\quad` : senderAddress1}${senderAddress2 !== "" ? String.raw` \\${senderAddress2}` : ""}} % Your address
 
-\setkomavar{signature}{${senderName}} % Your name used in the signature
+\setkomavar{signature}{${senderName === "" ? String.raw`\quad` : senderName}} % Your name used in the signature
 
 \date{${date === "" ? String.raw`\today` : date}} % Date of the letter
 
@@ -67,7 +67,7 @@ const getLetterLatex = ({
 %	ADDRESSEE
 %----------------------------------------------------------------------------------------
  
-\begin{letter}{${receiverName} ${receiverAddress1 !== "" ? String.raw`\\ ${receiverAddress1}` : ""} ${receiverAddress2 !== "" ? String.raw`\\ ${receiverAddress2}` : ""}} % Addressee name and address
+\begin{letter}{${receiverName === "" ? String.raw`\quad` : receiverName}${receiverAddress1 !== "" ? String.raw` \\ ${receiverAddress1}` : ""}${receiverAddress2 !== "" ? String.raw` \\ ${receiverAddress2}` : ""}} % Addressee name and address
 
 %----------------------------------------------------------------------------------------
 %	LETTER CONTENT

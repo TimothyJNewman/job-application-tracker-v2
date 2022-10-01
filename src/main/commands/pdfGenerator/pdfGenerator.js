@@ -21,13 +21,13 @@ const pdfGenerator = async (latexString, type, id) => {
   );
   const existingPdfFile = pdfFiles.find((file) => {
     const pattern = new RegExp(type + '_' + id);
-    pattern.test(file);
+    return pattern.test(file);
   });
   if (existingPdfFile !== undefined) {
     await fsPromises.unlink(
       path.join(
         app.getPath('userData'),
-        `output_files/${type}_tex`,
+        `output_files/${type}_pdf`,
         existingPdfFile
       )
     );
@@ -38,7 +38,7 @@ const pdfGenerator = async (latexString, type, id) => {
   );
   const existingTexFile = texFiles.find((file) => {
     const pattern = new RegExp(type + '_' + id);
-    pattern.test(file);
+    return pattern.test(file);
   });
   if (existingTexFile !== undefined) {
     await fsPromises.unlink(
