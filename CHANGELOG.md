@@ -28,3 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Letter generator with a single template to create simple formal letter
 - Option to upload custom letter and CV PDFs instead of document generator
+
+## [0.1.4] - 01/10/2022
+
+### Added 
+
+- Settings page to configure current season. More settings to follow. Perhaps default template.
+- Application priority field and events table for events such as application submitted, assessment completed and offer received
+- External links in applications open on external browser
+
+### Changed
+
+- Removed delete package-lock.json command in build and release github actions workflows since the existing package-lock.json file works in Debian.
