@@ -5,7 +5,7 @@ import { readDatabaseEntry, updateDatabaseEntry } from '../../../util/CRUD';
 import { GlobalContext } from '../../../context/GlobalContext';
 import { Folder2Open } from 'react-bootstrap-icons';
 
-const CVUpload = ({ id }) => {
+const LetterUpload = ({ id }) => {
   const { setAppsData, userPath } = useContext(GlobalContext);
 
   const openFileExplorer = (path) => {};
@@ -75,4 +75,4 @@ const CVUpload = ({ id }) => {
   );
 };
 
-export default CVUpload;
+export default LetterUpload;

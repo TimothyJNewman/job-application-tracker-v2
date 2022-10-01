@@ -131,7 +131,7 @@ const CVConstructorSection = ({ id }) => {
     return {
       id: id,
       name: String(id),
-      resumeObject,
+      detailsObject: resumeObject,
     };
   };
 
@@ -176,48 +176,60 @@ const CVConstructorSection = ({ id }) => {
     /**
      * Generate pdf in the background
      */
-    const getPdfPromise = window.electron
-      .getPdf('get-pdf', generatePdfParams(schema, elements))
-    getPdfPromise.then((relativeCVUrl) => {
-      console.log(relativeCVUrl)
-      updateDatabaseEntry(
-        'UPDATE applications SET cv_url=? WHERE id=?',
-        [relativeCVUrl, id],
-        ({ error }) => {
-          if (error) console.error(error);
-          readDatabaseEntry(
-            'SELECT * FROM applications',
-            null,
-            ({ error, result }) => {
-              if (error) console.error(error);
-              setAppsData(result);
-            }
-          );
-        }
-      );
-      console.log('New CV PDF url: ', relativeCVUrl);
-    })
+    const getPdfPromise = window.electron.getPdf(
+      'generate-pdf',
+      'cv',
+      generatePdfParams(schema, elements)
+    );
+    getPdfPromise
+      .then((relativeCVUrl) => {
+        updateDatabaseEntry(
+          'UPDATE applications SET cv_url=? WHERE id=?',
+          [relativeCVUrl, id],
+          ({ error }) => {
+            if (error) console.error(error);
+            readDatabaseEntry(
+              'SELECT * FROM applications',
+              null,
+              ({ error, result }) => {
+                if (error) console.error(error);
+                setAppsData(result);
+              }
+            );
+          }
+        );
+        console.log('New CV PDF url: ', relativeCVUrl);
+      })
       .catch((error) => {
         console.error(`PDF error: ${error}`);
       });
-    toast.promise(getPdfPromise, {
-      loading: 'Loading',
-      success: (savePath) => {
-        return (
-          <div className='flex'>
-            <span className='grow'>Successfully generated CV PDF{" "}
-              <Button Icon={Folder2Open} value="Open" onClick={openFileExplorer(`${userPath}${savePath}`)} />
-            </span>
-            {/* <button onClick><XLg /></button> */}
-          </div>
-        )
+    toast.promise(
+      getPdfPromise,
+      {
+        loading: 'Loading',
+        success: (savePath) => {
+          return (
+            <div className='flex'>
+              <span className='grow'>
+                Successfully generated CV PDF{' '}
+                <Button
+                  Icon={Folder2Open}
+                  value='Open'
+                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                />
+              </span>
+              {/* <button onClick><XLg /></button> */}
+            </div>
+          );
+        },
+        error: 'Error generating CV PDF',
       },
-      error: 'Error generating CV PDF',
-    }, {
-      success: {
-        duration: 10000,
-      },
-    });
+      {
+        success: {
+          duration: 10000,
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -243,9 +255,7 @@ const CVConstructorSection = ({ id }) => {
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
-  const openFileExplorer = (path) => {
-
-  }
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='mb-2'>
@@ -253,14 +263,7 @@ const CVConstructorSection = ({ id }) => {
         <h1 id='cv-contructor' className='text-lg font-bold'>
           CV constructor
         </h1>
-        <button
-          type='button'
-          onClick={generatePdf}
-          data-mdb-ripple='true'
-          data-mdb-ripple-color='light'
-          className='block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-          Generate CV PDF
-        </button>
+        <Button onClick={generatePdf} value='Generate CV Pdf' />
       </div>
       <div className='flex flex-wrap gap-2'>
         <ul
@@ -277,8 +280,9 @@ const CVConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -391,7 +395,6 @@ const CVConstructorSection = ({ id }) => {
                           )
                           .map((elem) => (
                             <Fragment key={elem.id}>
-                              {console.log()}
                               <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
                                 <td
                                   onClick={() => elementClickHandler(elem.id)}

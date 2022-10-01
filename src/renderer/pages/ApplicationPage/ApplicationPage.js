@@ -1,19 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { GlobalContext } from '../../context/GlobalContext';
 import { useParams } from 'react-router-dom';
-import LetterConstructorSection from './LetterConstructorSection/LetterConstructorSection';
-import PdfDisplay from '../../components/PdfDisplay';
+import LetterConstructorSection from './LetterSection/LetterSection';
 import ApplicationDetails from './ApplicationDetails';
 import JobDescriptionSection from './JobDescriptionSection/JobDescriptionSection';
-import CVConstructorSection from './CVSection/CVConstructorSection/CVConstructorSection';
-import Switch from '../../components/microComponents/Switch';
-import CVUpload from "./CVSection/CVUpload"
-import CVSection from "./CVSection/CVSection"
+import CVSection from './CVSection/CVSection';
 
 const ApplicationPage = () => {
-  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
+  const { appsData, setAppsData } = useContext(GlobalContext);
   const id = Number(useParams().id);
-  const appDetails = appsData.find((elem) => elem.id === id);
 
   return (
     <div className='px-4'>
@@ -70,7 +65,7 @@ const ApplicationPage = () => {
       </div>
       <div className='tab-content' id='pills-tabContent'>
         <div
-          className='active tab-pane show fade'
+          className='active show tab-pane fade'
           id='pills-desc'
           role='tabpanel'
           aria-labelledby='pills-desc-tab'>
@@ -81,26 +76,6 @@ const ApplicationPage = () => {
           id='pills-cv'
           role='tabpanel'
           aria-labelledby='pills-cv-tab'>
-          {/* <h1 id='job-description' className='my-2 text-xl font-bold'>
-            Curriculam Vitae
-          </h1>
-          <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
-            <div className='grow'>
-              <Switch isChecked={useCVBuilder} setIsChecked={setUseCVBuilder} id="cvBuilderToggle" name="cvBuilderToggle" label="Use CV Builder" />
-              {useCVBuilder ? <CVConstructorSection id={id} /> : <CVUpload id={id} />}
-            </div>
-            <div>
-              {appDetails.cv_url !== null ? (
-                <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
-              ) : (
-                <div
-                  className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
-                  role='alert'>
-                  No CV PDF found. Click generate pdf to create a new one.
-                </div>
-              )}
-            </div>
-          </div> */}
           <CVSection id={id} />
         </div>
         <div
@@ -108,7 +83,7 @@ const ApplicationPage = () => {
           id='pills-letter'
           role='tabpanel'
           aria-labelledby='pills-letter-tab'>
-          <LetterConstructorSection />
+          <LetterConstructorSection id={id} />
         </div>
       </div>
     </div>

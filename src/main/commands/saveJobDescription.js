@@ -11,7 +11,10 @@ const { app } = require('electron');
  */
 const saveJobDescription = async (event, { applicationID, uploadPdfUrl }) => {
   const uploadedPdfBuffer = await fs.readFile(uploadPdfUrl);
-  const fileName = `job_desc_${applicationID}_${new Date().toISOString().split(/[:.-]/).join("_")}.pdf`
+  const fileName = `job_desc_${applicationID}_${new Date()
+    .toISOString()
+    .split(/[:.-]/)
+    .join('_')}.pdf`;
   const savePdfFile = path.join(
     app.getPath('userData'),
     'output_files/job_desc_files',

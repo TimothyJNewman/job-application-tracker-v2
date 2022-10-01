@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../../../constants/template2_schema';
 import { PlusLg } from 'react-bootstrap-icons';
-import { Button } from "../../../../components/microComponents"
+import { Button } from '../../../../components/microComponents';
 
 const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   const [currentSchema, setCurrentSchema] = useState({});
@@ -419,7 +419,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
             </form>
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex gap-x-2 items-center'>
+            <div className='flex items-center gap-x-2'>
               <Button
                 additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
                 value='Cancel'

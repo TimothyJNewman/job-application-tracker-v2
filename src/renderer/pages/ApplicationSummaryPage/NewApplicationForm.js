@@ -5,7 +5,7 @@ const defaultState = {
   company: '',
   role: '',
   job_description: '',
-  link: "",
+  link: '',
   status: 'To Apply',
 };
 
@@ -90,7 +90,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                 onChange={(event) => {
                   setAppInput((arr) => ({
                     ...arr,
-                    role: event.target.value,
+                    link: event.target.value,
                   }));
                 }}
                 placeholder='www.myawesomewebite.com'
@@ -138,7 +138,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             </div>
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex gap-x-2 items-center'>
+            <div className='flex items-center gap-x-2'>
               <Button
                 additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
                 value='Cancel'
@@ -160,6 +160,6 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
       </div>
     </div>
   );
-}
+};
 
 export default NewApplicationForm;

@@ -16,48 +16,61 @@ const JobDescriptionSection = ({ id }) => {
   }, [appDetails]);
 
   const saveJobDescPdfHandler = (uploadPdfUrl) => {
-    const saveJobDescPdfPromise = window.electron
-      .savePdf('save-job-description', {
+    const saveJobDescPdfPromise = window.electron.savePdf(
+      'save-job-description',
+      {
         applicationID: id,
         uploadPdfUrl,
+      }
+    );
+    saveJobDescPdfPromise
+      .then((savedRelativeUrl) => {
+        updateDatabaseEntry(
+          'UPDATE applications SET job_description_url=? WHERE id=?',
+          [savedRelativeUrl, id],
+          ({ error }) => {
+            if (error) console.error(error);
+            readDatabaseEntry(
+              'SELECT * FROM applications',
+              null,
+              ({ error, result }) => {
+                if (error) console.error(error);
+                setAppsData(result);
+              }
+            );
+          }
+        );
       })
-    saveJobDescPdfPromise.then((savedRelativeUrl) => {
-      updateDatabaseEntry(
-        'UPDATE applications SET job_description_url=? WHERE id=?',
-        [savedRelativeUrl, id],
-        ({ error }) => {
-          if (error) console.error(error);
-          readDatabaseEntry(
-            'SELECT * FROM applications',
-            null,
-            ({ error, result }) => {
-              if (error) console.error(error);
-              setAppsData(result);
-            }
+      .catch((error) => {
+        console.error(error);
+      });
+    toast.promise(
+      saveJobDescPdfPromise,
+      {
+        loading: 'Saving PDF',
+        success: (savePath) => {
+          return (
+            <div className='flex'>
+              <span className='grow'>
+                Successfully uploaded PDF{' '}
+                <Button
+                  Icon={Folder2Open}
+                  value='Open'
+                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                />
+              </span>
+              {/* <button onClick><XLg /></button> */}
+            </div>
           );
-        }
-      );
-    }).catch((error) => {
-      console.error(error);
-    });
-    toast.promise(saveJobDescPdfPromise, {
-      loading: 'Saving PDF',
-      success: (savePath) => {
-        return (
-          <div className='flex'>
-            <span className='grow'>Successfully uploaded PDF{" "}
-              <Button Icon={Folder2Open} value="Open" onClick={openFileExplorer(`${userPath}${savePath}`)} />
-            </span>
-            {/* <button onClick><XLg /></button> */}
-          </div>
-        )
+        },
+        error: 'Error uploading job description PDF',
       },
-      error: 'Error uploading job description PDF',
-    }, {
-      success: {
-        duration: 10000,
-      },
-    });
+      {
+        success: {
+          duration: 10000,
+        },
+      }
+    );
   };
 
   const saveJobDescTextHandler = () => {
@@ -85,9 +98,7 @@ const JobDescriptionSection = ({ id }) => {
     );
   };
 
-  const openFileExplorer = (path) => {
-
-  }
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='mb-2'>
@@ -120,9 +131,14 @@ const JobDescriptionSection = ({ id }) => {
               No Job Description PDF found. Upload a PDF.
             </div>
           )}
-          <FilePicker label="Upload Job Description PDF" accept=".pdf" onChange={(event) =>
-            saveJobDescPdfHandler(event.target.files[0].path)
-          } id="uploadJobDescPdfPicker" />
+          <FilePicker
+            label='Upload Job Description PDF'
+            accept='.pdf'
+            onChange={(event) =>
+              saveJobDescPdfHandler(event.target.files[0].path)
+            }
+            id='uploadJobDescPdfPicker'
+          />
         </div>
       </div>
     </div>

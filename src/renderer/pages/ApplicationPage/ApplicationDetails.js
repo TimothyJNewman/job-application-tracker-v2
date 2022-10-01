@@ -3,6 +3,7 @@ import {
   EmojiFrown,
   EmojiNeutral,
   EmojiSmile,
+  EmojiSunglasses,
   Tag,
 } from 'react-bootstrap-icons';
 import { updateDatabaseEntry } from '../../util/CRUD';
@@ -30,6 +31,12 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
         return elem;
       });
       setAppsData(newAppsData);
+    } else if (field === 'link') {
+      const newAppsData = appsData.map((elem) => {
+        if (elem.id === id) return { ...elem, link: newValue };
+        return elem;
+      });
+      setAppsData(newAppsData);
     }
   };
 
@@ -44,30 +51,19 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   };
 
   return (
-    <div className='flex flex-col items-center gap-x-4 px-4 sm:flex-row'>
+    <div className='flex flex-col items-start gap-x-4 sm:flex-row'>
       <div className='flex w-fit justify-center pt-6 pb-2'>
-        <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-yellow-50'>
-          <div className='flex w-full flex-col items-center justify-center gap-y-2 object-cover p-4'>
-            {/* {appDetails.status === 'Rejected' ? (
+        <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-gray-50'>
+          <div className='hidden w-full flex-col items-center justify-center gap-y-2 object-cover p-4 sm:flex'>
+            {appDetails.status === 'Rejected' ? (
               <EmojiFrown className='h-36 w-36' />
-            ) : appDetails.status === 'To Apply' ? (
-              <EmojiNeutral className='h-36 w-36' />
-            ) : appDetails.status === 'Applied' ? (
+            ) : appDetails.status === 'Offer' ? (
               <EmojiSmile className='h-36 w-36' />
-            ) : null} */}
-            <Selector
-              options={[
-                { k: 'To apply', v: 'To apply' },
-                { k: 'Applied', v: 'Applied' },
-                { k: "Assessment", v: "Assessment" },
-                { k: "Interview", v: "Interview" },
-                { k: "Waiting for result", v: "Waiting for result" },
-                { k: 'Rejected', v: 'Rejected' },
-                { k: "Offer", v: "Offer" }
-              ]}
-              selected={appDetails.status}
-              onChange={(event) => updateValue(event.target.value, 'status')}
-            />
+            ) : appDetails.status === 'To apply' ? (
+              <EmojiSunglasses className='h-36 w-36' />
+            ) : (
+              <EmojiNeutral className='h-36 w-36' />
+            )}
           </div>
           <div className='flex flex-col justify-start p-6'>
             <input
@@ -85,6 +81,28 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               value={appDetails.role}
               onChange={(event) => updateValue(event.target.value, 'role')}
               onBlur={() => saveValue('role')}
+            />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
+              type='text'
+              placeholder='Link'
+              value={appDetails.link}
+              onChange={(event) => updateValue(event.target.value, 'link')}
+              onBlur={() => saveValue('link')}
+            />
+            <Selector
+              options={[
+                { k: 'To apply', v: 'To apply' },
+                { k: 'Applied', v: 'Applied' },
+                { k: 'Assessment', v: 'Assessment' },
+                { k: 'Interview', v: 'Interview' },
+                { k: 'Waiting for result', v: 'Waiting for result' },
+                { k: 'Rejected', v: 'Rejected' },
+                { k: 'Offer', v: 'Offer' },
+              ]}
+              selected={appDetails.status}
+              onChange={(event) => updateValue(event.target.value, 'status')}
+              onBlur={() => saveValue('status')}
             />
             <p className='px-1 text-xs text-gray-600'>
               Date Applied{' '}

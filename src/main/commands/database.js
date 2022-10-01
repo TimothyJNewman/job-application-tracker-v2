@@ -40,6 +40,7 @@ const databaseInit = () => {
       status VARCHAR(63),
       cv_url TEXT,
       cover_letter_url TEXT,
+      cover_letter_json TEXT,
       job_description_url TEXT,
       link TEXT,
       date_applied DATE,

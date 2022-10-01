@@ -1,7 +1,7 @@
-import React from "react"
+import React from 'react';
 
 const FilePicker = ({ onChange, id, name, accept, label }) => {
-  if (id == undefined) name = id
+  if (id == undefined) name = id;
   return (
     <div className='my-2 w-96'>
       <label
@@ -17,7 +17,7 @@ const FilePicker = ({ onChange, id, name, accept, label }) => {
         id={id}
       />
     </div>
-  )
-}
+  );
+};
 
-export default FilePicker
+export default FilePicker;

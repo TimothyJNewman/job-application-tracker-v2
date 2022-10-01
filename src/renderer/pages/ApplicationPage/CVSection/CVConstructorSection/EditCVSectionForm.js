@@ -107,7 +107,6 @@ const EditCVSectionForm = ({
       shortText: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
@@ -147,7 +146,6 @@ const EditCVSectionForm = ({
       number: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
@@ -168,7 +166,6 @@ const EditCVSectionForm = ({
       date: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
