@@ -4,10 +4,10 @@ import {
   EmojiNeutral,
   EmojiSmile,
   EmojiSunglasses,
-  Tag,
+  Tag, ArrowUpRightSquare
 } from 'react-bootstrap-icons';
 import { updateDatabaseEntry } from '../../util/CRUD';
-import { Selector } from '../../components/microComponents';
+import { Button, Selector } from '../../components/microComponents';
 
 const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
@@ -75,14 +75,14 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               onBlur={() => saveValue('company')}
             />
             <input
-              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
               type='text'
               placeholder='Role'
               value={appDetails.role}
               onChange={(event) => updateValue(event.target.value, 'role')}
               onBlur={() => saveValue('role')}
             />
-            <input
+            <div className='flex gap-x-2 items-center'> <input
               className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
               type='text'
               placeholder='Link'
@@ -90,23 +90,46 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               onChange={(event) => updateValue(event.target.value, 'link')}
               onBlur={() => saveValue('link')}
             />
-            <Selector
-              options={[
-                { k: 'To apply', v: 'To apply' },
-                { k: 'Applied', v: 'Applied' },
-                { k: 'Assessment', v: 'Assessment' },
-                { k: 'Interview', v: 'Interview' },
-                { k: 'Waiting for result', v: 'Waiting for result' },
-                { k: 'Rejected', v: 'Rejected' },
-                { k: 'Offer', v: 'Offer' },
-              ]}
-              selected={appDetails.status}
-              onChange={(event) => updateValue(event.target.value, 'status')}
-              onBlur={() => saveValue('status')}
-            />
-            <p className='px-1 text-xs text-gray-600'>
-              Date Applied{' '}
-              {new Date(appDetails.date_applied).toLocaleDateString()}
+              <a
+              target="_blank" 
+                href={appDetails.link}
+                data-mdb-ripple='true'
+                data-mdb-ripple-color='light'
+                className='flex rounded bg-purple-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
+                <ArrowUpRightSquare className='mr-1' />
+                Open
+              </a>
+              {/* <Button value="Open" Icon={ArrowUpRightSquare} color="purple" /> */}
+            </div>
+            <div className='my-1'>
+              <Selector
+                options={[
+                  { k: 'To apply', v: 'To apply' },
+                  { k: 'Applied', v: 'Applied' },
+                  { k: 'Assessment', v: 'Assessment' },
+                  { k: 'Interview', v: 'Interview' },
+                  { k: 'Waiting for result', v: 'Waiting for result' },
+                  { k: 'Rejected', v: 'Rejected' },
+                  { k: 'Offer', v: 'Offer' },
+                ]}
+                selected={appDetails.status}
+                onChange={(event) => updateValue(event.target.value, 'status')}
+                onBlur={() => saveValue('status')}
+              /></div>
+            <div className='my-1'>
+              <Selector
+                options={[
+                  { k: 'low', v: 'Low' },
+                  { k: 'medium', v: 'Medium' },
+                  { k: 'high', v: 'High' }
+                ]}
+                selected={appDetails.priority}
+                onChange={(event) => updateValue(event.target.value, 'priority')}
+                onBlur={() => saveValue('priority')}
+              /></div>
+            <p className='px-1 text-xs text-gray-600 mt-1'>
+              Season:{' '}
+              {appDetails.season}
             </p>
           </div>
         </div>

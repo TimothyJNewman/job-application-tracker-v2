@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
+const { app, BrowserWindow, ipcMain, session, protocol, shell } = require('electron');
 require('dotenv').config();
 const path = require('path');
 const url = require('url');
@@ -10,6 +10,7 @@ const { saveJobDescription } = require('./commands/saveJobDescription');
 const { getUserDataPath } = require('./commands/getPaths');
 const { exportToCsv } = require('./commands/export');
 const { saveCV } = require('./commands/saveCV');
+const { configManagement } = require('./commands/settings');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -77,6 +78,12 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+  // Redirecting new window event to external browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
   // Open the DevTools.
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -96,6 +103,7 @@ app.on('ready', async () => {
     console.error(err);
   }
 
+  // Setting content security policy
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -107,12 +115,14 @@ app.on('ready', async () => {
     });
   });
 
+  // Creating custom file protocol to avoid using file:// protocol which is restricted
   protocol.registerFileProtocol('atom', (request, callback) => {
     const filePath = url.fileURLToPath(
       'file://' + request.url.slice('atom://'.length)
     );
     callback(filePath);
   });
+
   databaseInit();
   createWindow();
 });
@@ -139,6 +149,7 @@ app.on('activate', () => {
 
 // ipcMain handlers
 ipcMain.handle('get-user-data-path', getUserDataPath);
+ipcMain.handle('settings', configManagement);
 ipcMain.handle('generate-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);

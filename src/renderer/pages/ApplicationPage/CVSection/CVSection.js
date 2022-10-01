@@ -11,7 +11,7 @@ const CVSection = ({ id }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
   return (
     <>
-      <h1 id='job-description' className='my-2 text-xl font-bold'>
+      <h1 id='job-description' className='my-2 text-xl font-bold tracking-tight'>
         Curriculam Vitae
       </h1>
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
@@ -34,7 +34,7 @@ const CVSection = ({ id }) => {
             <PdfDisplay url={`atom://${userPath}${appDetails.cv_url}`} />
           ) : (
             <div
-              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700 w-[500px]'
+              className='mb-3 w-[500px] rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
               role='alert'>
               No CV PDF found. Click generate PDF to create a new one.
             </div>

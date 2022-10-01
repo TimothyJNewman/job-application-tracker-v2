@@ -41,7 +41,8 @@ const columns = [
   // },
   {
     accessorKey: 'status',
-    header: '',
+    id: "status_color"
+    , header: '',
     cell: (info) => {
       let color;
       switch (info.getValue()) {
@@ -75,14 +76,12 @@ const columns = [
     header: 'Status',
   },
   {
-    accessorKey: 'date_applied',
-    header: () => (
-      <>
-        <CalendarCheck className='mb-1 mr-2 inline h-4 w-4' />
-        Applied
-      </>
-    ),
-    cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+    accessorKey: 'priority',
+    header: 'Priority',
+    cell: (info)=>{
+      const str = info.getValue()
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
   },
   {
     id: 'documents',
@@ -108,7 +107,8 @@ const columns = [
 ];
 
 const ApplicationSummaryPage = () => {
-  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
+  const { appsData, setAppsData, userPath, seasonValues, currentSeason } =
+    useContext(GlobalContext);
   const [deleteMode, setDeleteMode] = useState(false);
   const [bsToggleContent, setBSToggleContent] = useState({});
   const [deleteItemDetails, setDeleteItemDetails] = useState({
@@ -128,7 +128,7 @@ const ApplicationSummaryPage = () => {
 
   useEffect(() => {
     readDatabaseEntry(
-      'SELECT * FROM applications',
+      'SELECT applications.*, seasons.season FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id',
       null,
       ({ error, result }) => {
         if (error) console.error(error);
@@ -149,37 +149,43 @@ const ApplicationSummaryPage = () => {
   }, [deleteMode]);
 
   const handleApplicationClick = (id) => {
-    const appDetails = appsData.find((elem) => elem.id === id);
-    setDeleteItemDetails({
-      company: appDetails.company,
-      role: appDetails.role,
-      id,
-    });
-  };
-
-  const handleDeleteConfirmationCallback = () => {
     if (deleteMode) {
-      deleteDatabaseEntry(
-        'DELETE FROM cv_component_in_application WHERE application_id=?',
-        deleteItemDetails.id,
-        ({ error }) => {
-          if (error) console.error(error);
-          deleteDatabaseEntry(
-            'DELETE FROM applications WHERE id=?',
-            deleteItemDetails.id,
-            ({ error }) => {
-              if (error) console.error(error);
-              setNoItemsChanged(noItemsChanged + 1);
-            }
-          );
-        }
-      );
+      const appDetails = appsData.find((elem) => elem.id === id);
+      setDeleteItemDetails({
+        company: appDetails.company,
+        role: appDetails.role,
+        id,
+      });
     }
   };
 
+  const handleDeleteConfirmationCallback = () => {
+    deleteDatabaseEntry(
+      'DELETE FROM cv_component_in_application WHERE application_id=?',
+      deleteItemDetails.id,
+      ({ error }) => {
+        if (error) console.error(error);
+        deleteDatabaseEntry(
+          'DELETE FROM applications WHERE id=?',
+          deleteItemDetails.id,
+          ({ error }) => {
+            if (error) console.error(error);
+            setNoItemsChanged(noItemsChanged + 1);
+          }
+        );
+      }
+    );
+  };
+
   const handleSubmitCallback = (params) => {
+    const currentDate = new Date().toISOString();
+    const seasonID = seasonValues.find(({ season }) => season === currentSeason)?.id
+    if (seasonID === undefined) {
+      toast.error("Error: No season selected. Go to settings.")
+      return
+    }
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created) VALUES (?,?,?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?)',
       [
         params.company,
         params.role,
@@ -187,7 +193,9 @@ const ApplicationSummaryPage = () => {
         params.status,
         params.link,
         params.priority,
-        new Date().toISOString(),
+        currentDate,
+        currentDate,
+        seasonID,
       ],
       ({ error }) => {
         if (error) console.error(error);
@@ -231,12 +239,12 @@ const ApplicationSummaryPage = () => {
     );
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => { };
 
   return (
     <div className='p-4'>
       <div className='flex justify-between'>
-        <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
+        <h1 className='inline w-fit text-xl font-bold tracking-tight'>All Applications</h1>
         <div className='flex gap-x-2'>
           <Button
             Icon={FiletypeCsv}
@@ -253,7 +261,7 @@ const ApplicationSummaryPage = () => {
         </div>
       </div>
       {deleteMode ? (
-        <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
+        <p className='-mt-3 text-red-500'>Click on an item to delete 🡣</p>
       ) : (
         ''
       )}
@@ -270,10 +278,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -306,17 +313,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${
-                        deleteMode && 'cursor-pointer'
-                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${deleteMode && 'cursor-pointer'
+                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

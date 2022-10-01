@@ -25,7 +25,7 @@ const databaseInit = () => {
       `
     CREATE TABLE IF NOT EXISTS seasons (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      season VARCHAR(63)
+      season VARCHAR(63) NOT NULL UNIQUE
     )
   `
     ).run();
