@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session, protocol } = require('electron');
+const { app, BrowserWindow, ipcMain, session, protocol, shell } = require('electron');
 require('dotenv').config();
 const path = require('path');
 const url = require('url');
@@ -78,6 +78,12 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+  // Redirecting new window event to external browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
   // Open the DevTools.
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -97,6 +103,7 @@ app.on('ready', async () => {
     console.error(err);
   }
 
+  // Setting content security policy
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -108,12 +115,14 @@ app.on('ready', async () => {
     });
   });
 
+  // Creating custom file protocol to avoid using file:// protocol which is restricted
   protocol.registerFileProtocol('atom', (request, callback) => {
     const filePath = url.fileURLToPath(
       'file://' + request.url.slice('atom://'.length)
     );
     callback(filePath);
   });
+
   databaseInit();
   createWindow();
 });

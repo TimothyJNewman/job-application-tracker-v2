@@ -28,10 +28,8 @@ const App = () => {
         window.electron
           .modifySettings('settings', 'season')
           .then((value) => {
-            console.log(value);
             if (value !== undefined && value !== '') setCurrentSeason(value);
             else if (result.length === 1) {
-              console.log(result[0].season);
               setCurrentSeason(result[0].season);
             }
           })

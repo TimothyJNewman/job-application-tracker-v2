@@ -76,7 +76,6 @@ const pdfGenerator = async (latexString, type, id) => {
 
   try {
     const returnArray = await Promise.all([pdfFile, texFile]);
-    console.log('Created file: ', returnArray[0]);
     return returnArray[0];
   } catch (error) {
     throw error;

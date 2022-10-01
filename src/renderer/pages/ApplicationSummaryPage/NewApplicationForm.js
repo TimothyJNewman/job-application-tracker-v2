@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PlusCircleFill } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 
 const defaultState = {
@@ -25,7 +26,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='addNewModalLabel'>
-              New Application
+              <PlusCircleFill className='inline mb-1 text-green-500'/> New Application
             </h2>
             <button
               type='button'

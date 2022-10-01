@@ -67,7 +67,7 @@ const LetterUpload = ({ id }) => {
 
   return (
     <FilePicker
-      label='Upload CV PDF'
+      label='Upload letter PDF'
       accept='.pdf'
       onChange={(event) => saveCVPdfHandler(event.target.files[0].path)}
       id='uploadCVPdfPicker'
