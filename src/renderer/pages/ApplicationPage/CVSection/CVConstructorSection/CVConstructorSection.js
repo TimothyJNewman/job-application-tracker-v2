@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react';
-import { GlobalContext } from '../../../context/GlobalContext';
+import { GlobalContext } from '../../../../context/GlobalContext';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -7,7 +7,7 @@ import {
   readDatabaseEntry,
   updateDatabaseEntry,
   deleteDatabaseEntry,
-} from '../../../util/CRUD';
+} from '../../../../util/CRUD';
 import CVSectionBuilder from './NewCVSectionForm';
 import CVSectionBuilderEdit from './EditCVSectionForm';
 import {
@@ -15,13 +15,15 @@ import {
   XCircleFill,
   TrashFill,
   PlusLg,
+  Folder2Open,
 } from 'react-bootstrap-icons';
-import schema from '../../../constants/template2_schema';
+import schema from '../../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
+import { Button } from '../../../../components/microComponents';
 
 const CVConstructorSection = ({ id }) => {
-  const { setAppsData } = useContext(GlobalContext);
+  const { setAppsData, userPath } = useContext(GlobalContext);
   const [elements, setElements] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
@@ -129,7 +131,7 @@ const CVConstructorSection = ({ id }) => {
     return {
       id: id,
       name: String(id),
-      resumeObject,
+      detailsObject: resumeObject,
     };
   };
 
@@ -174,8 +176,12 @@ const CVConstructorSection = ({ id }) => {
     /**
      * Generate pdf in the background
      */
-    const getPdfPromise = window.electron
-      .getPdf('get-pdf', generatePdfParams(schema, elements))
+    const getPdfPromise = window.electron.getPdf(
+      'generate-pdf',
+      'cv',
+      generatePdfParams(schema, elements)
+    );
+    getPdfPromise
       .then((relativeCVUrl) => {
         updateDatabaseEntry(
           'UPDATE applications SET cv_url=? WHERE id=?',
@@ -197,11 +203,33 @@ const CVConstructorSection = ({ id }) => {
       .catch((error) => {
         console.error(`PDF error: ${error}`);
       });
-    toast.promise(getPdfPromise, {
-      loading: 'Loading',
-      success: 'Successfully generated CV PDF',
-      error: 'Error generating CV PDF',
-    });
+    toast.promise(
+      getPdfPromise,
+      {
+        loading: 'Loading',
+        success: (savePath) => {
+          return (
+            <div className='flex'>
+              <span className='grow'>
+                Successfully generated CV PDF{' '}
+                <Button
+                  Icon={Folder2Open}
+                  value='Open'
+                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                />
+              </span>
+              {/* <button onClick><XLg /></button> */}
+            </div>
+          );
+        },
+        error: 'Error generating CV PDF',
+      },
+      {
+        success: {
+          duration: 10000,
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -227,20 +255,15 @@ const CVConstructorSection = ({ id }) => {
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
+  const openFileExplorer = (path) => {};
+
   return (
     <div className='mb-2'>
       <div className='my-2 flex justify-between'>
-        <h1 id='cv-contructor' className='text-xl font-bold'>
+        <h1 id='cv-contructor' className='text-lg font-bold'>
           CV constructor
         </h1>
-        <button
-          type='button'
-          onClick={generatePdf}
-          data-mdb-ripple='true'
-          data-mdb-ripple-color='light'
-          className='block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-          Generate CV PDF
-        </button>
+        <Button onClick={generatePdf} value='Generate CV Pdf' />
       </div>
       <div className='flex flex-wrap gap-2'>
         <ul
@@ -372,7 +395,6 @@ const CVConstructorSection = ({ id }) => {
                           )
                           .map((elem) => (
                             <Fragment key={elem.id}>
-                              {console.log()}
                               <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>
                                 <td
                                   onClick={() => elementClickHandler(elem.id)}

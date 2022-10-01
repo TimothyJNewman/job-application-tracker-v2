@@ -9,19 +9,20 @@ const { app } = require('electron');
  * @param {number} args.applicationID
  * @param {string} args.uploadPdfUrl
  */
-const saveJobDescription = async (event, { applicationID, uploadPdfUrl }) => {
+const saveCV = async (event, { applicationID, uploadPdfUrl }) => {
   const uploadedPdfBuffer = await fs.readFile(uploadPdfUrl);
-  const fileName = `job_desc_${applicationID}_${new Date()
+
+  const fileName = `cv_${applicationID}_${new Date()
     .toISOString()
     .split(/[:.-]/)
     .join('_')}.pdf`;
   const savePdfFile = path.join(
     app.getPath('userData'),
-    'output_files/job_desc_files',
+    'output_files/cv_pdf',
     fileName
   );
   await fs.writeFile(savePdfFile, uploadedPdfBuffer);
-  return `\\output_files\\job_desc_files\\${fileName}`;
+  return `\\output_files\\cv_pdf\\${fileName}`;
 };
 
-module.exports = { saveJobDescription };
+module.exports = { saveCV };

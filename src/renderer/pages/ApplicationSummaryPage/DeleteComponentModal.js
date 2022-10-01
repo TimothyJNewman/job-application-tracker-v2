@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "../../components/microComponents"
+import { Button } from '../../components/microComponents';
 
 export default function DeleteApplicationModal({
   handleSubmitCallback,
@@ -30,10 +30,17 @@ export default function DeleteApplicationModal({
             Are you sure you want to delete {deleteApplicationName}?
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex'><Button value="Delete" color='blue' onClick={(event) => {
-              event.preventDefault();
-              handleSubmitCallback();
-            }} additionalAttributes={{ "data-bs-dismiss": 'modal' }} /></div>
+            <div className='flex'>
+              <Button
+                value='Delete'
+                color='blue'
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleSubmitCallback();
+                }}
+                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
+              />
+            </div>
           </div>
         </div>
       </div>

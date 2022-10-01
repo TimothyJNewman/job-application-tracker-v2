@@ -3,7 +3,8 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { toast } from 'react-hot-toast';
 import { updateDatabaseEntry, readDatabaseEntry } from '../../../util/CRUD';
 import PdfDisplay from '../../../components/PdfDisplay';
-import { Button } from '../../../components/microComponents';
+import { Button, FilePicker } from '../../../components/microComponents';
+import { Folder2Open } from 'react-bootstrap-icons';
 
 const JobDescriptionSection = ({ id }) => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -12,14 +13,17 @@ const JobDescriptionSection = ({ id }) => {
 
   useEffect(() => {
     setTextArea(appDetails.job_description);
-  }, [appDetails.job_description]);
+  }, [appDetails]);
 
   const saveJobDescPdfHandler = (uploadPdfUrl) => {
-    const saveJobDescPdfPromise = window.electron
-      .saveJobDescPdf('save-job-description', {
+    const saveJobDescPdfPromise = window.electron.savePdf(
+      'save-job-description',
+      {
         applicationID: id,
         uploadPdfUrl,
-      })
+      }
+    );
+    saveJobDescPdfPromise
       .then((savedRelativeUrl) => {
         updateDatabaseEntry(
           'UPDATE applications SET job_description_url=? WHERE id=?',
@@ -40,11 +44,33 @@ const JobDescriptionSection = ({ id }) => {
       .catch((error) => {
         console.error(error);
       });
-    toast.promise(saveJobDescPdfPromise, {
-      loading: 'Loading',
-      success: 'Successfully uploaded PDF',
-      error: 'Error uploading job description PDF',
-    });
+    toast.promise(
+      saveJobDescPdfPromise,
+      {
+        loading: 'Saving PDF',
+        success: (savePath) => {
+          return (
+            <div className='flex'>
+              <span className='grow'>
+                Successfully uploaded PDF{' '}
+                <Button
+                  Icon={Folder2Open}
+                  value='Open'
+                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                />
+              </span>
+              {/* <button onClick><XLg /></button> */}
+            </div>
+          );
+        },
+        error: 'Error uploading job description PDF',
+      },
+      {
+        success: {
+          duration: 10000,
+        },
+      }
+    );
   };
 
   const saveJobDescTextHandler = () => {
@@ -71,6 +97,8 @@ const JobDescriptionSection = ({ id }) => {
       }
     );
   };
+
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='mb-2'>
@@ -103,22 +131,14 @@ const JobDescriptionSection = ({ id }) => {
               No Job Description PDF found. Upload a PDF.
             </div>
           )}
-          <div className='my-2 w-96'>
-            <label
-              htmlFor='uploadPdfPicker'
-              className='form-label mb-2 inline-block text-gray-700'>
-              Upload Job Description File
-            </label>
-            <input
-              accept='.pdf'
-              onChange={(event) =>
-                saveJobDescPdfHandler(event.target.files[0].path)
-              }
-              className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-              type='file'
-              id='uploadPdfPicker'
-            />
-          </div>
+          <FilePicker
+            label='Upload Job Description PDF'
+            accept='.pdf'
+            onChange={(event) =>
+              saveJobDescPdfHandler(event.target.files[0].path)
+            }
+            id='uploadJobDescPdfPicker'
+          />
         </div>
       </div>
     </div>

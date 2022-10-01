@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import schema from '../../../constants/template2_schema';
-import { PlusLg } from 'react-bootstrap-icons';
-import { Button } from "../../../components/microComponents"
+import schema from '../../../../constants/template2_schema';
+import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
+import { toast } from 'react-hot-toast';
 
-const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
+const EditCVSectionForm = ({
+  elementToggleClickHandler,
+  editSectionCallback,
+  id,
+  currentSection,
+  currentFieldValuesDatabase,
+  currentDescriptionDatabase,
+}) => {
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentDescription, setCurrentDescription] = useState('');
@@ -25,14 +32,15 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
       Object.keys(currentSchema).length !== 0 &&
       Object.keys(currentFieldValues).length === 0
     ) {
-      const newFieldValues = getDefaultFieldValues(
-        currentSchema[currentSection]
-      );
+      const newFieldValues = currentFieldValuesDatabase
+        ? currentFieldValuesDatabase
+        : getDefaultFieldValues(currentSchema[currentSection]);
       setCurrentFieldValues({
         [currentSection]: newFieldValues,
         section: currentSection,
         description: '',
       });
+      setCurrentDescription(currentDescriptionDatabase);
     }
   }, [currentSchema]);
 
@@ -84,13 +92,13 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
         </h2>
       ),
       newFieldButton: ({ inputName, breadCrumbs }) => (
-        <div key={`add-button-${inputName}`} className='my-2'>
+        <div key={`add-button-${inputName}`} className='py-2'>
           <button
             onClick={(event) => addFieldHandler(event, breadCrumbs)}
             type='button'
             data-mdb-ripple='true'
             data-mdb-ripple-color='light'
-            className='align-center ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+            className='align-center my-2 ml-auto flex rounded bg-blue-600 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
             <PlusLg className='mr-2 h-4 w-4' />
             {`Add ${inputName}`}
           </button>
@@ -99,7 +107,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
       shortText: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
@@ -139,7 +146,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
       number: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
@@ -160,7 +166,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
       date: ({ inputName, inputState, breadCrumbs }) => (
         <div key={inputName} className='mb-4'>
           <label
-            value={inputName}
             htmlFor={inputName}
             className='form-label mb-2 inline-block capitalize text-gray-700'>
             {inputName}
@@ -347,7 +352,8 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addSectionCallback(currentFieldValues, currentDescription);
+    toast.success('Successfully saved');
+    editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
   const handleInputChange = (event, fieldValues, breadCrumbs) => {
@@ -371,72 +377,60 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   };
 
   return (
-    <div
-      className='fade modal fixed top-0 left-0 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none backdrop-blur-sm'
-      id='newCVSectionModal'
-      tabIndex='-1'
-      aria-labelledby='newCVSectionModalLabel'
-      aria-hidden='true'>
-      <div className='modal-dialog modal-dialog-scrollable pointer-events-none relative w-auto'>
-        <div className='modal-content pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none'>
-          <div className='modal-header flex flex-shrink-0 items-center justify-between rounded-t-md border-b border-gray-200 p-4'>
-            <h2
-              className='text-xl font-medium capitalize leading-normal text-gray-800'
-              id='newCVSectionModalLabel'>
-              {currentSection} <span className='text-sm'>section builder</span>
-            </h2>
-            <button
-              type='button'
-              className='btn-close box-content h-4 w-4 rounded-none border-none p-1 text-black opacity-50 hover:text-black hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none'
-              data-bs-dismiss='modal'
-              aria-label='Close'></button>
-          </div>
-          <div className='modal-body px-4 py-2'>
-            <form className='relative'>
-              <div className='mb-2 border-b border-gray-200 pb-2'>
-                {currentSectionJsx[currentSection] && (
-                  <>
-                    <label
-                      htmlFor='description'
-                      className='form-label mb-2 inline-block font-medium text-gray-700'>
-                      Description
-                    </label>
-                    <input
-                      type='text'
-                      className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-                      placeholder='Text input'
-                      name='description'
-                      id='description'
-                      value={currentDescription}
-                      onChange={(event) =>
-                        setCurrentDescription(event.target.value)
-                      }
-                    />
-                  </>
-                )}
-              </div>
-              {currentSectionJsx[currentSection]}
-            </form>
-          </div>
-          <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex gap-x-2 items-center'>
-              <Button
-                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
-                value='Cancel'
-                color='purple'
-              />
-              <Button
-                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
-                onClick={handleSubmit}
-                value='Submit'
-                color='blue'
-              />
+    <>
+      <div className='group relative z-20 flex items-center px-4 py-2 shadow-md'>
+        <div className='ease h-5 w-1 bg-red-600 opacity-80 duration-500 group-hover:h-0 group-hover:w-0 group-hover:opacity-0'></div>
+        <button
+          aria-label='Delete section'
+          onClick={() => elementToggleClickHandler('used', id)}
+          className='ease mr-2 flex w-0 items-center justify-center opacity-20 transition transition-[width] duration-500 group-hover:w-6 group-hover:opacity-100 '>
+          <XCircleFill className='h-5 w-5 text-red-600' />
+        </button>
+        <h1
+          id='cv-section-builder'
+          className='grow text-xl font-bold capitalize'>
+          {currentSection} section builder
+        </h1>
+        <button
+          type='submit'
+          onClick={handleSubmit}
+          data-mdb-ripple='true'
+          data-mdb-ripple-color='light'
+          className='ml-auto block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
+          Save
+        </button>
+      </div>
+      <div className='flex w-full items-center justify-center'>
+        <div className='grow overflow-y-scroll bg-white p-4'>
+          <form className='relative max-h-[70vh]'>
+            <div className='mb-2 border-b border-gray-200 pb-2'>
+              {currentSectionJsx[currentSection] && (
+                <>
+                  <label
+                    htmlFor='description'
+                    className='form-label mb-2 inline-block font-medium text-gray-700'>
+                    Description
+                  </label>
+                  <input
+                    type='text'
+                    className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                    placeholder='Text input'
+                    name='description'
+                    id='description'
+                    value={currentDescription}
+                    onChange={(event) =>
+                      setCurrentDescription(event.target.value)
+                    }
+                  />
+                </>
+              )}
             </div>
-          </div>
+            {currentSectionJsx[currentSection]}
+          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default NewCVSectionForm;
+export default EditCVSectionForm;
