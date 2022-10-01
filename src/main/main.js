@@ -10,6 +10,7 @@ const { saveJobDescription } = require('./commands/saveJobDescription');
 const { getUserDataPath } = require('./commands/getPaths');
 const { exportToCsv } = require('./commands/export');
 const { saveCV } = require('./commands/saveCV');
+const { configManagement } = require('./commands/settings');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -139,6 +140,7 @@ app.on('activate', () => {
 
 // ipcMain handlers
 ipcMain.handle('get-user-data-path', getUserDataPath);
+ipcMain.handle('settings', configManagement);
 ipcMain.handle('generate-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);

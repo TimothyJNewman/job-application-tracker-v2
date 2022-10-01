@@ -7,7 +7,7 @@ const defaultState = {
   job_description: '',
   link: '',
   status: 'To apply',
-  priority: "medium"
+  priority: 'medium',
 };
 
 const NewApplicationForm = ({ handleSubmitCallback }) => {
@@ -37,7 +37,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='company'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block text-gray-700 font-medium'>
                 Company
               </label>
               <input
@@ -58,7 +58,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='role'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block text-gray-700 font-medium'>
                 Role
               </label>
               <input
@@ -79,7 +79,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='link'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block text-gray-700 font-medium'>
                 Link
               </label>
               <input
@@ -100,7 +100,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='job_description'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block text-gray-700 font-medium'>
                 [Optional] Job Description
               </label>
               <textarea
@@ -119,7 +119,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
               />
             </div>
             <div>
-              <label htmlFor='status'>Status:</label>
+              <label htmlFor='status' className='form-label mb-2 inline-block text-gray-700 font-medium'>Status:</label>
               <select
                 value={appInput.status}
                 onChange={(event) => {
@@ -134,15 +134,15 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                 {/* <option selected>Open this select menu</option> */}
                 <option value='To apply'>To apply</option>
                 <option value='Applied'>Applied</option>
-                <option value="Assessment">Assessment</option>
-                <option value="Interview">Interview</option>
-                <option value="Waiting for result">Waiting for result</option>
+                <option value='Assessment'>Assessment</option>
+                <option value='Interview'>Interview</option>
+                <option value='Waiting for result'>Waiting for result</option>
                 <option value='Rejected'>Rejected</option>
-                <option value="Offer">Offer</option>
+                <option value='Offer'>Offer</option>
               </select>
             </div>
             <div>
-              <label htmlFor='priority'>Priority:</label>
+            <label htmlFor='priority' className='form-label mb-2 inline-block text-gray-700 font-medium'>Priority:</label>
               <select
                 value={appInput.priority}
                 onChange={(event) => {
@@ -156,7 +156,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                 aria-label='Default select priority'>
                 <option value='low'>Low</option>
                 <option value='medium'>Medium</option>
-                <option value="high">High</option>
+                <option value='high'>High</option>
               </select>
             </div>
           </div>

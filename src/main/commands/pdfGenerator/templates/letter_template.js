@@ -1,17 +1,17 @@
 const getLetterLatex = ({
-	content,
-	salutation,
-	date,
-	closing,
-	receiverName,
-	senderName,
-	receiverAddress1,
-	receiverAddress2,
-	senderAddress1,
-	senderAddress2,
-	attached,
+  content,
+  salutation,
+  date,
+  closing,
+  receiverName,
+  senderName,
+  receiverAddress1,
+  receiverAddress2,
+  senderAddress1,
+  senderAddress2,
+  attached,
 }) =>
-	String.raw`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  String.raw`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Elmueller Formal Letter
 % LaTeX Template
 % Version 1.3 (20/11/16)
@@ -51,13 +51,21 @@ const getLetterLatex = ({
 %	YOUR INFORMATION AND LETTER DATE
 %----------------------------------------------------------------------------------------
 
-\setkomavar{fromname}{${senderName === "" ? String.raw`\quad` : senderName}} % Your name used in the from address
+\setkomavar{fromname}{${
+    senderName === '' ? String.raw`\quad` : senderName
+  }} % Your name used in the from address
 
-\setkomavar{fromaddress}{${senderAddress1 === "" ? String.raw`\quad` : senderAddress1}${senderAddress2 !== "" ? String.raw` \\${senderAddress2}` : ""}} % Your address
+\setkomavar{fromaddress}{${
+    senderAddress1 === '' ? String.raw`\quad` : senderAddress1
+  }${
+    senderAddress2 !== '' ? String.raw` \\${senderAddress2}` : ''
+  }} % Your address
 
-\setkomavar{signature}{${senderName === "" ? String.raw`\quad` : senderName}} % Your name used in the signature
+\setkomavar{signature}{${
+    senderName === '' ? String.raw`\quad` : senderName
+  }} % Your name used in the signature
 
-\date{${date === "" ? String.raw`\today` : date}} % Date of the letter
+\date{${date === '' ? String.raw`\today` : date}} % Date of the letter
 
 %----------------------------------------------------------------------------------------
  
@@ -67,20 +75,24 @@ const getLetterLatex = ({
 %	ADDRESSEE
 %----------------------------------------------------------------------------------------
  
-\begin{letter}{${receiverName === "" ? String.raw`\quad` : receiverName}${receiverAddress1 !== "" ? String.raw` \\ ${receiverAddress1}` : ""}${receiverAddress2 !== "" ? String.raw` \\ ${receiverAddress2}` : ""}} % Addressee name and address
+\begin{letter}{${receiverName === '' ? String.raw`\quad` : receiverName}${
+    receiverAddress1 !== '' ? String.raw` \\ ${receiverAddress1}` : ''
+  }${
+    receiverAddress2 !== '' ? String.raw` \\ ${receiverAddress2}` : ''
+  }} % Addressee name and address
 
 %----------------------------------------------------------------------------------------
 %	LETTER CONTENT
 %----------------------------------------------------------------------------------------
 
-\opening{${salutation === "" ? "Dear Sir/Mdm" : salutation}}
+\opening{${salutation === '' ? 'Dear Sir/Mdm' : salutation}}
 
-${content === "" ? String.raw`\quad` : content}
+${content === '' ? String.raw`\quad` : content}
 
-\closing{${closing === "" ? "Sincerely" : closing}}
+\closing{${closing === '' ? 'Sincerely' : closing}}
 
 \setkomavar*{enclseparator}{Attached} % Change the default "encl:" to "Attached:"
-${attached !== "" ? String.raw`\encl{${attached}}` : ""} % Attached documents
+${attached !== '' ? String.raw`\encl{${attached}}` : ''} % Attached documents
 
 %----------------------------------------------------------------------------------------
 

@@ -75,16 +75,6 @@ const columns = [
     header: 'Status',
   },
   {
-    accessorKey: 'date_applied',
-    header: () => (
-      <>
-        <CalendarCheck className='mb-1 mr-2 inline h-4 w-4' />
-        Applied
-      </>
-    ),
-    cell: (info) => new Date(info.getValue()).toLocaleDateString(),
-  },
-  {
     id: 'documents',
     header: 'Docs',
     headerCellProps: {
@@ -108,7 +98,8 @@ const columns = [
 ];
 
 const ApplicationSummaryPage = () => {
-  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
+  const { appsData, setAppsData, userPath, seasonValues, currentSeason } =
+    useContext(GlobalContext);
   const [deleteMode, setDeleteMode] = useState(false);
   const [bsToggleContent, setBSToggleContent] = useState({});
   const [deleteItemDetails, setDeleteItemDetails] = useState({
@@ -178,8 +169,9 @@ const ApplicationSummaryPage = () => {
   };
 
   const handleSubmitCallback = (params) => {
+    const currentDate = new Date().toISOString();
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created) VALUES (?,?,?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?)',
       [
         params.company,
         params.role,
@@ -187,7 +179,9 @@ const ApplicationSummaryPage = () => {
         params.status,
         params.link,
         params.priority,
-        new Date().toISOString(),
+        currentDate,
+        currentDate,
+        seasonValues.find(({ season }) => season === currentSeason).id,
       ],
       ({ error }) => {
         if (error) console.error(error);
@@ -236,7 +230,7 @@ const ApplicationSummaryPage = () => {
   return (
     <div className='p-4'>
       <div className='flex justify-between'>
-        <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
+        <h1 className='inline w-fit text-xl font-bold tracking-tight'>All Applications</h1>
         <div className='flex gap-x-2'>
           <Button
             Icon={FiletypeCsv}
