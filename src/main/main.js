@@ -8,7 +8,8 @@ const { databaseInit, databaseHandler } = require('./commands/database');
 const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
 const { saveJobDescription } = require('./commands/saveJobDescription');
 const { getUserDataPath } = require('./commands/getPaths');
-const { exportToCsv } = require("./commands/export")
+const { exportToCsv } = require('./commands/export');
+const { saveCV } = require('./commands/saveCV');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -17,20 +18,32 @@ if (require('electron-squirrel-startup')) {
 }
 
 // initialise output file directories
-const pdfFilesDir = path.join(
-  app.getPath('userData'),
-  'output_files/pdf_files'
-);
-if (!fs.existsSync(pdfFilesDir)) {
-  fs.mkdirSync(pdfFilesDir, { recursive: true });
+const cvPdfFilesDir = path.join(app.getPath('userData'), 'output_files/cv_pdf');
+if (!fs.existsSync(cvPdfFilesDir)) {
+  fs.mkdirSync(cvPdfFilesDir, { recursive: true });
 }
-const texFilesDir = path.join(
-  app.getPath('userData'),
-  'output_files/tex_files'
-);
-if (!fs.existsSync(texFilesDir)) {
-  fs.mkdirSync(texFilesDir, { recursive: true });
+
+const cvTexFilesDir = path.join(app.getPath('userData'), 'output_files/cv_tex');
+if (!fs.existsSync(cvTexFilesDir)) {
+  fs.mkdirSync(cvTexFilesDir, { recursive: true });
 }
+
+const letterPdfFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/letter_pdf'
+);
+if (!fs.existsSync(letterPdfFilesDir)) {
+  fs.mkdirSync(letterPdfFilesDir, { recursive: true });
+}
+
+const letterTexFilesDir = path.join(
+  app.getPath('userData'),
+  'output_files/letter_tex'
+);
+if (!fs.existsSync(letterTexFilesDir)) {
+  fs.mkdirSync(letterTexFilesDir, { recursive: true });
+}
+
 const uploadPdfFilesDir = path.join(
   app.getPath('userData'),
   'output_files/job_desc_files'
@@ -38,9 +51,11 @@ const uploadPdfFilesDir = path.join(
 if (!fs.existsSync(uploadPdfFilesDir)) {
   fs.mkdirSync(uploadPdfFilesDir, { recursive: true });
 }
+
 const csvFilesDir = path.join(
   app.getPath('userData'),
-  'output_files/csv_files')
+  'output_files/csv_files'
+);
 if (!fs.existsSync(csvFilesDir)) {
   fs.mkdirSync(csvFilesDir, { recursive: true });
 }
@@ -124,7 +139,8 @@ app.on('activate', () => {
 
 // ipcMain handlers
 ipcMain.handle('get-user-data-path', getUserDataPath);
-ipcMain.handle('get-pdf', pdfGeneratorHandler);
+ipcMain.handle('generate-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);
-ipcMain.handle("export-to-csv", exportToCsv)
+ipcMain.handle('save-cv', saveCV);
+ipcMain.handle('export-to-csv', exportToCsv);

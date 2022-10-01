@@ -1,4 +1,4 @@
-const getLatex = (resumeObject) => {
+const getCVLatex = (resumeObject) => {
   const texPreamble = String.raw`%-------------------------
 % Resume in Latex
 % Author : Jake Gutierrez
@@ -397,4 +397,4 @@ const getLatex = (resumeObject) => {
   return generateTex(resumeObject);
 };
 
-module.exports = getLatex;
+module.exports = getCVLatex;

@@ -5,10 +5,11 @@ const defaultState = {
   company: '',
   role: '',
   job_description: '',
-  status: 'To Apply',
+  link: '',
+  status: 'To apply',
 };
 
-export default function NewApplicationForm({ handleSubmitCallback }) {
+const NewApplicationForm = ({ handleSubmitCallback }) => {
   const [appInput, setAppInput] = useState(defaultState);
   return (
     <div
@@ -76,11 +77,32 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
             </div>
             <div>
               <label
-                htmlFor='job_description'
+                htmlFor='link'
                 className='form-label mb-2 inline-block text-gray-700'>
-                Job Description
+                Link
               </label>
               <input
+                type='text'
+                className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                name='link'
+                id='link'
+                value={appInput.link}
+                onChange={(event) => {
+                  setAppInput((arr) => ({
+                    ...arr,
+                    link: event.target.value,
+                  }));
+                }}
+                placeholder='www.myawesomewebite.com'
+              />
+            </div>
+            <div>
+              <label
+                htmlFor='job_description'
+                className='form-label mb-2 inline-block text-gray-700'>
+                [Optional] Job Description
+              </label>
+              <textarea
                 type='text'
                 className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
                 name='job_description'
@@ -109,33 +131,35 @@ export default function NewApplicationForm({ handleSubmitCallback }) {
                 className='form-select m-0 block w-full appearance-none rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
                 aria-label='Default select example'>
                 {/* <option selected>Open this select menu</option> */}
-                <option value='To Apply'>To Apply</option>
+                <option value='To apply'>To apply</option>
                 <option value='Applied'>Applied</option>
                 <option value='Rejected'>Rejected</option>
               </select>
             </div>
           </div>
           <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t border-gray-200 p-4'>
-            <div className='flex gap-x-2 items-center'>
+            <div className='flex items-center gap-x-2'>
               <Button
-              additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
-              value='Cancel'
-              color='purple'
-            />
-            <Button
-              additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
-              onClick={(event) => {
-                event.preventDefault();
-                handleSubmitCallback(appInput);
-                setAppInput(defaultState);
-              }}
-              value='Save changes'
-              color='blue'
-            />
+                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
+                value='Cancel'
+                color='purple'
+              />
+              <Button
+                additionalAttributes={{ 'data-bs-dismiss': 'modal' }}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleSubmitCallback(appInput);
+                  setAppInput(defaultState);
+                }}
+                value='Save changes'
+                color='blue'
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default NewApplicationForm;

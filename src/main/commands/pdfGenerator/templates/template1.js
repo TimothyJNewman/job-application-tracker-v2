@@ -1,4 +1,4 @@
-const getLatex = (params) => {
+const getCVLatex = (params) => {
   const texPreamble = String.raw`
 %-------------------------
 % Resume in Latex
@@ -399,4 +399,4 @@ const getLatex = (params) => {
   return generateTex(params);
 };
 
-module.exports = getLatex;
+module.exports = getCVLatex;

@@ -22,6 +22,8 @@ import {
   FiletypeCsv,
   PlusLg,
   ArrowUpRightSquare,
+  Folder2Open,
+  XLg,
 } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents/';
 import toast from 'react-hot-toast';
@@ -43,16 +45,17 @@ const columns = [
     cell: (info) => {
       let color;
       switch (info.getValue()) {
-        case 'To Apply':
-          color = 'bg-blue-500';
-          break;
-        case 'Applied':
+        case 'Offer':
           color = 'bg-green-500';
           break;
         case 'Rejected':
           color = 'bg-red-500';
           break;
+        case 'To apply':
+          color = 'bg-blue-500';
+          break;
         default:
+          color = 'bg-purple-500';
           break;
       }
       return <div className={`h-5 w-1 ${color}`}></div>;
@@ -66,6 +69,10 @@ const columns = [
   {
     accessorKey: 'role',
     header: 'Role',
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
   },
   {
     accessorKey: 'date_applied',
@@ -101,7 +108,7 @@ const columns = [
 ];
 
 const ApplicationSummaryPage = () => {
-  const { appsData, setAppsData } = useContext(GlobalContext);
+  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
   const [deleteMode, setDeleteMode] = useState(false);
   const [bsToggleContent, setBSToggleContent] = useState({});
   const [deleteItemDetails, setDeleteItemDetails] = useState({
@@ -172,12 +179,13 @@ const ApplicationSummaryPage = () => {
 
   const handleSubmitCallback = (params) => {
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, date_created) VALUES (?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, date_created) VALUES (?,?,?,?,?,?)',
       [
         params.company,
         params.role,
         params.job_description,
         params.status,
+        params.link,
         new Date().toISOString(),
       ],
       ({ error }) => {
@@ -188,32 +196,60 @@ const ApplicationSummaryPage = () => {
   };
 
   const exportClickHandler = () => {
-    const exportCsvPromise = window.electron.exportToCsv("export-to-csv", appsData).catch((error) => {
-      console.error(error)
-    })
-    toast.promise(exportCsvPromise, {
-      loading: 'Loading',
-      success: 'Successfully exported to CSV',
-      error: 'Error exporting CSV',
-    });
-  }
+    const exportCsvPromise = window.electron
+      .exportToCsv('export-to-csv', appsData)
+      .catch((error) => {
+        console.error(error);
+      });
+    toast.promise(
+      exportCsvPromise,
+      {
+        loading: 'Loading',
+        success: (savePath) => {
+          return (
+            <div className='flex'>
+              <span className='grow'>
+                Successfully exported to CSV{' '}
+                <Button
+                  Icon={Folder2Open}
+                  value='Open'
+                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                />
+              </span>
+              {/* <button onClick><XLg /></button> */}
+            </div>
+          );
+        },
+        error: 'Error exporting CSV',
+      },
+      {
+        success: {
+          duration: 10000,
+        },
+      }
+    );
+  };
+
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='p-4'>
       <div className='flex justify-between'>
         <h1 className='inline w-fit text-xl font-bold'>All Applications</h1>
-        <div className='flex gap-x-2'><Button
-          Icon={FiletypeCsv}
-          value='Export'
-          color='purple'
-          onClick={exportClickHandler}
-        />
+        <div className='flex gap-x-2'>
+          <Button
+            Icon={FiletypeCsv}
+            value='Export'
+            color='purple'
+            onClick={exportClickHandler}
+          />
           <Button
             Icon={TrashFill}
             value='Delete'
             color='red'
             onClick={() => setDeleteMode(!deleteMode)}
-          /></div>
+          />
+        </div>
       </div>
       {deleteMode ? (
         <p className='-mt-1 text-red-500'>Click on an item to delete 🡣</p>
@@ -233,9 +269,10 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
-                            ?.className ?? ''
-                            }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
+                            header.column.columnDef.headerCellProps
+                              ?.className ?? ''
+                          }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -268,15 +305,17 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${deleteMode && 'cursor-pointer'
-                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${
+                        deleteMode && 'cursor-pointer'
+                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
-                            }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
+                            cell.column.columnDef.bodyCellProps?.className ?? ''
+                          }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
