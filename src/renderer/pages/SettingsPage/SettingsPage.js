@@ -33,13 +33,17 @@ const SettingsPage = () => {
       .modifySettings('settings', 'season', currentSeasonLocal)
       .then(() => {
         setCurrentSeason(currentSeasonLocal);
+        console.log(seasonValues, currentSeasonLocal,seasonValues.every(({ season }) => season !== currentSeasonLocal))
         if (
           !seasonValues.every(({ season }) => season !== currentSeasonLocal)
         ) {
+          console.log("New season cannot be duplicate of existing season")
           return;
-        } else if (currentSeasonLocal !== '') {
+        } else if (currentSeasonLocal === '') {
+          console.error("New season cannot be empty string")
           return;
         } else {
+          console.log("New entry")
           createDatabaseEntry(
             'INSERT INTO seasons (season) VALUES (?)',
             [currentSeasonLocal],
@@ -52,7 +56,7 @@ const SettingsPage = () => {
                   null,
                   ({ error, result }) => {
                     if (error) console.error(error);
-                    else setSeasonValues(result.map((elem) => elem.season));
+                    else setSeasonValues(result);
                   }
                 );
               }

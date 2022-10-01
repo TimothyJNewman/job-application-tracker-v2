@@ -13,41 +13,51 @@ const getCVLatex = require('./templates/template2');
  * @returns {Promise}
  */
 const pdfGenerator = async (latexString, type, id) => {
-  const latexPdf = await latex(latexString);
 
-  // Check for existing files and delete existing file
-  const pdfFiles = await fsPromises.readdir(
-    path.join(app.getPath('userData'), `output_files/${type}_pdf`)
-  );
-  const existingPdfFile = pdfFiles.find((file) => {
-    const pattern = new RegExp(type + '_' + id);
-    return pattern.test(file);
-  });
-  if (existingPdfFile !== undefined) {
-    await fsPromises.unlink(
-      path.join(
-        app.getPath('userData'),
-        `output_files/${type}_pdf`,
-        existingPdfFile
-      )
-    );
+  let latexPdf;
+  try {
+    latexPdf = await latex(latexString);
+  } catch (error) {
+    throw error;
   }
 
-  const texFiles = await fsPromises.readdir(
-    path.join(app.getPath('userData'), `output_files/${type}_tex`)
-  );
-  const existingTexFile = texFiles.find((file) => {
-    const pattern = new RegExp(type + '_' + id);
-    return pattern.test(file);
-  });
-  if (existingTexFile !== undefined) {
-    await fsPromises.unlink(
-      path.join(
-        app.getPath('userData'),
-        `output_files/${type}_tex`,
-        existingTexFile
-      )
+  try {
+    // Check for existing files and delete existing file
+    const pdfFiles = await fsPromises.readdir(
+      path.join(app.getPath('userData'), `output_files/${type}_pdf`)
     );
+    const existingPdfFile = pdfFiles.find((file) => {
+      const pattern = new RegExp(type + '_' + id);
+      return pattern.test(file);
+    });
+    if (existingPdfFile !== undefined) {
+      await fsPromises.unlink(
+        path.join(
+          app.getPath('userData'),
+          `output_files/${type}_pdf`,
+          existingPdfFile
+        )
+      );
+    }
+
+    const texFiles = await fsPromises.readdir(
+      path.join(app.getPath('userData'), `output_files/${type}_tex`)
+    );
+    const existingTexFile = texFiles.find((file) => {
+      const pattern = new RegExp(type + '_' + id);
+      return pattern.test(file);
+    });
+    if (existingTexFile !== undefined) {
+      await fsPromises.unlink(
+        path.join(
+          app.getPath('userData'),
+          `output_files/${type}_tex`,
+          existingTexFile
+        )
+      );
+    }
+  } catch (error) {
+    throw error
   }
 
   const dateString = new Date().toISOString().split(/[:.-]/).join('_');
