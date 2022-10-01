@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PlusCircleFill } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 
 const defaultState = {
@@ -7,6 +8,7 @@ const defaultState = {
   job_description: '',
   link: '',
   status: 'To apply',
+  priority: 'medium',
 };
 
 const NewApplicationForm = ({ handleSubmitCallback }) => {
@@ -24,7 +26,8 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='addNewModalLabel'>
-              New Application
+              <PlusCircleFill className='mb-1 inline text-green-500' /> New
+              Application
             </h2>
             <button
               type='button'
@@ -36,7 +39,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='company'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Company
               </label>
               <input
@@ -57,7 +60,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='role'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Role
               </label>
               <input
@@ -78,7 +81,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='link'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Link
               </label>
               <input
@@ -99,7 +102,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             <div>
               <label
                 htmlFor='job_description'
-                className='form-label mb-2 inline-block text-gray-700'>
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
                 [Optional] Job Description
               </label>
               <textarea
@@ -118,7 +121,11 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
               />
             </div>
             <div>
-              <label htmlFor='status'>Status:</label>
+              <label
+                htmlFor='status'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Status:
+              </label>
               <select
                 value={appInput.status}
                 onChange={(event) => {
@@ -129,11 +136,37 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                 }}
                 name='status'
                 className='form-select m-0 block w-full appearance-none rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-                aria-label='Default select example'>
+                aria-label='Default select status'>
                 {/* <option selected>Open this select menu</option> */}
                 <option value='To apply'>To apply</option>
                 <option value='Applied'>Applied</option>
+                <option value='Assessment'>Assessment</option>
+                <option value='Interview'>Interview</option>
+                <option value='Waiting for result'>Waiting for result</option>
                 <option value='Rejected'>Rejected</option>
+                <option value='Offer'>Offer</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor='priority'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Priority:
+              </label>
+              <select
+                value={appInput.priority}
+                onChange={(event) => {
+                  setAppInput((arr) => ({
+                    ...arr,
+                    priority: event.target.value,
+                  }));
+                }}
+                name='priority'
+                className='form-select m-0 block w-full appearance-none rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                aria-label='Default select priority'>
+                <option value='low'>Low</option>
+                <option value='medium'>Medium</option>
+                <option value='high'>High</option>
               </select>
             </div>
           </div>

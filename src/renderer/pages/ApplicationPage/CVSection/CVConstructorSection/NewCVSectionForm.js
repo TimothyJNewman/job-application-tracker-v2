@@ -108,6 +108,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
             type='text'
             className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
             placeholder='Text input'
+            title={inputName}
             name={inputName}
             id={inputName}
             value={inputState}
@@ -126,6 +127,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
           </label>
           <textarea
             className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            title={inputName}
             name={inputName}
             id={inputName}
             value={inputState}
@@ -147,6 +149,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
           <input
             type='number'
             className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+            title={inputName}
             name={inputName}
             id={inputName}
             value={inputState}
@@ -169,6 +172,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
             type='date'
             className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
             placeholder='Text input'
+            title={inputName}
             name={inputName}
             id={inputName}
             value={inputState}
@@ -405,6 +409,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
                       type='text'
                       className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
                       placeholder='Text input'
+                      title='Description'
                       name='description'
                       id='description'
                       value={currentDescription}

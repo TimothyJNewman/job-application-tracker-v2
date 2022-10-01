@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('electron', {
   getPath: (channel) => {
     return ipcRenderer.invoke(channel);
   },
+  modifySettings: (channel, key, value) => {
+    return ipcRenderer.invoke(channel, key, value);
+  },
   getPdf: (channel, type, data) => {
     return ipcRenderer.invoke(channel, type, data);
   },

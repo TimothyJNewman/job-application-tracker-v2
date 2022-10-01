@@ -12,19 +12,9 @@ const LetterSection = ({ id }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
 
   return (
-    // <div className='mb-2 px-4'>
-    //   <h1 id='letter-contructor' className='my-2 text-xl font-bold'>
-    //     Letter Constructor
-    //   </h1>
-    //   <p>
-    //     <ExclamationTriangle className='inline' />
-    //     Work in progress
-    //     <ExclamationTriangle className='inline' />
-    //   </p>
-    // </div>
     <>
-      <h1 id='letter' className='my-2 text-xl font-bold'>
-        Letter Constructor
+      <h1 id='letter' className='my-2 text-xl font-bold tracking-tight'>
+        Letter
       </h1>
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
         <div className='grow'>
@@ -48,7 +38,7 @@ const LetterSection = ({ id }) => {
             />
           ) : (
             <div
-              className='mb-3 rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
+              className='mb-3 w-[500px] rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'
               role='alert'>
               No Letter found
             </div>

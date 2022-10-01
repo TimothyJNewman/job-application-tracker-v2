@@ -2,18 +2,45 @@ import React, { useContext, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { ApplicationPage, ApplicationSummaryPage } from './pages/index';
+import {
+  ApplicationPage,
+  ApplicationSummaryPage,
+  HomePage,
+  SettingsPage,
+} from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
-import HomePage from './pages/HomePage/HomePage';
 import { GlobalContext } from './context/GlobalContext';
+import { readDatabaseEntry } from './util/CRUD';
+import { toast } from 'react-hot-toast';
 
 const App = () => {
-  const { setUserPath } = useContext(GlobalContext);
+  const { setUserPath, setSeasonValues, setCurrentSeason } =
+    useContext(GlobalContext);
+
   useEffect(() => {
     window.electron.getPath('get-user-data-path').then((path) => {
       setUserPath(path);
     });
+    readDatabaseEntry('SELECT * FROM seasons', null, ({ error, result }) => {
+      if (error) console.error(error);
+      else {
+        setSeasonValues(result);
+        window.electron
+          .modifySettings('settings', 'season')
+          .then((value) => {
+            if (value !== undefined && value !== '') setCurrentSeason(value);
+            else if (result.length === 1) {
+              setCurrentSeason(result[0].season);
+            }
+          })
+          .catch((error) => {
+            toast.error(error.message);
+            console.error(error);
+          });
+      }
+    });
   }, []);
+
   return (
     <div className='App'>
       <Toaster />
@@ -22,6 +49,7 @@ const App = () => {
         <Routes>
           <Route path='/application/:id' element={<ApplicationPage />} />
           <Route path='/applications' element={<ApplicationSummaryPage />} />
+          <Route path='/settings' element={<SettingsPage />} />
           <Route path='/' element={<HomePage />} />
         </Routes>
       </Router>

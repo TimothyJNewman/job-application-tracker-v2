@@ -2,7 +2,11 @@ import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../../../context/GlobalContext';
 import { Button } from '../../../components/microComponents';
 import { toast } from 'react-hot-toast';
-import { createDatabaseEntry, readDatabaseEntry, updateDatabaseEntry } from '../../../util/CRUD';
+import {
+  createDatabaseEntry,
+  readDatabaseEntry,
+  updateDatabaseEntry,
+} from '../../../util/CRUD';
 import { Folder2Open } from 'react-bootstrap-icons';
 
 const LetterConstructorSection = ({ id }) => {
@@ -27,7 +31,7 @@ const LetterConstructorSection = ({ id }) => {
     });
   };
 
-  const openFileExplorer = (path) => { };
+  const openFileExplorer = (path) => {};
 
   const generatePdf = () => {
     // TODO add check for valid input
@@ -221,7 +225,7 @@ const LetterConstructorSection = ({ id }) => {
         </label>
         <input
           type='text'
-          className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+          className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
           placeholder='Salutation'
           name='salutation'
           id='salutation'

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const navLinks = [
   { name: 'Home', url: '/' },
   { name: 'Applications', url: '/applications' },
+  { name: 'Settings', url: '/settings' },
 ];
 
 const NavBar = () => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { XCircleFill } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 
 export default function DeleteApplicationModal({
@@ -18,7 +19,8 @@ export default function DeleteApplicationModal({
             <h2
               className='text-xl font-medium leading-normal text-gray-800'
               id='deleteModalLabel'>
-              Delete confirmation
+              <XCircleFill className='mb-1 inline text-red-500' /> Delete
+              confirmation
             </h2>
             <button
               type='button'
