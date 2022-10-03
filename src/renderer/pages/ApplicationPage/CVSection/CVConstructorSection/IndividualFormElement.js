@@ -111,7 +111,6 @@ const IndividualFormElement = ({
       </div>
     ),
   };
-  console.log('inputtype', inputType);
   return inputFieldJsxDictionary[inputType]({
     inputName,
     breadCrumbs,

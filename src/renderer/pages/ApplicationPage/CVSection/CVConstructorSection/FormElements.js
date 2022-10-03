@@ -54,10 +54,6 @@ const FormElements = ({
 
   const getInputJsxRecursive = (schemaKey, schemaValue, breadCrumbs) => {
     let returnVal;
-    console.log(schemaKey, schemaValue);
-    if (schemaValue === undefined) {
-      console.log('undef', schemaKey, currentSchema, breadCrumbs);
-    }
     if (schemaValue.constructor === String) {
       return (
         <IndividualFormElement
@@ -72,6 +68,7 @@ const FormElements = ({
       returnVal = [];
       returnVal.push(
         <IndividualFormElement
+          key={`${schemaKey}-objectLabel`}
           inputType='objectLabel'
           inputName={schemaKey}
           breadCrumbs={breadCrumbs}
@@ -87,7 +84,7 @@ const FormElements = ({
         }
       }
       returnVal.push(
-        <ol className='list-outside list-decimal pl-4'>
+        <ol key={schemaKey} className='list-outside list-decimal pl-4'>
           {currentFieldValuesArray.map((elem, index) => (
             <li key={`${schemaKey}-${index}`}>
               {getInputJsxRecursive('', schemaValue[0], [
@@ -100,6 +97,7 @@ const FormElements = ({
       );
       returnVal.push(
         <IndividualFormElement
+          key={`${schemaKey}-newFieldButton`}
           inputType='newFieldButton'
           inputName={schemaKey}
           breadCrumbs={breadCrumbs}
@@ -110,13 +108,14 @@ const FormElements = ({
       returnVal = [];
       returnVal.push(
         <IndividualFormElement
+          key={`${schemaKey}-objectLabel`}
           inputType='objectLabel'
           inputName={schemaKey}
           breadCrumbs={breadCrumbs}
         />
       );
       returnVal.push(
-        <div className='pl-4'>
+        <div key={schemaKey} className='pl-4'>
           {Object.entries(schemaValue).map(([subSchemaKey, subSchemaValue]) =>
             getInputJsxRecursive(subSchemaKey, subSchemaValue, [
               ...breadCrumbs,
@@ -223,7 +222,7 @@ const FormElements = ({
   return (
     <>
       {currentSchema[currentSection] !== undefined &&
-      Object.keys(currentFieldValues).length !== 0
+        Object.keys(currentFieldValues).length !== 0
         ? getInputJsxRecursive(currentSection, currentSchema[currentSection], [currentSection])
         : null}
     </>

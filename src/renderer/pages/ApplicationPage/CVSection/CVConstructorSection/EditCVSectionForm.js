@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../../../constants/template2_schema';
-import { PlusLg, XCircleFill } from 'react-bootstrap-icons';
+import { XCircleFill } from 'react-bootstrap-icons';
 import { toast } from 'react-hot-toast';
 import FormElements from './FormElements';
 
@@ -15,7 +15,6 @@ const EditCVSectionForm = ({
   const [currentSchema, setCurrentSchema] = useState({});
   const [currentFieldValues, setCurrentFieldValues] = useState({});
   const [currentDescription, setCurrentDescription] = useState('');
-  const [currentSectionJsx, setCurrentSectionJsx] = useState([]);
 
   useEffect(() => {
     let newSchemaValue = schema[currentSection];
@@ -33,32 +32,14 @@ const EditCVSectionForm = ({
       Object.keys(currentSchema).length !== 0 &&
       Object.keys(currentFieldValues).length === 0
     ) {
-      const newFieldValues = currentFieldValuesDatabase
-        ? currentFieldValuesDatabase
-        : getDefaultFieldValues(currentSchema[currentSection]);
       setCurrentFieldValues({
-        [currentSection]: newFieldValues,
+        [currentSection]: currentFieldValuesDatabase,
         section: currentSection,
         description: '',
       });
       setCurrentDescription(currentDescriptionDatabase);
     }
   }, [currentSchema]);
-
-  // useEffect(() => {
-  //   console.log("currentFieldValues")
-  //   if (
-  //     Object.keys(currentSchema).length !== 0 &&
-  //     Object.keys(currentFieldValues).length !== 0
-  //   ) {
-  //     const newInputJsx = getInputJsx(
-  //       currentSection,
-  //       currentSchema[currentSection]
-  //     );
-  //     console.log("newInputJsx", newInputJsx)
-  //     setCurrentSectionJsx(newInputJsx);
-  //   }
-  // }, [currentFieldValues]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,27 +75,23 @@ const EditCVSectionForm = ({
         <div className='grow overflow-y-scroll bg-white p-4'>
           <form className='relative max-h-[70vh]'>
             <div className='mb-2 border-b border-gray-200 pb-2'>
-              {currentSectionJsx && (
-                <>
-                  <label
-                    htmlFor='description'
-                    className='form-label mb-2 inline-block font-medium text-gray-700'>
-                    Description
-                  </label>
-                  <input
-                    type='text'
-                    className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
-                    placeholder='Text input'
-                    title='Description'
-                    name='description'
-                    id='description'
-                    value={currentDescription}
-                    onChange={(event) =>
-                      setCurrentDescription(event.target.value)
-                    }
-                  />
-                </>
-              )}
+              <label
+                htmlFor='description'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Description
+              </label>
+              <input
+                type='text'
+                className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                placeholder='Text input'
+                title='Description'
+                name='description'
+                id='description'
+                value={currentDescription}
+                onChange={(event) =>
+                  setCurrentDescription(event.target.value)
+                }
+              />
             </div>
             <FormElements
               currentSection={currentSection}
