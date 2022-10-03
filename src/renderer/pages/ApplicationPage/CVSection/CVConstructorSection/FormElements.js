@@ -5,7 +5,6 @@ import IndividualFormElement from './IndividualFormElement';
  * gets input jsx given a schema
  */
 const FormElements = ({
-  schemaKey,
   currentSection,
   currentSchema,
   setCurrentSchema,
@@ -223,9 +222,9 @@ const FormElements = ({
   };
   return (
     <>
-      {currentSchema[schemaKey] !== undefined &&
+      {currentSchema[currentSection] !== undefined &&
       Object.keys(currentFieldValues).length !== 0
-        ? getInputJsxRecursive(schemaKey, currentSchema[schemaKey], [schemaKey])
+        ? getInputJsxRecursive(currentSection, currentSchema[currentSection], [currentSection])
         : null}
     </>
   );

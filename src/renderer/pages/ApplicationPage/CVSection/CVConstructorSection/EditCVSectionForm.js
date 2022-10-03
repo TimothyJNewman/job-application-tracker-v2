@@ -117,7 +117,6 @@ const EditCVSectionForm = ({
               )}
             </div>
             <FormElements
-              schemaKey={currentSection}
               currentSection={currentSection}
               currentSchema={currentSchema}
               setCurrentSchema={setCurrentSchema}
