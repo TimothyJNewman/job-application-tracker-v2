@@ -14,7 +14,7 @@ const SettingsPage = () => {
   }, []);
 
   const updateSeason = () => {
-    if (currentSeasonLocal !== undefined && currentSeasonLocal !== "") {
+    if (currentSeasonLocal !== undefined && currentSeasonLocal !== '') {
       window.electron
         .modifySettings('settings', 'season', currentSeasonLocal)
         .then((result) => {
@@ -38,10 +38,10 @@ const SettingsPage = () => {
         if (
           !seasonValues.every(({ season }) => season !== currentSeasonLocal)
         ) {
-          console.error("New season cannot be duplicate of existing season")
+          console.error('New season cannot be duplicate of existing season');
           return;
         } else if (currentSeasonLocal === '') {
-          console.error("New season cannot be empty string")
+          console.error('New season cannot be empty string');
           return;
         } else {
           createDatabaseEntry(

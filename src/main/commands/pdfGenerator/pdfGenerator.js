@@ -13,7 +13,6 @@ const getCVLatex = require('./templates/template2');
  * @returns {Promise}
  */
 const pdfGenerator = async (latexString, type, id) => {
-
   let latexPdf;
   try {
     latexPdf = await latex(latexString);
@@ -57,7 +56,7 @@ const pdfGenerator = async (latexString, type, id) => {
       );
     }
   } catch (error) {
-    throw error
+    throw error;
   }
 
   const dateString = new Date().toISOString().split(/[:.-]/).join('_');
