@@ -5,12 +5,12 @@
   "description": "Simple job application tracker and CV generator",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "tsc && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
-    "format": "prettier --write \"src/**/*.{js,jsx}\""
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "repository": "https://github.com/TimothyJNewman/job-application-tracker-v2",
   "keywords": [
@@ -31,7 +31,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "job_application_tracker_v2"
+            "name": "job_application_tracker"
           }
         },
         {
@@ -104,23 +104,25 @@
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "style-loader": "^3.3.1",
-    "tailwindcss": "^3.1.6"
+    "tailwindcss": "^3.1.6",
+    "ts-loader": "^9.4.1",
+    "typescript": "~4.5.4",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.2.6",
-    "aws-sdk": "^2.1181.0",
     "better-sqlite3": "^7.6.2",
     "dotenv": "^16.0.2",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "mock-aws-s3": "^4.0.2",
-    "nock": "^13.2.9",
     "node-latex": "^3.1.0",
     "objects-to-csv": "^1.3.6",
     "pdf-to-base64": "^1.0.3",
     "react": "^18.2.0",
-    "react-ace": "^10.1.0",
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",

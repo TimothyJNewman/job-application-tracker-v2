@@ -37,13 +37,13 @@ const getLetterLatex = ({
 	parskip=half, % Separates paragraphs with some whitespace, use parskip=full for more space or comment out to return to default
 	fromalign=right, % Aligns the from address to the right
 	foldmarks=true, % Prints small fold marks on the left of the page
-	addrfield=false % Set to false to hide the addressee section - you will then want to adjust the height of the body of the letter on the page by adding the following in this section: \makeatletter \@setplength{refvpos}{\useplength{toaddrvpos}} \makeatletter
+	addrfield=false % Set to false to hide the addressee section - you will then want to adjust the height of the body of the letter on the page by adding the following in this section: \makeatletter \@setplength{refvpos}{\\useplength{toaddrvpos}} \makeatletter
 	]{scrlttr2}
 
-\usepackage[T1]{fontenc} % For extra glyphs (accents, etc)
-\usepackage{stix} % Use the Stix font by default
+\\usepackage[T1]{fontenc} % For extra glyphs (accents, etc)
+\\usepackage{stix} % Use the Stix font by default
 
-\usepackage[english]{babel} % Explicitly load the babel package to stop an error occurring on some LaTeX installations
+\\usepackage[english]{babel} % Explicitly load the babel package to stop an error occurring on some LaTeX installations
 
 \renewcommand*{\raggedsignature}{\raggedright} % Stop the signature from indenting
 

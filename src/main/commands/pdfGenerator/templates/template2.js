@@ -8,19 +8,19 @@ const getCVLatex = (resumeObject) => {
 
 \documentclass[letterpaper,11pt]{article}
 
-\usepackage{latexsym}
-\usepackage[empty]{fullpage}
-\usepackage{titlesec}
-\usepackage{marvosym}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{verbatim}
-\usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fancyhdr}
-\usepackage[english]{babel}
-\usepackage{tabularx}
-\usepackage{fontawesome5}
-\usepackage{multicol}
+\\usepackage{latexsym}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+\\usepackage{marvosym}
+\\usepackage[usenames,dvipsnames]{color}
+\\usepackage{verbatim}
+\\usepackage{enumitem}
+\\usepackage[hidelinks]{hyperref}
+\\usepackage{fancyhdr}
+\\usepackage[english]{babel}
+\\usepackage{tabularx}
+\\usepackage{fontawesome5}
+\\usepackage{multicol}
 \setlength{\multicolsep}{-3.0pt}
 \setlength{\columnsep}{-1pt}
 \input{glyphtounicode}
@@ -28,14 +28,14 @@ const getCVLatex = (resumeObject) => {
 
 %----------FONT OPTIONS----------
 % sans-serif
-% \usepackage[sfdefault]{FiraSans}
-% \usepackage[sfdefault]{roboto}
-% \usepackage[sfdefault]{noto-sans}
-% \usepackage[default]{sourcesanspro}
+% \\usepackage[sfdefault]{FiraSans}
+% \\usepackage[sfdefault]{roboto}
+% \\usepackage[sfdefault]{noto-sans}
+% \\usepackage[default]{sourcesanspro}
 
 % serif
-% \usepackage{CormorantGaramond}
-% \usepackage{charter}
+% \\usepackage{CormorantGaramond}
+% \\usepackage{charter}
 
 
 \pagestyle{fancy}
@@ -51,7 +51,7 @@ const getCVLatex = (resumeObject) => {
 \addtolength{\topmargin}{-.7in}
 \addtolength{\textheight}{1.4in}
 
-\urlstyle{same}
+\\urlstyle{same}
 
 \raggedbottom
 \raggedright
@@ -153,14 +153,14 @@ const getCVLatex = (resumeObject) => {
     ${basics.phone !== '' ? String.raw`\faPhone\ ${basics.phone}` : ''}
     ${
       basics.email !== ''
-        ? String.raw`~ \href{mailto:${basics.email}}{\raisebox{-0.2\height} \faEnvelope\ \underline{${basics.email}}}`
+        ? String.raw`~ \href{mailto:${basics.email}}{\raisebox{-0.2\height} \faEnvelope\ \\underline{${basics.email}}}`
         : ''
     }
     ${
       getLinkedIn(basics.profiles)
         ? String.raw` ~ \href{${
             getLinkedIn(basics.profiles).url
-          }}{\raisebox{-0.2\height}\faLinkedin\ \underline{${
+          }}{\raisebox{-0.2\height}\faLinkedin\ \\underline{${
             getLinkedIn(basics.profiles).url
           }}}`
         : ''
@@ -169,7 +169,7 @@ const getCVLatex = (resumeObject) => {
       getGithub(basics.profiles)
         ? String.raw`~ \href{${
             getGithub(basics.profiles).url
-          }{\raisebox{-0.2\height}\faGithub\ \underline{${
+          }{\raisebox{-0.2\height}\faGithub\ \\underline{${
             getGithub(basics.profiles).url
           }}}`
         : ''
