@@ -5,11 +5,11 @@
   "description": "Simple job application tracker and CV generator",
   "main": ".webpack/main",
   "scripts": {
-    "start": "tsc && electron-forge start",
+    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "repository": "https://github.com/TimothyJNewman/job-application-tracker-v2",
@@ -93,12 +93,17 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.66",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.64",
     "@electron-forge/publisher-github": "^6.0.0-beta.66",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "electron": "19.0.8",
     "electron-rebuild": "^3.2.8",
+    "eslint": "^8.0.1",
+    "eslint-plugin-import": "^2.25.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
     "node-loader": "^2.0.0",
     "postcss-loader": "^7.0.1",
     "prettier": "^2.7.1",
@@ -106,11 +111,7 @@
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.1.6",
     "ts-loader": "^9.4.1",
-    "typescript": "~4.5.4",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.0.1",
-    "eslint-plugin-import": "^2.25.0"
+    "typescript": "~4.5.4"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.2.6",
@@ -123,6 +124,7 @@
     "objects-to-csv": "^1.3.6",
     "pdf-to-base64": "^1.0.3",
     "react": "^18.2.0",
+    "react-ace": "^10.1.0",
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
@@ -131,6 +133,6 @@
     "tw-elements": "^1.0.0-alpha12"
   },
   "engines": {
-    "node": "^14"
+    "node": "^16"
   }
 }
