@@ -110,7 +110,6 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               onBlur={() => saveValue('role')}
             />
             <div className='flex items-center gap-x-2'>
-              {' '}
               <input
                 className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
                 type='text'
@@ -131,7 +130,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               </a>
               {/* <Button value="Open" Icon={ArrowUpRightSquare} color="purple" /> */}
             </div>
-            <div className='my-1'>
+            <div>
               <Selector
                 options={[
                   { k: 'To apply', v: 'To apply' },
@@ -143,12 +142,17 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                   { k: 'Offer', v: 'Offer' },
                 ]}
                 title='Status'
+                style={{
+                  backgroundColor: 'inherit',
+                  borderColor: 'transparent',
+                  padding: '0.25rem',
+                }}
                 selected={appDetails.status}
                 onChange={(event) => updateValue(event.target.value, 'status')}
                 onBlur={() => saveValue('status')}
               />
             </div>
-            <div className='my-1'>
+            <div>
               <Selector
                 options={[
                   { k: 'low', v: 'Low' },
@@ -156,6 +160,12 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                   { k: 'high', v: 'High' },
                 ]}
                 title='Priority'
+                style={{
+                  backgroundColor: 'inherit',
+                  borderColor: 'transparent',
+                  padding: '0.25rem',
+                }}
+                className='border-transparent bg-inherit p-0'
                 selected={appDetails.priority}
                 onChange={(event) =>
                   updateValue(event.target.value, 'priority')

@@ -237,7 +237,7 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
         returnVal.push(
           <ol className='list-outside list-decimal pl-4'>
             {currentFieldValuesArray.map((elem, index) => (
-              <li key={index}>
+              <li key={`${schemaKey}-${index}`}>
                 {getInputJsxRecursive('', schemaValue[0], [
                   ...breadCrumbs,
                   index,
@@ -278,12 +278,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   };
 
   const getDefaultArraySchema = (schema, breadCrumbs) => {
-    if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
     let schemaSub = schema;
     for (let i = 0; i < breadCrumbs.length; i++) {
       if (i === breadCrumbs.length - 1) {
@@ -304,12 +298,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
     breadCrumbs,
     deleteIndex = null
   ) => {
-    if (breadCrumbs.length > 3 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
     let newSchema = { ...schema };
     let newFieldValues = { ...fieldValues };
     let schemaSub = schema;
@@ -355,12 +343,6 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   };
 
   const handleInputChange = (event, fieldValues, breadCrumbs) => {
-    if (breadCrumbs.length > 4 || breadCrumbs.length <= 0) {
-      throw new Error(
-        'Breadcrumbs cannot be less than 1 or greater than 3: ' + breadCrumbs
-      );
-    }
-
     let newFieldValues = { ...fieldValues };
     let fieldValuesSub = newFieldValues;
     for (let i = 0; i < breadCrumbs.length; i++) {
