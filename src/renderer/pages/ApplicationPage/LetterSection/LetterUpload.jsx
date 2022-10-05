@@ -8,7 +8,7 @@ import { Folder2Open } from 'react-bootstrap-icons';
 const LetterUpload = ({ id }) => {
   const { setAppsData, userPath } = useContext(GlobalContext);
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => { window.electron.openFolder(path) };
 
   const saveCVPdfHandler = (uploadPdfUrl) => {
     const saveCVPdfPromise = window.electron.savePdf('save-cv', {
@@ -51,7 +51,6 @@ const LetterUpload = ({ id }) => {
                   onClick={openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },

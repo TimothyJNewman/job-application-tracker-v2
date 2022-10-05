@@ -222,7 +222,6 @@ const CVConstructorSection = ({ id }) => {
                   onClick={openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },
@@ -259,7 +258,7 @@ const CVConstructorSection = ({ id }) => {
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => { window.electron.openFolder(path) };
 
   return (
     <div className='mb-2'>

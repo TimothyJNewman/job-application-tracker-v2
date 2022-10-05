@@ -127,7 +127,6 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 <ArrowUpRightSquare className='mr-1' />
                 Open
               </a>
-              {/* <Button value="Open" Icon={ArrowUpRightSquare} color="purple" /> */}
             </div>
             <div>
               <Selector

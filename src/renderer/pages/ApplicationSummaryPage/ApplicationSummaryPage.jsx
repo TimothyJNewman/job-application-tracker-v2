@@ -74,7 +74,7 @@ const columns = [
     accessorKey: 'status',
     header: 'Status',
     cell: (info) => {
-      const str =info.getValue()
+      const str = info.getValue()
       let bgColor;
       switch (str) {
         case 'Offer':
@@ -131,7 +131,7 @@ const columns = [
         data-mdb-ripple='true'
         data-mdb-ripple-color='light'
         className='flex rounded bg-gray-200 text-gray-700 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:text-white hover:shadow-lg focus:bg-blue-700 focus:text-white focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg active:text-white'>
-        <ArrowUpRightSquare className='mr-1 h-4 w-4' style={{stokeWidth:5}} />
+        <ArrowUpRightSquare className='mr-1 h-4 w-4' style={{ stokeWidth: 5 }} />
         Open
       </Link>
     ),
@@ -258,10 +258,9 @@ const ApplicationSummaryPage = () => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}\\${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },
@@ -275,7 +274,10 @@ const ApplicationSummaryPage = () => {
     );
   };
 
-  const openFileExplorer = (path) => { };
+  const openFileExplorer = (path) => {
+    console.log(path)
+    window.electron.openFolder(path)
+  };
 
   return (
     <div className='p-4'>

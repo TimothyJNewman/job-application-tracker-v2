@@ -18,6 +18,7 @@ const { getUserDataPath } = require('./commands/getPaths');
 const { exportToCsv } = require('./commands/export');
 const { saveCV } = require('./commands/saveCV');
 const { configManagement } = require('./commands/settings');
+const { openFolder } = require('./commands/openFileExplorer');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -162,3 +163,4 @@ ipcMain.handle('database', databaseHandler);
 ipcMain.handle('save-job-description', saveJobDescription);
 ipcMain.handle('save-cv', saveCV);
 ipcMain.handle('export-to-csv', exportToCsv);
+ipcMain.handle("open-folder",openFolder)

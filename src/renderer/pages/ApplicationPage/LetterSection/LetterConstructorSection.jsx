@@ -31,7 +31,7 @@ const LetterConstructorSection = ({ id }) => {
     });
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => { window.electron.openFolder(path) };
 
   const generatePdf = () => {
     // TODO add check for valid input
@@ -80,7 +80,6 @@ const LetterConstructorSection = ({ id }) => {
                   onClick={openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },
