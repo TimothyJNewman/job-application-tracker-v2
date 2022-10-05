@@ -16,29 +16,10 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   const { seasonValues } = useContext(GlobalContext);
   const updateValue = (newValue, field) => {
     let newAppsData = [...appsData]
-    if (field === 'company') {
+    const acceptableFields = ["company", "role", "status", "link", "priority", "location", "deadline"]
+    if (acceptableFields.includes(field)) {
       newAppsData = newAppsData.map((elem) => {
-        if (elem.id === id) return { ...elem, company: newValue };
-        return elem;
-      });
-    } else if (field === 'role') {
-      newAppsData = newAppsData.map((elem) => {
-        if (elem.id === id) return { ...elem, role: newValue };
-        return elem;
-      });
-    } else if (field === 'status') {
-      newAppsData = newAppsData.map((elem) => {
-        if (elem.id === id) return { ...elem, status: newValue };
-        return elem;
-      });
-    } else if (field === 'link') {
-      newAppsData = newAppsData.map((elem) => {
-        if (elem.id === id) return { ...elem, link: newValue };
-        return elem;
-      });
-    } else if (field === 'priority') {
-      newAppsData = newAppsData.map((elem) => {
-        if (elem.id === id) return { ...elem, priority: newValue };
+        if (elem.id === id) return { ...elem, [field]: newValue };
         return elem;
       });
     }
@@ -109,6 +90,23 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               value={appDetails.role}
               onChange={(event) => updateValue(event.target.value, 'role')}
               onBlur={() => saveValue('role')}
+            />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+              type='text'
+              title='Location'
+              placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
+              value={appDetails.location}
+              onChange={(event) => updateValue(event.target.value, 'location')}
+              onBlur={() => saveValue('location')}
+            />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+              type='date'
+              title='Deadline'
+              value={appDetails.deadline}
+              onChange={(event) => updateValue(event.target.value, 'deadline')}
+              onBlur={() => saveValue('deadline')}
             />
             <div className='flex items-center gap-x-2'>
               <input

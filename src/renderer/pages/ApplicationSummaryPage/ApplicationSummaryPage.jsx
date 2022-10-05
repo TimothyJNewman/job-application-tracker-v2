@@ -218,7 +218,7 @@ const ApplicationSummaryPage = () => {
       return;
     }
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, priority, location, deadline, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
       [
         params.company,
         params.role,
@@ -226,6 +226,8 @@ const ApplicationSummaryPage = () => {
         params.status,
         params.link,
         params.priority,
+        params.location,
+        params.deadline,
         currentDate,
         currentDate,
         seasonID,

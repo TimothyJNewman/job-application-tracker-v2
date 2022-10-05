@@ -9,6 +9,8 @@ const defaultState = {
   link: '',
   status: 'To apply',
   priority: 'medium',
+  location:"",
+  deadline: ""
 };
 
 const NewApplicationForm = ({ handleSubmitCallback }) => {
@@ -80,6 +82,26 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
             </div>
             <div>
               <label
+                htmlFor='deadline'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Deadline
+              </label>
+              <input
+                type='date'
+                className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                name='deadline'
+                id='deadline'
+                value={appInput.deadline}
+                onChange={(event) => {
+                  setAppInput((arr) => ({
+                    ...arr,
+                    deadline: event.target.value,
+                  }));
+                }}
+              />
+            </div>
+            <div>
+              <label
                 htmlFor='link'
                 className='form-label mb-2 inline-block font-medium text-gray-700'>
                 Link
@@ -97,6 +119,27 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                   }));
                 }}
                 placeholder='www.myawesomewebite.com'
+              />
+            </div>
+            <div>
+              <label
+                htmlFor='location'
+                className='form-label mb-2 inline-block font-medium text-gray-700'>
+                Location
+              </label>
+              <textarea
+                type='text'
+                className='form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+                name='location'
+                id='location'
+                value={appInput.location}
+                onChange={(event) => {
+                  setAppInput((arr) => ({
+                    ...arr,
+                    location: event.target.value,
+                  }));
+                }}
+                placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
               />
             </div>
             <div>
