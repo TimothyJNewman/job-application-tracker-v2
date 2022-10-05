@@ -25,7 +25,7 @@ import {
   Folder2Open,
   XLg,
 } from 'react-bootstrap-icons';
-import { Button } from '../../components/microComponents/';
+import { Button } from '../../components/microComponents';
 import toast from 'react-hot-toast';
 
 const columns = [
