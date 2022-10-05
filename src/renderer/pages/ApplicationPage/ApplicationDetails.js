@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
   EmojiFrown,
   EmojiNeutral,
   EmojiSmile,
   EmojiSunglasses,
-  Tag,
   ArrowUpRightSquare,
 } from 'react-bootstrap-icons';
 import { updateDatabaseEntry } from '../../util/CRUD';
-import { Button, Selector } from '../../components/microComponents';
+import { Selector } from '../../components/microComponents';
 import { GlobalContext } from '../../context/GlobalContext';
 
 const ApplicationDetails = ({ id, appsData, setAppsData }) => {
   const appDetails = appsData.find((elem) => elem.id === id);
 
-  const { seasonValues, currentSeason } = useContext(GlobalContext);
-
+  const { seasonValues } = useContext(GlobalContext);
   const updateValue = (newValue, field) => {
     if (field === 'company') {
       const newAppsData = appsData.map((elem) => {
