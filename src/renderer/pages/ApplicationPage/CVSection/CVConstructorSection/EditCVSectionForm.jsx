@@ -88,9 +88,7 @@ const EditCVSectionForm = ({
                 name='description'
                 id='description'
                 value={currentDescription}
-                onChange={(event) =>
-                  setCurrentDescription(event.target.value)
-                }
+                onChange={(event) => setCurrentDescription(event.target.value)}
               />
             </div>
             <FormElements

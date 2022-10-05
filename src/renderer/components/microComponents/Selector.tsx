@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { ChangeEventHandler, CSSProperties } from 'react';
 
-const Selector = ({ options, selected, onChange, onBlur, title, style }) => (
+type SelectorProps = {
+  options: Array<{ k: string; v: string }>;
+  selected: string;
+  onChange: ChangeEventHandler;
+  onBlur: ChangeEventHandler;
+  title: string;
+  style: CSSProperties;
+};
+
+const Selector = ({
+  options,
+  selected,
+  onChange,
+  onBlur,
+  title,
+  style,
+}: SelectorProps) => (
   <div className='min-w-[12rem] xl:max-w-[96rem]'>
     <select
       onChange={onChange}

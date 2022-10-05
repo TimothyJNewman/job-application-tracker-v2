@@ -222,8 +222,10 @@ const FormElements = ({
   return (
     <>
       {currentSchema[currentSection] !== undefined &&
-        Object.keys(currentFieldValues).length !== 0
-        ? getInputJsxRecursive(currentSection, currentSchema[currentSection], [currentSection])
+      Object.keys(currentFieldValues).length !== 0
+        ? getInputJsxRecursive(currentSection, currentSchema[currentSection], [
+            currentSection,
+          ])
         : null}
     </>
   );

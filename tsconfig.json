@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES6",
     "allowJs": true,
-    "module": "commonjs",
+    "jsx": "react",
+    "module": "ES6",
+    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": ".",

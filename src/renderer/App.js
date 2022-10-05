@@ -11,19 +11,27 @@ import {
 import GlobalProvider from './context/GlobalProvider';
 import { GlobalContext } from './context/GlobalContext';
 import { readDatabaseEntry } from './util/CRUD';
-import { ErrorBoundary } from 'react-error-boundary'
-import {  ExclamationTriangleFill } from 'react-bootstrap-icons';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ExclamationTriangleFill } from 'react-bootstrap-icons';
 
 const ErrorFallback = ({ error }) => {
   return (
-    <div className="flex items-center justify-center h-screen w-screen">
-      <div><h1 className="font-bold tracking-tight text-xl"><ExclamationTriangleFill className="w-12 h-12 text-red-500"/>A fatal error occurred!</h1>
-      <p>Click <span className="rounded bg-red-300 px-1 py-0.5">CTRL+R</span> to refresh app.</p>
-      <h2 className="font-medium mt-5">Full error message:</h2>
-      <pre>{error.message}</pre></div>
+    <div className='flex h-screen w-screen items-center justify-center'>
+      <div>
+        <h1 className='text-xl font-bold tracking-tight'>
+          <ExclamationTriangleFill className='h-12 w-12 text-red-500' />A fatal
+          error occurred!
+        </h1>
+        <p>
+          Click <span className='rounded bg-red-300 px-1 py-0.5'>CTRL+R</span>{' '}
+          to refresh app.
+        </p>
+        <h2 className='mt-5 font-medium'>Full error message:</h2>
+        <pre>{error.message}</pre>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 const App = () => {
   const { setUserPath, setSeasonValues, setCurrentSeason } =
@@ -70,9 +78,7 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-  <ErrorBoundary
-    FallbackComponent={ErrorFallback}
-  >
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
     <GlobalProvider>
       <App />
     </GlobalProvider>

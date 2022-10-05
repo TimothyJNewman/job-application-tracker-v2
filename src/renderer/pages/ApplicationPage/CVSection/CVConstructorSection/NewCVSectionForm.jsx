@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import schema from '../../../../constants/template2_schema';
 import { PlusLg } from 'react-bootstrap-icons';
 import { Button } from '../../../../components/microComponents';
-import FormElements from "./FormElements"
+import FormElements from './FormElements';
 
 const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
   const [currentSchema, setCurrentSchema] = useState({});
@@ -50,13 +50,11 @@ const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {
     addSectionCallback(currentFieldValues, currentDescription);
     // reset values to default
     setCurrentFieldValues({
-      [currentSection]: getDefaultFieldValues(
-        currentSchema[currentSection]
-      ),
+      [currentSection]: getDefaultFieldValues(currentSchema[currentSection]),
       section: currentSection,
       description: '',
     });
-    setCurrentDescription("")
+    setCurrentDescription('');
   };
 
   return (

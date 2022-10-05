@@ -45,7 +45,7 @@ const CVConstructorSection = ({ id }) => {
           'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
           [id, deleteComponentID],
           ({ error }) => {
-            if (error) console.error(error)
+            if (error) console.error(error);
             else setNoElementsClicked(noElementsClicked + 1);
           }
         );
@@ -138,17 +138,18 @@ const CVConstructorSection = ({ id }) => {
   };
 
   const addCVSectionBuilderHandler = (sectionObj, sectionDesc) => {
-    const dateString = new Date().toISOString()
+    const dateString = new Date().toISOString();
     createDatabaseEntry(
       'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created, date_modified) VALUES (?,?,?,?,?)',
       [
         sectionObj.section,
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
         sectionDesc,
-        dateString, dateString
+        dateString,
+        dateString,
       ],
       ({ error }) => {
-        if (error) console.error(error)
+        if (error) console.error(error);
       }
     );
     setNoElementsAdded(noElementsAdded + 1);
@@ -257,7 +258,7 @@ const CVConstructorSection = ({ id }) => {
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
-  const openFileExplorer = (path) => { };
+  const openFileExplorer = (path) => {};
 
   return (
     <div className='mb-2'>
@@ -282,8 +283,9 @@ const CVConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}

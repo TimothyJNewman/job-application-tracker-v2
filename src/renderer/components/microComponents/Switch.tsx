@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { ReactFragment } from 'react';
 
-const Switch = ({ isChecked, setIsChecked, id, name, label }) => {
-  if (id == undefined) name = id;
+type SwitchProps = {
+  isChecked: boolean;
+  setIsChecked: (isChecked: boolean) => void;
+  id: string;
+  name: string;
+  label: ReactFragment;
+};
+
+const Switch = ({ isChecked, setIsChecked, id, name, label }: SwitchProps) => {
+  if (id == undefined) name = String(id);
   return (
     <div className='form-check form-switch'>
       <input
