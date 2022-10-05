@@ -72,13 +72,46 @@ const columns = [
   {
     accessorKey: 'status',
     header: 'Status',
+    cell: (info) => {
+      const str =info.getValue()
+      let bgColor;
+      switch (str) {
+        case 'Offer':
+          bgColor = 'bg-green-500';
+          break;
+        case 'Rejected':
+          bgColor = 'bg-red-500';
+          break;
+        case 'To apply':
+          bgColor = 'bg-blue-500';
+          break;
+        default:
+          bgColor = 'bg-purple-500';
+          break;
+      }
+      return <span className={`${bgColor} text-white py-1 px-2 rounded`}>{str.charAt(0).toUpperCase() + str.slice(1)}</span>
+    },
   },
   {
     accessorKey: 'priority',
     header: 'Priority',
     cell: (info) => {
       const str = info.getValue();
-      return str.charAt(0).toUpperCase() + str.slice(1);
+      let bgColor;
+      switch (str) {
+        case "low":
+          bgColor = "bg-blue-600"
+          break;
+        case "medium":
+          bgColor = "bg-green-600"
+          break;
+        case "high":
+          bgColor = "bg-red-600"
+          break;
+        default:
+          break;
+      }
+      return <span className={`${bgColor} text-white py-1 px-2 rounded`}>{str.charAt(0).toUpperCase() + str.slice(1)}</span>
     },
   },
   {
@@ -96,8 +129,8 @@ const columns = [
         to={`/application/${info.row.original.id}`}
         data-mdb-ripple='true'
         data-mdb-ripple-color='light'
-        className='flex rounded bg-blue-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        <ArrowUpRightSquare className='mr-1' />
+        className='flex rounded bg-gray-200 text-gray-700 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:text-white hover:shadow-lg focus:bg-blue-700 focus:text-white focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg active:text-white'>
+        <ArrowUpRightSquare className='mr-1 h-4 w-4' style={{stokeWidth:5}} />
         Open
       </Link>
     ),
@@ -239,7 +272,7 @@ const ApplicationSummaryPage = () => {
     );
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => { };
 
   return (
     <div className='p-4'>
@@ -280,10 +313,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -316,17 +348,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${
-                        deleteMode && 'cursor-pointer'
-                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${deleteMode && 'cursor-pointer'
+                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

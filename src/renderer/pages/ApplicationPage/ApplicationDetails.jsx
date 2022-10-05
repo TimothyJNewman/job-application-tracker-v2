@@ -15,31 +15,34 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
 
   const { seasonValues } = useContext(GlobalContext);
   const updateValue = (newValue, field) => {
+    let newAppsData = [...appsData]
     if (field === 'company') {
-      const newAppsData = appsData.map((elem) => {
+      newAppsData = newAppsData.map((elem) => {
         if (elem.id === id) return { ...elem, company: newValue };
         return elem;
       });
-      setAppsData(newAppsData);
     } else if (field === 'role') {
-      const newAppsData = appsData.map((elem) => {
+      newAppsData = newAppsData.map((elem) => {
         if (elem.id === id) return { ...elem, role: newValue };
         return elem;
       });
-      setAppsData(newAppsData);
     } else if (field === 'status') {
-      const newAppsData = appsData.map((elem) => {
+      newAppsData = newAppsData.map((elem) => {
         if (elem.id === id) return { ...elem, status: newValue };
         return elem;
       });
-      setAppsData(newAppsData);
     } else if (field === 'link') {
-      const newAppsData = appsData.map((elem) => {
+      newAppsData = newAppsData.map((elem) => {
         if (elem.id === id) return { ...elem, link: newValue };
         return elem;
       });
-      setAppsData(newAppsData);
+    } else if (field === 'priority') {
+      newAppsData = newAppsData.map((elem) => {
+        if (elem.id === id) return { ...elem, priority: newValue };
+        return elem;
+      });
     }
+    setAppsData(newAppsData);
   };
 
   const saveValue = (field) => {
