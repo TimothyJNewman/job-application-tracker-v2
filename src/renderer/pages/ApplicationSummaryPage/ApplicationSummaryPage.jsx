@@ -25,6 +25,7 @@ import {
 } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 import toast from 'react-hot-toast';
+import { genericErrorNotification } from '../../components/Notifications';
 
 const columns = [
   // {
@@ -214,7 +215,7 @@ const ApplicationSummaryPage = () => {
       ({ season }) => season === currentSeason
     )?.id;
     if (seasonID === undefined) {
-      toast.error('Error: No season selected. Go to settings.');
+      genericErrorNotification('Error: No season selected. Go to settings.')
       return;
     }
     createDatabaseEntry(

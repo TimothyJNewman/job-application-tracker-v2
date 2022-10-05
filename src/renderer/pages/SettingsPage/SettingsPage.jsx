@@ -3,6 +3,7 @@ import { GlobalContext } from '../../context/GlobalContext';
 import { toast } from 'react-hot-toast';
 import { Selector } from '../../components/microComponents';
 import { createDatabaseEntry, readDatabaseEntry } from '../../util/CRUD';
+import { genericErrorNotification, genericSuccessNotification } from '../../components/Notifications';
 
 const SettingsPage = () => {
   const { seasonValues, setSeasonValues, currentSeason, setCurrentSeason } =
@@ -20,11 +21,11 @@ const SettingsPage = () => {
         .then((result) => {
           if (result !== undefined) {
             setCurrentSeason(currentSeasonLocal);
-            toast.success(`Season updated to ${result.value}!`);
+            genericSuccessNotification(`Season updated to ${result.value}!`)
           }
         })
         .catch((error) => {
-          toast.error(error.message);
+          genericErrorNotification(error.message)
           console.error(error);
         });
     }
@@ -50,7 +51,7 @@ const SettingsPage = () => {
             ({ error }) => {
               if (error) console.error(error);
               else {
-                toast.success('New season created successfully!');
+                genericSuccessNotification("New season created successfully!")
                 readDatabaseEntry(
                   'SELECT * FROM seasons',
                   null,
@@ -65,7 +66,7 @@ const SettingsPage = () => {
         }
       })
       .catch((error) => {
-        toast.error(error.message);
+        genericErrorNotification(error.message)
         console.error(error);
       });
   };

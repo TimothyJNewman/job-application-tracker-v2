@@ -21,6 +21,7 @@ import schema from '../../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
 import { Button } from '../../../../components/microComponents';
+import { genericErrorNotification } from '../../../../components/Notifications';
 
 const CVConstructorSection = ({ id }) => {
   const { setAppsData, userPath } = useContext(GlobalContext);
@@ -174,7 +175,7 @@ const CVConstructorSection = ({ id }) => {
   const generatePdf = () => {
     if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select CV elements before generating document!');
-      toast.error('Error: Select CV elements before generating document');
+      genericErrorNotification('Error: Select CV elements before generating document')
       return;
     }
     /**

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import schema from '../../../../constants/template2_schema';
 import { XCircleFill } from 'react-bootstrap-icons';
-import { toast } from 'react-hot-toast';
 import FormElements from './FormElements';
+import { genericSuccessNotification } from '../../../../components/Notifications';
 
 const EditCVSectionForm = ({
   elementToggleClickHandler,
@@ -43,7 +43,7 @@ const EditCVSectionForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    toast.success('Successfully saved');
+    genericSuccessNotification("Successfully saved")
     editSectionCallback(currentFieldValues, currentDescription, id);
   };
 
