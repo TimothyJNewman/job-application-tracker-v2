@@ -17,13 +17,11 @@ import {
 import {
   SortAlphaDown,
   SortAlphaDownAlt,
-  CalendarCheck,
   TrashFill,
   FiletypeCsv,
   PlusLg,
   ArrowUpRightSquare,
-  Folder2Open,
-  XLg,
+  Folder2Open
 } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 import toast from 'react-hot-toast';
