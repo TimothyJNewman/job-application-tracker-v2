@@ -1,5 +1,5 @@
 const rules = require('./webpack.rules');
-const path = require('path');
+const plugins = require('./webpack.plugins');
 
 rules.push({
   test: /\.css$/,
@@ -16,4 +16,8 @@ module.exports = {
     rules,
   },
   devtool: 'source-map',
+  plugins: plugins,
+  resolve: {
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+  },
 };
