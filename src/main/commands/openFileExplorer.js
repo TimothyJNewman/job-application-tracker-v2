@@ -6,7 +6,7 @@ const path = require('path');
  * @param {Object} event
  * @param {string} uri
  */
-const openFolder = (event: Event, uri: string) => {
+const openFolder = (event, uri) => {
   const parsedPath = path.parse(uri);
   if (parsedPath.ext === 'pdf') {
     shell.openPath('folderpath'); // Open the given file in the desktop's default manner.
