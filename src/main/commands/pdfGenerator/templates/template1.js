@@ -399,4 +399,4 @@ const getCVLatex = (params) => {
   return generateTex(params);
 };
 
-module.exports = {getCVLatex};
+module.exports = { getCVLatex };

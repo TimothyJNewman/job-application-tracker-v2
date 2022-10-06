@@ -23,6 +23,8 @@ const LetterConstructorSection = ({ id }) => {
     senderAddress1: '',
     senderAddress2: '',
     attached: '',
+    telephone: '',
+    email: '',
   });
   const handleInputChange = (event) => {
     setLetterFormValues({
@@ -199,6 +201,38 @@ const LetterConstructorSection = ({ id }) => {
           name='receiverAddress2'
           id='receiverAddress2'
           value={letterFormValues.receiverAddress2}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </div>
+      <div className='mb-4'>
+        <label
+          htmlFor='email'
+          className='form-label mb-2 inline-block capitalize text-gray-700'>
+          Email
+        </label>
+        <input
+          type='text'
+          className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+          placeholder='john.doe@yahoo.com'
+          name='email'
+          id='email'
+          value={letterFormValues.email}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </div>
+      <div className='mb-4'>
+        <label
+          htmlFor='telephone'
+          className='form-label mb-2 inline-block capitalize text-gray-700'>
+          Telephone
+        </label>
+        <input
+          type='text'
+          className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+          placeholder='(000) 000-0000'
+          name='telephone'
+          id='telephone'
+          value={letterFormValues.telephone}
           onChange={(event) => handleInputChange(event)}
         />
       </div>

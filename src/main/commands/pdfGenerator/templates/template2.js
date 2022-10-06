@@ -397,4 +397,4 @@ const getCVLatex = (resumeObject) => {
   return generateTex(resumeObject);
 };
 
-module.exports = {getCVLatex};
+module.exports = { getCVLatex };
