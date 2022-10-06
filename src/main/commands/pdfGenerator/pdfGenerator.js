@@ -3,8 +3,8 @@ const fs = require('fs');
 const fsPromises = require('fs/promises');
 const { app } = require('electron');
 const path = require('path');
-const getLetterLatex = require('./templates/letter_template');
-const getCVLatex = require('./templates/template2');
+const {getLetterLatex} = require('./templates/letter_template2');
+const {getCVLatex} = require('./templates/template2');
 
 /**
  * Function to generate and save pdf given latexString and id
