@@ -3,15 +3,14 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { Button } from '../../../components/microComponents';
 import { toast } from 'react-hot-toast';
 import {
-  createDatabaseEntry,
   readDatabaseEntry,
   updateDatabaseEntry,
 } from '../../../util/CRUD';
 import { Folder2Open } from 'react-bootstrap-icons';
 
 const LetterConstructorSection = ({ id }) => {
-  const { setAppsData, userPath } = useContext(GlobalContext);
-  const [letterFormValues, setLetterFormValues] = useState({
+  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
+  const defaultLetterForm = {
     content: '',
     salutation: '',
     date: '',
@@ -25,7 +24,10 @@ const LetterConstructorSection = ({ id }) => {
     attached: '',
     telephone: '',
     email: '',
-  });
+  }
+  const coverLetterJson = JSON.parse(appsData.find((elem) => elem.id === id).cover_letter_json) ?? {};
+  const [letterFormValues, setLetterFormValues] = useState({ ...defaultLetterForm, ...coverLetterJson });
+
   const handleInputChange = (event) => {
     setLetterFormValues({
       ...letterFormValues,
