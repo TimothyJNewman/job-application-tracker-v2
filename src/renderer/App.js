@@ -13,6 +13,7 @@ import { GlobalContext } from './context/GlobalContext';
 import { readDatabaseEntry } from './util/CRUD';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ExclamationTriangleFill } from 'react-bootstrap-icons';
+import { genericSuccessNotification } from './components/Notifications';
 
 const ErrorFallback = ({ error }) => {
   return (
@@ -54,7 +55,7 @@ const App = () => {
             }
           })
           .catch((error) => {
-            toast.error(error.message);
+            genericSuccessNotification(error.message);
             console.error(error);
           });
       }

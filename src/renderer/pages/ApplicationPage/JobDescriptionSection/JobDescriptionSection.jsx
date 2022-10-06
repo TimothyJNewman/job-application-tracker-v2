@@ -5,6 +5,10 @@ import { updateDatabaseEntry, readDatabaseEntry } from '../../../util/CRUD';
 import PdfDisplay from '../../../components/PdfDisplay';
 import { Button, FilePicker } from '../../../components/microComponents';
 import { Folder2Open } from 'react-bootstrap-icons';
+import {
+  genericErrorNotification,
+  genericSuccessNotification,
+} from '../../../components/Notifications';
 
 const JobDescriptionSection = ({ id }) => {
   const { appsData, setAppsData, userPath } = useContext(GlobalContext);
@@ -16,13 +20,11 @@ const JobDescriptionSection = ({ id }) => {
   }, [appDetails]);
 
   const saveJobDescPdfHandler = (uploadPdfUrl) => {
-    const saveJobDescPdfPromise = window.electron.savePdf(
-      'save-job-description',
-      {
-        applicationID: id,
-        uploadPdfUrl,
-      }
-    );
+    const saveJobDescPdfPromise = window.electron.savePdf('save-pdf', {
+      applicationID: id,
+      uploadPdfUrl,
+      type: 'job_desc',
+    });
     saveJobDescPdfPromise
       .then((savedRelativeUrl) => {
         updateDatabaseEntry(
@@ -56,10 +58,9 @@ const JobDescriptionSection = ({ id }) => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },
@@ -80,7 +81,7 @@ const JobDescriptionSection = ({ id }) => {
       ({ error }) => {
         if (error) {
           console.error(error);
-          toast.error('Error: Job description text not saved');
+          genericErrorNotification('Error: Job description text not saved');
         }
         readDatabaseEntry(
           'SELECT * FROM applications',
@@ -88,9 +89,11 @@ const JobDescriptionSection = ({ id }) => {
           ({ error, result }) => {
             if (error) {
               console.error(error);
-              toast.error('Error: Job description text not saved');
+              genericErrorNotification('Error: Job description text not saved');
             }
-            toast.success('Successfully saved job description text');
+            genericSuccessNotification(
+              'Successfully saved job description text'
+            );
             setAppsData(result);
           }
         );
@@ -98,7 +101,9 @@ const JobDescriptionSection = ({ id }) => {
     );
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => {
+    window.electron.openFolder(path);
+  };
 
   return (
     <div className='mb-2'>

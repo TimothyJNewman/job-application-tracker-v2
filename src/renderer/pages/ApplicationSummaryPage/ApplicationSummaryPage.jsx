@@ -17,16 +17,15 @@ import {
 import {
   SortAlphaDown,
   SortAlphaDownAlt,
-  CalendarCheck,
   TrashFill,
   FiletypeCsv,
   PlusLg,
   ArrowUpRightSquare,
   Folder2Open,
-  XLg,
 } from 'react-bootstrap-icons';
 import { Button } from '../../components/microComponents';
 import toast from 'react-hot-toast';
+import { genericErrorNotification } from '../../components/Notifications';
 
 const columns = [
   // {
@@ -74,13 +73,54 @@ const columns = [
   {
     accessorKey: 'status',
     header: 'Status',
+    cell: (info) => {
+      const str = info.getValue();
+      let bgColor;
+      switch (str) {
+        case 'Offer':
+          bgColor = 'bg-green-500';
+          break;
+        case 'Rejected':
+          bgColor = 'bg-red-500';
+          break;
+        case 'To apply':
+          bgColor = 'bg-blue-500';
+          break;
+        default:
+          bgColor = 'bg-purple-500';
+          break;
+      }
+      return (
+        <span className={`${bgColor} rounded py-1 px-2 text-white`}>
+          {str.charAt(0).toUpperCase() + str.slice(1)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: 'priority',
     header: 'Priority',
     cell: (info) => {
       const str = info.getValue();
-      return str.charAt(0).toUpperCase() + str.slice(1);
+      let bgColor;
+      switch (str) {
+        case 'low':
+          bgColor = 'bg-blue-600';
+          break;
+        case 'medium':
+          bgColor = 'bg-green-600';
+          break;
+        case 'high':
+          bgColor = 'bg-red-600';
+          break;
+        default:
+          break;
+      }
+      return (
+        <span className={`${bgColor} rounded py-1 px-2 text-white`}>
+          {str.charAt(0).toUpperCase() + str.slice(1)}
+        </span>
+      );
     },
   },
   {
@@ -98,8 +138,11 @@ const columns = [
         to={`/application/${info.row.original.id}`}
         data-mdb-ripple='true'
         data-mdb-ripple-color='light'
-        className='flex rounded bg-blue-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg'>
-        <ArrowUpRightSquare className='mr-1' />
+        className='flex rounded bg-gray-200 p-2 text-xs font-medium uppercase leading-tight text-gray-700 text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:text-white hover:shadow-lg focus:bg-blue-700 focus:text-white focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:text-white active:shadow-lg'>
+        <ArrowUpRightSquare
+          className='mr-1 h-4 w-4'
+          style={{ stokeWidth: 5 }}
+        />
         Open
       </Link>
     ),
@@ -183,11 +226,11 @@ const ApplicationSummaryPage = () => {
       ({ season }) => season === currentSeason
     )?.id;
     if (seasonID === undefined) {
-      toast.error('Error: No season selected. Go to settings.');
+      genericErrorNotification('Error: No season selected. Go to settings.');
       return;
     }
     createDatabaseEntry(
-      'INSERT INTO applications (company, role, job_description, status, link, priority, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?)',
+      'INSERT INTO applications (company, role, job_description, status, link, priority, location, deadline, date_created, date_modified, season_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
       [
         params.company,
         params.role,
@@ -195,6 +238,8 @@ const ApplicationSummaryPage = () => {
         params.status,
         params.link,
         params.priority,
+        params.location,
+        params.deadline,
         currentDate,
         currentDate,
         seasonID,
@@ -224,10 +269,9 @@ const ApplicationSummaryPage = () => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}\\${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },
@@ -241,7 +285,10 @@ const ApplicationSummaryPage = () => {
     );
   };
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => {
+    console.log(path);
+    window.electron.openFolder(path);
+  };
 
   return (
     <div className='p-4'>

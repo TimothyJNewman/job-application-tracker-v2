@@ -4,6 +4,7 @@
     "allowJs": true,
     "jsx": "react",
     "module": "ES6",
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "sourceMap": true,

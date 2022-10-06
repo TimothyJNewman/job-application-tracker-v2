@@ -9,7 +9,8 @@ const exportToCsv = (event, arrayOfObjects) => {
     'output_files/csv_files',
     `applications_${fileName}.csv`
   );
-  return new ObjectsToCsv(arrayOfObjects).toDisk(saveCsvPath);
+  new ObjectsToCsv(arrayOfObjects).toDisk(saveCsvPath);
+  return path.join('output_files/csv_files', `applications_${fileName}.csv`);
 };
 
 module.exports = { exportToCsv };

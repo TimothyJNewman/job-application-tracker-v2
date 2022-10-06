@@ -1,11 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowUpRightSquare,
-  BoxArrowUpRight,
-  DoorOpen,
-  ThreeDotsVertical,
-} from 'react-bootstrap-icons';
+import { ArrowUpRightSquare } from 'react-bootstrap-icons';
 
 type DropdownLinksProps = {
   values: Array<{ label: string; link: string }>;

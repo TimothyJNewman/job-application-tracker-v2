@@ -15,31 +15,23 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
 
   const { seasonValues } = useContext(GlobalContext);
   const updateValue = (newValue, field) => {
-    if (field === 'company') {
-      const newAppsData = appsData.map((elem) => {
-        if (elem.id === id) return { ...elem, company: newValue };
+    let newAppsData = [...appsData];
+    const acceptableFields = [
+      'company',
+      'role',
+      'status',
+      'link',
+      'priority',
+      'location',
+      'deadline',
+    ];
+    if (acceptableFields.includes(field)) {
+      newAppsData = newAppsData.map((elem) => {
+        if (elem.id === id) return { ...elem, [field]: newValue };
         return elem;
       });
-      setAppsData(newAppsData);
-    } else if (field === 'role') {
-      const newAppsData = appsData.map((elem) => {
-        if (elem.id === id) return { ...elem, role: newValue };
-        return elem;
-      });
-      setAppsData(newAppsData);
-    } else if (field === 'status') {
-      const newAppsData = appsData.map((elem) => {
-        if (elem.id === id) return { ...elem, status: newValue };
-        return elem;
-      });
-      setAppsData(newAppsData);
-    } else if (field === 'link') {
-      const newAppsData = appsData.map((elem) => {
-        if (elem.id === id) return { ...elem, link: newValue };
-        return elem;
-      });
-      setAppsData(newAppsData);
     }
+    setAppsData(newAppsData);
   };
 
   const saveValue = (field) => {
@@ -107,6 +99,23 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               onChange={(event) => updateValue(event.target.value, 'role')}
               onBlur={() => saveValue('role')}
             />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+              type='text'
+              title='Location'
+              placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
+              value={appDetails.location}
+              onChange={(event) => updateValue(event.target.value, 'location')}
+              onBlur={() => saveValue('location')}
+            />
+            <input
+              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+              type='date'
+              title='Deadline'
+              value={appDetails.deadline}
+              onChange={(event) => updateValue(event.target.value, 'deadline')}
+              onBlur={() => saveValue('deadline')}
+            />
             <div className='flex items-center gap-x-2'>
               <input
                 className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
@@ -126,7 +135,6 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 <ArrowUpRightSquare className='mr-1' />
                 Open
               </a>
-              {/* <Button value="Open" Icon={ArrowUpRightSquare} color="purple" /> */}
             </div>
             <div>
               <Selector
