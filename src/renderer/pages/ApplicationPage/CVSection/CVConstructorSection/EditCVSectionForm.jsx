@@ -43,7 +43,7 @@ const EditCVSectionForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    genericSuccessNotification("Successfully saved")
+    genericSuccessNotification('Successfully saved');
     editSectionCallback(currentFieldValues, currentDescription, id);
   };
 

@@ -8,17 +8,20 @@ import { Folder2Open } from 'react-bootstrap-icons';
 const LetterUpload = ({ id }) => {
   const { setAppsData, userPath } = useContext(GlobalContext);
 
-  const openFileExplorer = (path) => { window.electron.openFolder(path) };
+  const openFileExplorer = (path) => {
+    window.electron.openFolder(path);
+  };
 
-  const saveCVPdfHandler = (uploadPdfUrl) => {
-    const saveCVPdfPromise = window.electron.savePdf('save-cv', {
+  const saveLetterPdfHandler = (uploadPdfUrl) => {
+    const saveLetterPdfPromise = window.electron.savePdf('save-pdf', {
       applicationID: id,
       uploadPdfUrl,
+      type: 'letter',
     });
-    saveCVPdfPromise
+    saveLetterPdfPromise
       .then((savedRelativeUrl) => {
         updateDatabaseEntry(
-          'UPDATE applications SET cv_url=? WHERE id=?',
+          'UPDATE applications SET cover_letter_url=? WHERE id=?',
           [savedRelativeUrl, id],
           ({ error }) => {
             if (error) console.error(error);
@@ -37,7 +40,7 @@ const LetterUpload = ({ id }) => {
         console.error(error);
       });
     toast.promise(
-      saveCVPdfPromise,
+      saveLetterPdfPromise,
       {
         loading: 'Loading',
         success: (savePath) => {
@@ -48,13 +51,13 @@ const LetterUpload = ({ id }) => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
             </div>
           );
         },
-        error: 'Error uploading CV PDF',
+        error: 'Error uploading Letter PDF',
       },
       {
         success: {
@@ -68,8 +71,8 @@ const LetterUpload = ({ id }) => {
     <FilePicker
       label='Upload letter PDF'
       accept='.pdf'
-      onChange={(event) => saveCVPdfHandler(event.target.files[0].path)}
-      id='uploadCVPdfPicker'
+      onChange={(event) => saveLetterPdfHandler(event.target.files[0].path)}
+      id='uploadLetterPdfPicker'
     />
   );
 };

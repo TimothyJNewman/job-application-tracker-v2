@@ -23,5 +23,5 @@ contextBridge.exposeInMainWorld('electron', {
   savePdf: (channel, args) => {
     return ipcRenderer.invoke(channel, args);
   },
-  openFolder: (path) => ipcRenderer.invoke("open-folder", path)
+  openFolder: (path) => ipcRenderer.invoke('open-folder', path),
 });

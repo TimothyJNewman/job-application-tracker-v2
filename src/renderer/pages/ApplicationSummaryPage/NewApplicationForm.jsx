@@ -9,8 +9,8 @@ const defaultState = {
   link: '',
   status: 'To apply',
   priority: 'medium',
-  location:"",
-  deadline: ""
+  location: '',
+  deadline: '',
 };
 
 const NewApplicationForm = ({ handleSubmitCallback }) => {

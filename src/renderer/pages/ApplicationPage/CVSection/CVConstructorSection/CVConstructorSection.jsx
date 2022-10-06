@@ -175,7 +175,9 @@ const CVConstructorSection = ({ id }) => {
   const generatePdf = () => {
     if (elements.filter((elem) => elem.application_id).length === 0) {
       console.error('Select CV elements before generating document!');
-      genericErrorNotification('Error: Select CV elements before generating document')
+      genericErrorNotification(
+        'Error: Select CV elements before generating document'
+      );
       return;
     }
     /**
@@ -219,7 +221,7 @@ const CVConstructorSection = ({ id }) => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
             </div>
@@ -258,7 +260,9 @@ const CVConstructorSection = ({ id }) => {
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
-  const openFileExplorer = (path) => { window.electron.openFolder(path) };
+  const openFileExplorer = (path) => {
+    window.electron.openFolder(path);
+  };
 
   return (
     <div className='mb-2'>

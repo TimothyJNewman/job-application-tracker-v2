@@ -12,11 +12,10 @@ const url = require('url');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
 const { databaseInit, databaseHandler } = require('./commands/database');
-const pdfGeneratorHandler = require('./commands/pdfGenerator/pdfGenerator');
-const { saveJobDescription } = require('./commands/saveJobDescription');
+const { pdfGeneratorHandler } = require('./commands/pdfGenerator/pdfGenerator');
 const { getUserDataPath } = require('./commands/getPaths');
 const { exportToCsv } = require('./commands/export');
-const { saveCV } = require('./commands/saveCV');
+const { savePdf } = require('./commands/savePdf');
 const { configManagement } = require('./commands/settings');
 const { openFolder } = require('./commands/openFileExplorer');
 
@@ -160,7 +159,6 @@ ipcMain.handle('get-user-data-path', getUserDataPath);
 ipcMain.handle('settings', configManagement);
 ipcMain.handle('generate-pdf', pdfGeneratorHandler);
 ipcMain.handle('database', databaseHandler);
-ipcMain.handle('save-job-description', saveJobDescription);
-ipcMain.handle('save-cv', saveCV);
+ipcMain.handle('save-pdf', savePdf);
 ipcMain.handle('export-to-csv', exportToCsv);
-ipcMain.handle("open-folder",openFolder)
+ipcMain.handle('open-folder', openFolder);

@@ -15,8 +15,16 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
 
   const { seasonValues } = useContext(GlobalContext);
   const updateValue = (newValue, field) => {
-    let newAppsData = [...appsData]
-    const acceptableFields = ["company", "role", "status", "link", "priority", "location", "deadline"]
+    let newAppsData = [...appsData];
+    const acceptableFields = [
+      'company',
+      'role',
+      'status',
+      'link',
+      'priority',
+      'location',
+      'deadline',
+    ];
     if (acceptableFields.includes(field)) {
       newAppsData = newAppsData.map((elem) => {
         if (elem.id === id) return { ...elem, [field]: newValue };

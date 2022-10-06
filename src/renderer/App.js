@@ -55,7 +55,7 @@ const App = () => {
             }
           })
           .catch((error) => {
-            genericSuccessNotification(error.message)
+            genericSuccessNotification(error.message);
             console.error(error);
           });
       }
