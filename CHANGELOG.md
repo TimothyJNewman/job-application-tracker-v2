@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.4] - 01/10/2022
 
-### Added 
+### Added
 
 - Settings page to configure current season. More settings to follow. Perhaps default template.
 - Application priority field and events table for events such as application submitted, assessment completed and offer received
@@ -40,3 +40,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed delete package-lock.json command in build and release github actions workflows since the existing package-lock.json file works in Debian.
+
+## [0.1.5] - 06/10/2022
+
+### Added
+
+- TypeScript with webpack based on Electron-Forge example. Converted microComponents to TypeScript code. Looking to transform entire renderer code to TypeScript.
+- Error boundary to show message if fatal error occurs.
+- Color coded application status and priority in application summary page.
+- Show file in folder button in notification for generating CV, letter or job description or exporting to CSV.
+- Dismiss button in error and success messages.
+
+## Changed
+
+- Min width of 500px to job description text area.
+- Renamed .js files containing jsx to .jsx for better semantics.
+
+## Fixed
+
+- Cursor in CV component form was jumping to the end when typing. This was because the form was regenerated on every input change. Fixed this by creating a separate form component.

@@ -42,6 +42,8 @@ const databaseInit = () => {
       cover_letter_url TEXT,
       cover_letter_json TEXT,
       job_description_url TEXT,
+      location TEXT,
+      deadline DATE,
       link TEXT,
       priority VARCHAR(63) NOT NULL DEFAULT "medium",
       date_created DATE,

@@ -1,4 +1,13 @@
-import React from 'react';
+import React, { MouseEventHandler, ReactFragment } from 'react';
+import { Icon } from 'react-bootstrap-icons';
+
+type ButtonProps = {
+  Icon: Icon;
+  color: string;
+  additionalAttributes: Record<string, unknown>;
+  value: ReactFragment;
+  onClick: MouseEventHandler;
+};
 
 const Button = ({
   Icon,
@@ -6,7 +15,7 @@ const Button = ({
   additionalAttributes = {},
   value,
   onClick,
-}) => (
+}: ButtonProps) => (
   <button
     type='button'
     onClick={onClick}

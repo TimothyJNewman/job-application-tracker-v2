@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowUpRightSquare,
-  BoxArrowUpRight,
-  DoorOpen,
-  ThreeDotsVertical,
-} from 'react-bootstrap-icons';
+import { ArrowUpRightSquare } from 'react-bootstrap-icons';
 
-const DropdownLinks = ({ values = [], className }) => {
+type DropdownLinksProps = {
+  values: Array<{ label: string; link: string }>;
+  className: string;
+};
+
+const DropdownLinks = ({ values = [], className }: DropdownLinksProps) => {
   return (
     <div className={`flex justify-center ${className}`}>
       <div className='dropdown relative'>

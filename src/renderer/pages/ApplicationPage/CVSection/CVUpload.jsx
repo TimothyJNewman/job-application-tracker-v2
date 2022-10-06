@@ -8,12 +8,15 @@ import { Folder2Open } from 'react-bootstrap-icons';
 const CVUpload = ({ id }) => {
   const { setAppsData, userPath } = useContext(GlobalContext);
 
-  const openFileExplorer = (path) => {};
+  const openFileExplorer = (path) => {
+    window.electron.openFolder(path);
+  };
 
   const saveCVPdfHandler = (uploadPdfUrl) => {
-    const saveCVPdfPromise = window.electron.savePdf('save-cv', {
+    const saveCVPdfPromise = window.electron.savePdf('save-pdf', {
       applicationID: id,
       uploadPdfUrl,
+      type: 'cv',
     });
     saveCVPdfPromise
       .then((savedRelativeUrl) => {
@@ -48,10 +51,9 @@ const CVUpload = ({ id }) => {
                 <Button
                   Icon={Folder2Open}
                   value='Open'
-                  onClick={openFileExplorer(`${userPath}${savePath}`)}
+                  onClick={() => openFileExplorer(`${userPath}${savePath}`)}
                 />
               </span>
-              {/* <button onClick><XLg /></button> */}
             </div>
           );
         },

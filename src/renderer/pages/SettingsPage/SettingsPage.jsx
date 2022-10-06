@@ -3,6 +3,10 @@ import { GlobalContext } from '../../context/GlobalContext';
 import { toast } from 'react-hot-toast';
 import { Selector } from '../../components/microComponents';
 import { createDatabaseEntry, readDatabaseEntry } from '../../util/CRUD';
+import {
+  genericErrorNotification,
+  genericSuccessNotification,
+} from '../../components/Notifications';
 
 const SettingsPage = () => {
   const { seasonValues, setSeasonValues, currentSeason, setCurrentSeason } =
@@ -14,17 +18,17 @@ const SettingsPage = () => {
   }, []);
 
   const updateSeason = () => {
-    if (currentSeasonLocal !== undefined && currentSeasonLocal !== "") {
+    if (currentSeasonLocal !== undefined && currentSeasonLocal !== '') {
       window.electron
         .modifySettings('settings', 'season', currentSeasonLocal)
         .then((result) => {
           if (result !== undefined) {
             setCurrentSeason(currentSeasonLocal);
-            toast.success(`Season updated to ${result.value}!`);
+            genericSuccessNotification(`Season updated to ${result.value}!`);
           }
         })
         .catch((error) => {
-          toast.error(error.message);
+          genericErrorNotification(error.message);
           console.error(error);
         });
     }
@@ -38,10 +42,10 @@ const SettingsPage = () => {
         if (
           !seasonValues.every(({ season }) => season !== currentSeasonLocal)
         ) {
-          console.error("New season cannot be duplicate of existing season")
+          console.error('New season cannot be duplicate of existing season');
           return;
         } else if (currentSeasonLocal === '') {
-          console.error("New season cannot be empty string")
+          console.error('New season cannot be empty string');
           return;
         } else {
           createDatabaseEntry(
@@ -50,7 +54,7 @@ const SettingsPage = () => {
             ({ error }) => {
               if (error) console.error(error);
               else {
-                toast.success('New season created successfully!');
+                genericSuccessNotification('New season created successfully!');
                 readDatabaseEntry(
                   'SELECT * FROM seasons',
                   null,
@@ -65,7 +69,7 @@ const SettingsPage = () => {
         }
       })
       .catch((error) => {
-        toast.error(error.message);
+        genericErrorNotification(error.message);
         console.error(error);
       });
   };

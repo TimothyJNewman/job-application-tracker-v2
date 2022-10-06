@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import {
   ApplicationPage,
   ApplicationSummaryPage,
@@ -11,7 +11,28 @@ import {
 import GlobalProvider from './context/GlobalProvider';
 import { GlobalContext } from './context/GlobalContext';
 import { readDatabaseEntry } from './util/CRUD';
-import { toast } from 'react-hot-toast';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ExclamationTriangleFill } from 'react-bootstrap-icons';
+import { genericSuccessNotification } from './components/Notifications';
+
+const ErrorFallback = ({ error }) => {
+  return (
+    <div className='flex h-screen w-screen items-center justify-center'>
+      <div>
+        <h1 className='text-xl font-bold tracking-tight'>
+          <ExclamationTriangleFill className='h-12 w-12 text-red-500' />A fatal
+          error occurred!
+        </h1>
+        <p>
+          Click <span className='rounded bg-red-300 px-1 py-0.5'>CTRL+R</span>{' '}
+          to refresh app.
+        </p>
+        <h2 className='mt-5 font-medium'>Full error message:</h2>
+        <pre>{error.message}</pre>
+      </div>
+    </div>
+  );
+};
 
 const App = () => {
   const { setUserPath, setSeasonValues, setCurrentSeason } =
@@ -34,7 +55,7 @@ const App = () => {
             }
           })
           .catch((error) => {
-            toast.error(error.message);
+            genericSuccessNotification(error.message);
             console.error(error);
           });
       }
@@ -58,9 +79,11 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-  <GlobalProvider>
-    <App />
-  </GlobalProvider>
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
+  </ErrorBoundary>
 );
 
 export default AppWrapper;
