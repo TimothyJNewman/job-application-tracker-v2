@@ -5,10 +5,14 @@ name: electron-forge-publish
 
 on:
   pull_request:
-    branches: ["master"]
+    branches: ['master']
+    types:
+      - closed
 
 jobs:
-  build:
+  publish:
+    if: github.event.pull_request.merged == true
+
     strategy:
       matrix:
         node-version: [14.x]
