@@ -7,6 +7,7 @@ import {
   ApplicationSummaryPage,
   HomePage,
   SettingsPage,
+  CVPage
 } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
 import { GlobalContext } from './context/GlobalContext';
@@ -70,6 +71,7 @@ const App = () => {
         <Routes>
           <Route path='/application/:id' element={<ApplicationPage />} />
           <Route path='/applications' element={<ApplicationSummaryPage />} />
+          <Route path='/cv' element={<CVPage />} />
           <Route path='/settings' element={<SettingsPage />} />
           <Route path='/' element={<HomePage />} />
         </Routes>

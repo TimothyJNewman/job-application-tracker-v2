@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react';
-import { GlobalContext } from '../../../../context/GlobalContext';
+import { GlobalContext } from '../../../context/GlobalContext';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json';
 import {
@@ -7,7 +7,7 @@ import {
   readDatabaseEntry,
   updateDatabaseEntry,
   deleteDatabaseEntry,
-} from '../../../../util/CRUD';
+} from '../../../util/CRUD';
 import CVSectionBuilder from './NewCVSectionForm';
 import CVSectionBuilderEdit from './EditCVSectionForm';
 import {
@@ -17,83 +17,85 @@ import {
   PlusLg,
   Folder2Open,
 } from 'react-bootstrap-icons';
-import schema from '../../../../constants/template2_schema';
+import schema from '../../../constants/template2_schema';
 import 'tw-elements/dist/src/js/index';
 import { toast } from 'react-hot-toast';
-import { Button } from '../../../../components/microComponents';
-import { genericErrorNotification } from '../../../../components/Notifications';
+import { Button } from '../../../components/microComponents';
+import { genericErrorNotification } from '../../../components/Notifications';
 
-const CVConstructorSection = ({ id }) => {
+const CVConstructorSection = ({ cvID }) => {
+  cvID = Number(cvID)
   const { setAppsData, userPath } = useContext(GlobalContext);
-  const [elements, setElements] = useState([]);
+  const [components, setComponents] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
-  const [noElementsAdded, setNoElementsAdded] = useState(0);
-  const [noElementsClicked, setNoElementsClicked] = useState(0);
+  const [noComponentsAdded, setNoElementsAdded] = useState(0);
+  const [noComponentsClicked, setNoElementsClicked] = useState(0);
   const [currentSection, setCurrentSection] = useState('basics');
   const [openJsonViewerArr, setOpenJsonViewerArr] = useState([]);
 
-  // Handles clicks to elements in either used or unused components
+  // Handles clicks to components in either used or unused components
   const elementToggleClickHandler = (action, deleteComponentID) => {
     // When unused element is clicked
     if (action === 'unused') {
       // If element is not already used
       if (
-        !elements.filter((elem) => elem.id === deleteComponentID)[0]
-          .application_id
+        components.find((elem) => elem.id === deleteComponentID).cv_id === null
       ) {
+        console.log(components, deleteComponentID,cvID, components.find((elem) => elem.id === deleteComponentID))
         createDatabaseEntry(
-          'INSERT INTO cv_component_in_application (application_id, component_id) VALUES (?,?)',
-          [id, deleteComponentID],
+          'INSERT INTO cv_component_link (component_id, cv_id) VALUES (?,?)',
+          [deleteComponentID, cvID],
           ({ error }) => {
             if (error) console.error(error);
-            else setNoElementsClicked(noElementsClicked + 1);
+            else setNoElementsClicked(noComponentsClicked + 1);
           }
         );
       }
       // If element is already used, remove it
       else {
         deleteDatabaseEntry(
-          'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-          [id, deleteComponentID],
+          'DELETE FROM cv_component_link WHERE component_id = ? AND cv_id = ?',
+          [deleteComponentID, cvID],
           ({ error }) => {
             if (error) console.error(error);
-            else setNoElementsClicked(noElementsClicked + 1);
+            else setNoElementsClicked(noComponentsClicked + 1);
           }
         );
       }
     }
     // When used element is clicked
     else if (action === 'used') {
+      console.log("trig")
       deleteDatabaseEntry(
-        'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-        [id, deleteComponentID],
+        'DELETE FROM cv_component_link WHERE component_id = ? AND cv_id = ?',
+        [deleteComponentID, cvID],
         ({ error }) => {
           if (error) console.error(error);
-          setNoElementsClicked(noElementsClicked + 1);
+          setNoElementsClicked(noComponentsClicked + 1);
         }
       );
     }
   };
 
   /**
-   * delete component from cv_components table and cv_component_in_application if existis
+   * delete component from cv_components table and cv_component_links if exists
    * @param {number} componentId
    */
-  const elementDeleteClickHandler = (componentId) => {
+  const elementDeleteClickHandler = (componentID) => {
     deleteDatabaseEntry(
-      'DELETE FROM cv_component_in_application WHERE application_id = ? AND component_id = ?',
-      [id, componentId],
+      'DELETE FROM cv_component_link WHERE component_id = ?',
+      [componentID],
       ({ error }) => {
         if (error) console.error(error);
-        // TODO add a check to make sure that component deleted is not referenced by another application component
+        // TODO add a check to make sure that component deleted is not referenced by another cv
         else {
           deleteDatabaseEntry(
             'DELETE FROM cv_components WHERE id = ?',
-            [componentId],
+            [componentID],
             ({ error }) => {
               if (error) console.error(error);
-              else setNoElementsClicked(noElementsClicked + 1);
+              else setNoElementsClicked(noComponentsClicked + 1);
             }
           );
         }
@@ -114,69 +116,65 @@ const CVConstructorSection = ({ id }) => {
   const generatePdfParams = (schemaLocal, elementsLocal) => {
     const resumeObject = {};
     elementsLocal
-      .filter((elem) => elem.application_id)
-      .forEach(({ cv_component_section, cv_component_text }) => {
-        if (schemaLocal[cv_component_section].constructor === Array) {
-          if (resumeObject[cv_component_section]) {
-            resumeObject[cv_component_section].push(
-              JSON.parse(cv_component_text)
+      .filter((elem) => elem.cv_id !== null)
+      .forEach(({ section, json }) => {
+        if (schemaLocal[section].constructor === Array) {
+          if (resumeObject[section]) {
+            resumeObject[section].push(
+              JSON.parse(json)
             );
           } else {
-            resumeObject[cv_component_section] = [
-              JSON.parse(cv_component_text),
+            resumeObject[section] = [
+              JSON.parse(json),
             ];
           }
-        } else if (schemaLocal[cv_component_section].constructor === Object) {
-          resumeObject[cv_component_section] = JSON.parse(cv_component_text);
+        } else if (schemaLocal[section].constructor === Object) {
+          resumeObject[section] = JSON.parse(json);
         }
       });
 
     return {
-      id: id,
-      name: String(id),
+      id: cvID,
+      name: String(cvID),
       detailsObject: resumeObject,
     };
   };
 
   const addCVSectionBuilderHandler = (sectionObj, sectionDesc) => {
-    const dateString = new Date().toISOString();
     createDatabaseEntry(
-      'INSERT INTO cv_components (cv_component_section, cv_component_text, cv_component_description, date_created, date_modified) VALUES (?,?,?,?,?)',
+      'INSERT INTO cv_components (section, json, description) VALUES (?,?,?)',
       [
         sectionObj.section,
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
-        sectionDesc,
-        dateString,
-        dateString,
+        sectionDesc
       ],
       ({ error }) => {
         if (error) console.error(error);
       }
     );
-    setNoElementsAdded(noElementsAdded + 1);
+    setNoElementsAdded(noComponentsAdded + 1);
   };
 
   const editCVSectionBuilderHandler = (sectionObj, sectionDesc, id) => {
     updateDatabaseEntry(
-      'UPDATE cv_components SET cv_component_text=?, cv_component_description=?, date_modified=? WHERE id=?',
+      'UPDATE cv_components SET json=?, description=? WHERE id=?',
       [
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
         sectionDesc,
-        new Date().toISOString(),
         id,
       ],
       ({ error }) => {
         if (error) console.error(error);
       }
     );
-    setNoElementsAdded(noElementsAdded + 1);
+    setNoElementsAdded(noComponentsAdded + 1);
   };
 
   const generatePdf = () => {
-    if (elements.filter((elem) => elem.application_id).length === 0) {
-      console.error('Select CV elements before generating document!');
+    if (components.find((elem) => elem.cv_id !== null) !== undefined) {
+      console.error('Select CV components before generating document!');
       genericErrorNotification(
-        'Error: Select CV elements before generating document'
+        'Error: Select CV components before generating document'
       );
       return;
     }
@@ -186,17 +184,17 @@ const CVConstructorSection = ({ id }) => {
     const getPdfPromise = window.electron.getPdf(
       'generate-pdf',
       'cv',
-      generatePdfParams(schema, elements)
+      generatePdfParams(schema, components)
     );
     getPdfPromise
       .then((relativeCVUrl) => {
         updateDatabaseEntry(
-          'UPDATE applications SET cv_url=? WHERE id=?',
-          [relativeCVUrl, id],
+          'UPDATE cv_list SET cv_url=? WHERE id=?',
+          [relativeCVUrl, cvID],
           ({ error }) => {
             if (error) console.error(error);
             readDatabaseEntry(
-              'SELECT * FROM applications',
+              'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
               null,
               ({ error, result }) => {
                 if (error) console.error(error);
@@ -239,24 +237,26 @@ const CVConstructorSection = ({ id }) => {
 
   useEffect(() => {
     readDatabaseEntry(
-      `SELECT cv_components.id, cv_components.date_created, cv_components.date_modified, cv_components.cv_component_section, cv_components.cv_component_text, cv_components.cv_component_description, cv_component_in_application.application_id
+      `SELECT cv_components.*, cv_list.id as cv_id, cv_list.cv_url
       FROM cv_components 
-      LEFT JOIN cv_component_in_application 
-      ON cv_components.id = cv_component_in_application.component_id AND cv_component_in_application.application_id = ?`,
-      id,
+      LEFT JOIN cv_component_link
+      ON cv_component_link.component_id = cv_components.id
+      LEFT JOIN cv_list
+      ON cv_component_link.cv_id = cv_list.id`,
+      null,
       ({ error, result }) => {
         if (error) console.error(error);
-        setElements(result);
+        setComponents(result);
       }
     );
-  }, [noElementsAdded, noElementsClicked]);
+  }, [noComponentsAdded, noComponentsClicked, cvID]);
 
   const getDescription = (elem) => {
-    const { cv_component_description } = elem;
+    const { description } = elem;
     const { name, text, institution, organization, title, language } =
-      JSON.parse(elem.cv_component_text);
-    return cv_component_description !== ''
-      ? cv_component_description
+      JSON.parse(elem.json);
+    return description !== ''
+      ? description
       : name ?? text ?? institution ?? organization ?? title ?? language;
   };
 
@@ -287,9 +287,8 @@ const CVConstructorSection = ({ id }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${
-                    key === currentSection && 'active bg-blue-50 shadow'
-                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${key === currentSection && 'active bg-blue-50 shadow'
+                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -312,11 +311,11 @@ const CVConstructorSection = ({ id }) => {
         <div className='mb-2'>
           <h2 className='font-medium tracking-tight'>Used Components</h2>
           <div className='accordion' id='accordionBuilder'>
-            {elements
+            {components
               .filter(
                 (elem) =>
-                  elem.application_id &&
-                  elem.cv_component_section === currentSection
+                  elem.cv_id !== null &&
+                  elem.section === currentSection
               )
               .map((elem) => (
                 <div
@@ -332,7 +331,7 @@ const CVConstructorSection = ({ id }) => {
                       data-bs-target={`#accordion_builder_collapse_${elem.id}`}
                       aria-expanded='false'
                       aria-controls={`#accordion_builder_collapse_${elem.id}`}>
-                      {elem?.cv_component_description}
+                      {elem?.description}
                     </button>
                   </h2>
                   <div
@@ -347,10 +346,10 @@ const CVConstructorSection = ({ id }) => {
                         id={elem.id}
                         currentSection={currentSection}
                         currentDescriptionDatabase={
-                          elem.cv_component_description
+                          elem.description
                         }
                         currentFieldValuesDatabase={JSON.parse(
-                          elem.cv_component_text
+                          elem.json
                         )}
                       />
                     </div>
@@ -361,8 +360,8 @@ const CVConstructorSection = ({ id }) => {
         </div>
         <div>
           <h2 className='font-medium tracking-tight'>Unused Components</h2>
-          {elements.filter(
-            (elem) => elem.cv_component_section === currentSection
+          {components.filter(
+            (elem) => elem.section === currentSection
           ).length === 0 ? (
             <div
               className='mb-3 rounded-lg bg-yellow-100 py-5 px-4 text-base text-yellow-700'
@@ -395,10 +394,10 @@ const CVConstructorSection = ({ id }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {elements
+                        {components
                           .filter(
                             (elem) =>
-                              elem.cv_component_section === currentSection
+                              elem.section === currentSection
                           )
                           .map((elem) => (
                             <Fragment key={elem.id}>
@@ -417,10 +416,11 @@ const CVConstructorSection = ({ id }) => {
                                       )
                                     }
                                     className='flex w-full items-center justify-center'>
-                                    {elem.application_id ? (
-                                      <XCircleFill className='h-5 w-5 text-red-600' />
-                                    ) : (
+                                      {console.log(elem)}
+                                    {elem.cv_id === null ? (
                                       <PlusCircleFill className='h-5 w-5 text-green-600' />
+                                    ) : (
+                                      <XCircleFill className='h-5 w-5 text-red-600' />
                                     )}
                                   </button>
                                 </td>
@@ -441,7 +441,7 @@ const CVConstructorSection = ({ id }) => {
                                       mode='json'
                                       width='100%'
                                       maxLines={15}
-                                      value={elem.cv_component_text}
+                                      value={elem.json}
                                       readOnly={true}
                                     />
                                   </td>

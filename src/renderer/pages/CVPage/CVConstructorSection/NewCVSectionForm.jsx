@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import schema from '../../../../constants/template2_schema';
+import schema from '../../../constants/template2_schema';
 import { PlusLg } from 'react-bootstrap-icons';
-import { Button } from '../../../../components/microComponents';
+import { Button } from '../../../components/microComponents';
 import FormElements from './FormElements';
 
 const NewCVSectionForm = ({ addSectionCallback, currentSection }) => {

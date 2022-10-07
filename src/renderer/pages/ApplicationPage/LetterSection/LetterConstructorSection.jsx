@@ -57,7 +57,7 @@ const LetterConstructorSection = ({ id }) => {
           ({ error }) => {
             if (error) console.error(error);
             readDatabaseEntry(
-              'SELECT * FROM applications',
+              'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
               null,
               ({ error, result }) => {
                 if (error) console.error(error);
