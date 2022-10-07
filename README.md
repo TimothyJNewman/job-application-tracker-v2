@@ -14,4 +14,4 @@ This is a simple desktop application to help you track your applications and cre
 ## Requirements
 This application is built using the Electron framework and has releases for MacOS, Windows, and Linux (Debian and Redhat). 
 
-LaTeX must be installed on your machine. You can download it [here](https://www.latex-project.org/get]).
+LaTeX must be installed on your machine. You can download it [here](https://www.latex-project.org/get).
