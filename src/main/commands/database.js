@@ -38,8 +38,8 @@ const databaseInit = () => {
       job_description TEXT,
       is_open INTEGER NOT NULL DEFAULT 0 CHECK(is_open IN (0,1)),
       status VARCHAR(63) NOT NULL DEFAULT "To apply",
-      cv_id INTEGER NOT NULL,
-      letter_id INTEGER NOT NULL,
+      cv_id INTEGER,
+      letter_id INTEGER,
       job_description_url TEXT,
       location TEXT,
       deadline DATE,
@@ -90,8 +90,9 @@ const databaseInit = () => {
       `
     CREATE TABLE IF NOT EXISTS cv_list (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name VARCHAR(511),
-      cv_url TEXT
+      name VARCHAR(511) NOT NULL UNIQUE,
+      cv_url TEXT,
+      is_uploaded INTEGER NOT NULL DEFAULT 1 CHECK(is_uploaded IN (0,1))
     )
   `
     ).run();
@@ -99,8 +100,10 @@ const databaseInit = () => {
       `
     CREATE TABLE IF NOT EXISTS letter_list (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name VARCHAR(511) NOT NULL UNIQUE,
       letter_url TEXT,
-      letter_json TEXT
+      letter_json TEXT,
+      is_uploaded INTEGER NOT NULL DEFAULT 0 CHECK(is_uploaded IN (0,1))
     )
   `
     ).run();

@@ -27,6 +27,7 @@ const CVConstructorSection = ({ cvID }) => {
   cvID = Number(cvID)
   const { setAppsData, userPath } = useContext(GlobalContext);
   const [components, setComponents] = useState([]);
+  const [selectedComponents, setSelectedComponents] = useState([])
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
   const [noComponentsAdded, setNoElementsAdded] = useState(0);
@@ -40,9 +41,8 @@ const CVConstructorSection = ({ cvID }) => {
     if (action === 'unused') {
       // If element is not already used
       if (
-        components.find((elem) => elem.id === deleteComponentID).cv_id === null
+        !selectedComponents.includes(deleteComponentID)
       ) {
-        console.log(components, deleteComponentID,cvID, components.find((elem) => elem.id === deleteComponentID))
         createDatabaseEntry(
           'INSERT INTO cv_component_link (component_id, cv_id) VALUES (?,?)',
           [deleteComponentID, cvID],
@@ -66,7 +66,6 @@ const CVConstructorSection = ({ cvID }) => {
     }
     // When used element is clicked
     else if (action === 'used') {
-      console.log("trig")
       deleteDatabaseEntry(
         'DELETE FROM cv_component_link WHERE component_id = ? AND cv_id = ?',
         [deleteComponentID, cvID],
@@ -134,9 +133,9 @@ const CVConstructorSection = ({ cvID }) => {
       });
 
     return {
-      id: cvID,
       name: String(cvID),
       detailsObject: resumeObject,
+      dateString: new Date().toISOString().split(/[:.-]/).join('_')
     };
   };
 
@@ -171,7 +170,7 @@ const CVConstructorSection = ({ cvID }) => {
   };
 
   const generatePdf = () => {
-    if (components.find((elem) => elem.cv_id !== null) !== undefined) {
+    if (selectedComponents.length === 0) {
       console.error('Select CV components before generating document!');
       genericErrorNotification(
         'Error: Select CV components before generating document'
@@ -207,6 +206,43 @@ const CVConstructorSection = ({ cvID }) => {
       .catch((error) => {
         console.error(`PDF error: ${error}`);
       });
+    getPdfPromise.then((savedRelativeUrl) => {
+      const applicationID = `Application ${cvID}`
+      createDatabaseEntry(
+        `
+        INSERT INTO cv_list (name, cv_url, is_uploaded)
+        VALUES(?,?,?) 
+        ON CONFLICT(name) 
+        DO UPDATE SET cv_url=excluded.cv_url, is_uploaded=excluded.is_uploaded;
+        `,
+        [applicationID, savedRelativeUrl, 0],
+        ({ error }) => {
+          if (error) console.error(error);
+          else {
+            readDatabaseEntry(
+              `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
+                        FROM applications 
+                        LEFT JOIN seasons 
+                        ON applications.season_id = seasons.id 
+                        LEFT JOIN cv_list 
+                        ON applications.cv_id = cv_list.id 
+                        LEFT JOIN letter_list 
+                        ON applications.letter_id = letter_list.id`,
+              null,
+              ({ error, result }) => {
+                if (error) console.error(error);
+                else {
+                  setAppsData(result);
+                }
+              }
+            );
+          }
+        }
+      );
+    })
+      .catch((error) => {
+        console.error(error);
+      });
     toast.promise(
       getPdfPromise,
       {
@@ -237,16 +273,26 @@ const CVConstructorSection = ({ cvID }) => {
 
   useEffect(() => {
     readDatabaseEntry(
-      `SELECT cv_components.*, cv_list.id as cv_id, cv_list.cv_url
-      FROM cv_components 
-      LEFT JOIN cv_component_link
-      ON cv_component_link.component_id = cv_components.id
-      LEFT JOIN cv_list
-      ON cv_component_link.cv_id = cv_list.id`,
+      `
+      SELECT *
+      FROM cv_components
+      `,
       null,
       ({ error, result }) => {
-        if (error) console.error(error);
+        if (error) { console.error(error); return }
         setComponents(result);
+        readDatabaseEntry(
+          `
+          SELECT *
+          FROM cv_component_link
+          WHERE cv_id = ?
+          `,
+          cvID,
+          ({ error, result }) => {
+            if (error) { console.error(error); return }
+            setSelectedComponents(result.map(({ component_id }) => component_id));
+          }
+        );
       }
     );
   }, [noComponentsAdded, noComponentsClicked, cvID]);
@@ -314,7 +360,7 @@ const CVConstructorSection = ({ cvID }) => {
             {components
               .filter(
                 (elem) =>
-                  elem.cv_id !== null &&
+                  selectedComponents.includes(elem.id) &&
                   elem.section === currentSection
               )
               .map((elem) => (
@@ -416,11 +462,10 @@ const CVConstructorSection = ({ cvID }) => {
                                       )
                                     }
                                     className='flex w-full items-center justify-center'>
-                                      {console.log(elem)}
-                                    {elem.cv_id === null ? (
-                                      <PlusCircleFill className='h-5 w-5 text-green-600' />
-                                    ) : (
+                                    {selectedComponents.includes(elem.id) ? (
                                       <XCircleFill className='h-5 w-5 text-red-600' />
+                                    ) : (
+                                      <PlusCircleFill className='h-5 w-5 text-green-600' />
                                     )}
                                   </button>
                                 </td>

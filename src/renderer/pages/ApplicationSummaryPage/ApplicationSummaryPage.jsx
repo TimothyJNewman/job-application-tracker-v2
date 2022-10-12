@@ -283,7 +283,6 @@ const ApplicationSummaryPage = () => {
   };
 
   const openFileExplorer = (path) => {
-    console.log(path);
     window.electron.openFolder(path);
   };
 

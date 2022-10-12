@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { GlobalContext } from '../../../context/GlobalContext';
-import { ExclamationTriangle } from 'react-bootstrap-icons';
 import LetterUpload from './LetterUpload';
 import PdfDisplay from '../../../components/PdfDisplay';
 import { Switch } from '../../../components/microComponents';
@@ -34,7 +33,7 @@ const LetterSection = ({ id }) => {
         <div>
           {appDetails.cover_letter_url !== null ? (
             <PdfDisplay
-              url={`atom://${userPath}${appDetails.cover_letter_url}`}
+              url={`atom://${userPath}${appDetails.letter_url}`}
             />
           ) : (
             <div

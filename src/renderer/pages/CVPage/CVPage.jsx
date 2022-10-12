@@ -9,14 +9,15 @@ const CVPage = () => {
   const { appsData, userPath } = useContext(GlobalContext);
   const [cvList, setCVList] = useState([])
   const [cvName, setCVName] = useState("")
-  const [selectedCV, setSelectedCV] = useState({ cv_url: "", id: "" })
+  const [selectedCV, setSelectedCV] = useState({ cv_url: "", id: null })
 
   useEffect(() => {
-    readDatabaseEntry("SELECT * FROM cv_list", null, ({ result, error }) => {
+    readDatabaseEntry("SELECT * FROM cv_list WHERE is_uploaded=0", null, ({ result, error }) => {
       if (error) { console.error(error); return; }
       setCVList(result)
+      if (selectedCV.id===null) setSelectedCV({ cv_url: result[0].cv_url, id: result[0].id })
     })
-  }, [])
+  }, [selectedCV])
 
   const selectCVHandler = (event) => {
     const cvID = event.target.value
@@ -25,14 +26,16 @@ const CVPage = () => {
   }
 
   const newCV = () => {
-    createDatabaseEntry('INSERT INTO cv_list (name) VALUES (?)', cvName, ({ error, result }) => {
+    createDatabaseEntry('INSERT INTO cv_list (name, is_uploaded) VALUES (?,?)', [cvName, 0], ({ error, result }) => {
       if (error) {
         console.error(error);
         return
       }
-      readDatabaseEntry("SELECT * FROM cv_list", null, ({ result, error }) => {
+      readDatabaseEntry("SELECT * FROM cv_list WHERE is_uploaded=0", null, ({ result, error }) => {
         if (error) { console.error(error); return; }
         setCVList(result)
+        const cvID = result.find(({ name }) => name === cvName).id
+        setSelectedCV({ ...selectedCV, id: cvID })
       })
     })
   }
@@ -47,7 +50,7 @@ const CVPage = () => {
         <label
           htmlFor='cvName'
           className='form-label mb-2 inline-block capitalize text-gray-700'>
-          Sender Name
+          CV Name
         </label>
         <input
           type='text'

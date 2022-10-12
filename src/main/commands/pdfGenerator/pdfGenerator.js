@@ -12,7 +12,7 @@ const { getCVLatex } = require('./templates/template2');
  * @param {number} id
  * @returns {Promise}
  */
-const pdfGenerator = async (latexString, type, id) => {
+const pdfGenerator = async (latexString, type, id, dateString) => {
   let latexPdf;
 
   latexPdf = await latex(latexString);
@@ -53,7 +53,7 @@ const pdfGenerator = async (latexString, type, id) => {
   }
 
   // save pdf file
-  const dateString = new Date().toISOString().split(/[:.-]/).join('_');
+  // const dateString = new Date().toISOString().split(/[:.-]/).join('_');
   const pdfFile = new Promise((resolve, reject) => {
     const savePdfPath = path.join(
       app.getPath('userData'),
@@ -87,7 +87,7 @@ const pdfGeneratorHandler = async (event, type, args) => {
   } else if (type === 'letter') {
     latexString = getLetterLatex(args.detailsObject);
   }
-  return pdfGenerator(latexString, type, args.id);
+  return pdfGenerator(latexString, type, args.name, args.dateString);
 };
 
 module.exports = { pdfGeneratorHandler };

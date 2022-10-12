@@ -3,6 +3,7 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { Button } from '../../../components/microComponents';
 import { toast } from 'react-hot-toast';
 import {
+  createDatabaseEntry,
   readDatabaseEntry,
   updateDatabaseEntry,
 } from '../../../util/CRUD';
@@ -25,7 +26,7 @@ const LetterConstructorSection = ({ id }) => {
     telephone: '',
     email: '',
   }
-  const coverLetterJson = JSON.parse(appsData.find((elem) => elem.id === id).cover_letter_json) ?? {};
+  const coverLetterJson = JSON.parse(appsData.find((elem) => elem.id === id).letter_json) ?? {};
   const [letterFormValues, setLetterFormValues] = useState({ ...defaultLetterForm, ...coverLetterJson });
 
   const handleInputChange = (event) => {
@@ -45,31 +46,85 @@ const LetterConstructorSection = ({ id }) => {
      * Generate pdf in the background
      */
     const getPdfPromise = window.electron.getPdf('generate-pdf', 'letter', {
-      id,
       name: String(id),
       detailsObject: letterFormValues,
+      dateString: new Date().toISOString().split(/[:.-]/).join('_')
     });
+    // getPdfPromise
+    //   .then((relativeLetterUrl) => {
+    //     updateDatabaseEntry(
+    //       'UPDATE applications SET cover_letter_url=?, cover_letter_json=? WHERE id=?',
+    //       [relativeLetterUrl, JSON.stringify(letterFormValues), id],
+    //       ({ error }) => {
+    //         if (error) console.error(error);
+    //         readDatabaseEntry(
+    //           'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
+    //           null,
+    //           ({ error, result }) => {
+    //             if (error) console.error(error);
+    //             setAppsData(result);
+    //           }
+    //         );
+    //       }
+    //     );
+    //     console.log('New Letter PDF url: ', relativeLetterUrl);
+    //   })
+    //   .catch((error) => {
+    //     console.error(`PDF error: ${error}`);
+    //   });
     getPdfPromise
-      .then((relativeLetterUrl) => {
-        updateDatabaseEntry(
-          'UPDATE applications SET cover_letter_url=?, cover_letter_json=? WHERE id=?',
-          [relativeLetterUrl, JSON.stringify(letterFormValues), id],
+      .then((savedRelativeUrl) => {
+        const applicationID = `Application ${id}`
+        createDatabaseEntry(
+          `
+          INSERT INTO letter_list (name, letter_url, is_uploaded)
+          VALUES(?,?,?) 
+          ON CONFLICT(name) 
+          DO UPDATE SET letter_url=excluded.letter_url, is_uploaded=excluded.is_uploaded;
+          `,
+          [applicationID, savedRelativeUrl, 0],
           ({ error }) => {
             if (error) console.error(error);
-            readDatabaseEntry(
-              'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
-              null,
-              ({ error, result }) => {
-                if (error) console.error(error);
-                setAppsData(result);
-              }
-            );
+            else {
+              readDatabaseEntry(
+                "SELECT id FROM letter_list WHERE name=? AND letter_url=?",
+                [applicationID, savedRelativeUrl],
+                ({ error, result }) => {
+                  if (error) console.error(error);
+                  else {
+                    updateDatabaseEntry(
+                      'UPDATE applications SET letter_id=? where id=?', [result[0].id, id], ({ error }) => {
+                        if (error) console.error(error);
+                        else {
+                          readDatabaseEntry(
+                            `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
+                          FROM applications 
+                          LEFT JOIN seasons 
+                          ON applications.season_id = seasons.id 
+                          LEFT JOIN cv_list 
+                          ON applications.cv_id = cv_list.id 
+                          LEFT JOIN letter_list 
+                          ON applications.letter_id = letter_list.id`,
+                            null,
+                            ({ error, result }) => {
+                              if (error) console.error(error);
+                              else {
+                                console.log(result)
+                                setAppsData(result);
+                              }
+                            }
+                          );
+                        }
+                      })
+                  }
+                }
+              )
+            }
           }
         );
-        console.log('New Letter PDF url: ', relativeLetterUrl);
       })
       .catch((error) => {
-        console.error(`PDF error: ${error}`);
+        console.error(error);
       });
     toast.promise(
       getPdfPromise,
