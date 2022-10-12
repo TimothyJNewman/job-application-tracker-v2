@@ -7,6 +7,7 @@ import {
   ApplicationSummaryPage,
   HomePage,
   SettingsPage,
+  CVPage,
 } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
 import { GlobalContext } from './context/GlobalContext';
@@ -43,22 +44,20 @@ const App = () => {
       setUserPath(path);
     });
     readDatabaseEntry('SELECT * FROM seasons', null, ({ error, result }) => {
-      if (error) console.error(error);
-      else {
-        setSeasonValues(result);
-        window.electron
-          .modifySettings('settings', 'season')
-          .then((value) => {
-            if (value !== undefined && value !== '') setCurrentSeason(value);
-            else if (result.length === 1) {
-              setCurrentSeason(result[0].season);
-            }
-          })
-          .catch((error) => {
-            genericSuccessNotification(error.message);
-            console.error(error);
-          });
-      }
+      if (error) { console.error(error); return }
+      setSeasonValues(result);
+      window.electron
+        .modifySettings('settings', 'season')
+        .then((value) => {
+          if (value !== undefined && value !== '') setCurrentSeason(value);
+          else if (result.length === 1) {
+            setCurrentSeason(result[0].season);
+          }
+        })
+        .catch((error) => {
+          genericSuccessNotification(error.message);
+          console.error(error);
+        });
     });
   }, []);
 
@@ -70,6 +69,7 @@ const App = () => {
         <Routes>
           <Route path='/application/:id' element={<ApplicationPage />} />
           <Route path='/applications' element={<ApplicationSummaryPage />} />
+          <Route path='/cv' element={<CVPage />} />
           <Route path='/settings' element={<SettingsPage />} />
           <Route path='/' element={<HomePage />} />
         </Routes>

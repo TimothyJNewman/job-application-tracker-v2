@@ -1,12 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Switch } from '../../../components/microComponents';
 import { GlobalContext } from '../../../context/GlobalContext';
 import CVUpload from './CVUpload';
-import CVConstructorSection from './CVConstructorSection/CVConstructorSection';
 import PdfDisplay from '../../../components/PdfDisplay';
 
 const CVSection = ({ id }) => {
-  const [useCVBuilder, setUseCVBuilder] = useState(false);
   const { appsData, userPath } = useContext(GlobalContext);
   const appDetails = appsData.find((elem) => elem.id === id);
   return (
@@ -18,18 +15,7 @@ const CVSection = ({ id }) => {
       </h1>
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
         <div className='grow'>
-          <Switch
-            isChecked={useCVBuilder}
-            setIsChecked={setUseCVBuilder}
-            id='cvBuilderToggle'
-            name='cvBuilderToggle'
-            label='Use CV Builder'
-          />
-          {useCVBuilder ? (
-            <CVConstructorSection id={id} />
-          ) : (
-            <CVUpload id={id} />
-          )}
+          <CVUpload id={id} />
         </div>
         <div>
           {appDetails.cv_url !== null ? (

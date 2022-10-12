@@ -118,7 +118,7 @@ const NewApplicationForm = ({ handleSubmitCallback }) => {
                     link: event.target.value,
                   }));
                 }}
-                placeholder='www.myawesomewebite.com'
+                placeholder='www.myawesomewebsite.com'
               />
             </div>
             <div>
