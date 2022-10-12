@@ -54,39 +54,17 @@ const LetterConstructorSection = ({ id }) => {
       detailsObject: letterFormValues,
       dateString: new Date().toISOString().split(/[:.-]/).join('_'),
     });
-    // getPdfPromise
-    //   .then((relativeLetterUrl) => {
-    //     updateDatabaseEntry(
-    //       'UPDATE applications SET cover_letter_url=?, cover_letter_json=? WHERE id=?',
-    //       [relativeLetterUrl, JSON.stringify(letterFormValues), id],
-    //       ({ error }) => {
-    //         if (error) console.error(error);
-    //         readDatabaseEntry(
-    //           'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
-    //           null,
-    //           ({ error, result }) => {
-    //             if (error) console.error(error);
-    //             setAppsData(result);
-    //           }
-    //         );
-    //       }
-    //     );
-    //     console.log('New Letter PDF url: ', relativeLetterUrl);
-    //   })
-    //   .catch((error) => {
-    //     console.error(`PDF error: ${error}`);
-    //   });
     getPdfPromise
       .then((savedRelativeUrl) => {
         const applicationID = `Application ${id}`;
         createDatabaseEntry(
           `
-          INSERT INTO letter_list (name, letter_url, is_uploaded)
-          VALUES(?,?,?) 
+          INSERT INTO letter_list (name, letter_url, letter_json, is_uploaded)
+          VALUES(?,?,?,?) 
           ON CONFLICT(name) 
-          DO UPDATE SET letter_url=excluded.letter_url, is_uploaded=excluded.is_uploaded;
+          DO UPDATE SET letter_url=excluded.letter_url, letter_json=excluded.letter_json, is_uploaded=excluded.is_uploaded;
           `,
-          [applicationID, savedRelativeUrl, 0],
+          [applicationID, savedRelativeUrl, JSON.stringify(letterFormValues), 0],
           ({ error }) => {
             if (error) {
               console.error(error);
