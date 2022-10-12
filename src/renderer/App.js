@@ -7,7 +7,7 @@ import {
   ApplicationSummaryPage,
   HomePage,
   SettingsPage,
-  CVPage
+  CVPage,
 } from './pages/index';
 import GlobalProvider from './context/GlobalProvider';
 import { GlobalContext } from './context/GlobalContext';

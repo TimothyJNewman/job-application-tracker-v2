@@ -24,10 +24,10 @@ import { Button } from '../../../components/microComponents';
 import { genericErrorNotification } from '../../../components/Notifications';
 
 const CVConstructorSection = ({ cvID }) => {
-  cvID = Number(cvID)
+  cvID = Number(cvID);
   const { setAppsData, userPath } = useContext(GlobalContext);
   const [components, setComponents] = useState([]);
-  const [selectedComponents, setSelectedComponents] = useState([])
+  const [selectedComponents, setSelectedComponents] = useState([]);
   // Todo find way to rerender after createDatabaseEntry without this entra state
   // perhaps use the usereducer hook
   const [noComponentsAdded, setNoElementsAdded] = useState(0);
@@ -40,15 +40,16 @@ const CVConstructorSection = ({ cvID }) => {
     // When unused element is clicked
     if (action === 'unused') {
       // If element is not already used
-      if (
-        !selectedComponents.includes(deleteComponentID)
-      ) {
+      if (!selectedComponents.includes(deleteComponentID)) {
         createDatabaseEntry(
           'INSERT INTO cv_component_link (component_id, cv_id) VALUES (?,?)',
           [deleteComponentID, cvID],
           ({ error }) => {
-            if (error) console.error(error);
-            else setNoElementsClicked(noComponentsClicked + 1);
+            if (error) {
+              console.error(error);
+              return;
+            }
+            setNoElementsClicked(noComponentsClicked + 1);
           }
         );
       }
@@ -58,8 +59,11 @@ const CVConstructorSection = ({ cvID }) => {
           'DELETE FROM cv_component_link WHERE component_id = ? AND cv_id = ?',
           [deleteComponentID, cvID],
           ({ error }) => {
-            if (error) console.error(error);
-            else setNoElementsClicked(noComponentsClicked + 1);
+            if (error) {
+              console.error(error);
+              return;
+            }
+            setNoElementsClicked(noComponentsClicked + 1);
           }
         );
       }
@@ -70,7 +74,10 @@ const CVConstructorSection = ({ cvID }) => {
         'DELETE FROM cv_component_link WHERE component_id = ? AND cv_id = ?',
         [deleteComponentID, cvID],
         ({ error }) => {
-          if (error) console.error(error);
+          if (error) {
+            console.error(error);
+            return;
+          }
           setNoElementsClicked(noComponentsClicked + 1);
         }
       );
@@ -86,18 +93,22 @@ const CVConstructorSection = ({ cvID }) => {
       'DELETE FROM cv_component_link WHERE component_id = ?',
       [componentID],
       ({ error }) => {
-        if (error) console.error(error);
-        // TODO add a check to make sure that component deleted is not referenced by another cv
-        else {
-          deleteDatabaseEntry(
-            'DELETE FROM cv_components WHERE id = ?',
-            [componentID],
-            ({ error }) => {
-              if (error) console.error(error);
-              else setNoElementsClicked(noComponentsClicked + 1);
-            }
-          );
+        if (error) {
+          console.error(error);
+          return;
         }
+        // TODO add a check to make sure that component deleted is not referenced by another cv
+        deleteDatabaseEntry(
+          'DELETE FROM cv_components WHERE id = ?',
+          [componentID],
+          ({ error }) => {
+            if (error) {
+              console.error(error);
+              return;
+            }
+            setNoElementsClicked(noComponentsClicked + 1);
+          }
+        );
       }
     );
   };
@@ -119,13 +130,9 @@ const CVConstructorSection = ({ cvID }) => {
       .forEach(({ section, json }) => {
         if (schemaLocal[section].constructor === Array) {
           if (resumeObject[section]) {
-            resumeObject[section].push(
-              JSON.parse(json)
-            );
+            resumeObject[section].push(JSON.parse(json));
           } else {
-            resumeObject[section] = [
-              JSON.parse(json),
-            ];
+            resumeObject[section] = [JSON.parse(json)];
           }
         } else if (schemaLocal[section].constructor === Object) {
           resumeObject[section] = JSON.parse(json);
@@ -135,7 +142,7 @@ const CVConstructorSection = ({ cvID }) => {
     return {
       name: String(cvID),
       detailsObject: resumeObject,
-      dateString: new Date().toISOString().split(/[:.-]/).join('_')
+      dateString: new Date().toISOString().split(/[:.-]/).join('_'),
     };
   };
 
@@ -145,10 +152,13 @@ const CVConstructorSection = ({ cvID }) => {
       [
         sectionObj.section,
         JSON.stringify(sectionObj[sectionObj.section], null, 2),
-        sectionDesc
+        sectionDesc,
       ],
       ({ error }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
       }
     );
     setNoElementsAdded(noComponentsAdded + 1);
@@ -163,7 +173,10 @@ const CVConstructorSection = ({ cvID }) => {
         id,
       ],
       ({ error }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
       }
     );
     setNoElementsAdded(noComponentsAdded + 1);
@@ -191,12 +204,18 @@ const CVConstructorSection = ({ cvID }) => {
           'UPDATE cv_list SET cv_url=? WHERE id=?',
           [relativeCVUrl, cvID],
           ({ error }) => {
-            if (error) console.error(error);
+            if (error) {
+              console.error(error);
+              return;
+            }
             readDatabaseEntry(
               'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
               null,
               ({ error, result }) => {
-                if (error) console.error(error);
+                if (error) {
+                  console.error(error);
+                  return;
+                }
                 setAppsData(result);
               }
             );
@@ -206,19 +225,22 @@ const CVConstructorSection = ({ cvID }) => {
       .catch((error) => {
         console.error(`PDF error: ${error}`);
       });
-    getPdfPromise.then((savedRelativeUrl) => {
-      const applicationID = `Application ${cvID}`
-      createDatabaseEntry(
-        `
+    getPdfPromise
+      .then((savedRelativeUrl) => {
+        const applicationID = `Application ${cvID}`;
+        createDatabaseEntry(
+          `
         INSERT INTO cv_list (name, cv_url, is_uploaded)
         VALUES(?,?,?) 
         ON CONFLICT(name) 
         DO UPDATE SET cv_url=excluded.cv_url, is_uploaded=excluded.is_uploaded;
         `,
-        [applicationID, savedRelativeUrl, 0],
-        ({ error }) => {
-          if (error) console.error(error);
-          else {
+          [applicationID, savedRelativeUrl, 0],
+          ({ error }) => {
+            if (error) {
+              console.error(error);
+              return;
+            }
             readDatabaseEntry(
               `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
                         FROM applications 
@@ -230,16 +252,16 @@ const CVConstructorSection = ({ cvID }) => {
                         ON applications.letter_id = letter_list.id`,
               null,
               ({ error, result }) => {
-                if (error) console.error(error);
-                else {
-                  setAppsData(result);
+                if (error) {
+                  console.error(error);
+                  return;
                 }
+                setAppsData(result);
               }
             );
           }
-        }
-      );
-    })
+        );
+      })
       .catch((error) => {
         console.error(error);
       });
@@ -279,7 +301,10 @@ const CVConstructorSection = ({ cvID }) => {
       `,
       null,
       ({ error, result }) => {
-        if (error) { console.error(error); return }
+        if (error) {
+          console.error(error);
+          return;
+        }
         setComponents(result);
         readDatabaseEntry(
           `
@@ -287,10 +312,15 @@ const CVConstructorSection = ({ cvID }) => {
           FROM cv_component_link
           WHERE cv_id = ?
           `,
-          cvID,
+          [cvID],
           ({ error, result }) => {
-            if (error) { console.error(error); return }
-            setSelectedComponents(result.map(({ component_id }) => component_id));
+            if (error) {
+              console.error(error);
+              return;
+            }
+            setSelectedComponents(
+              result.map(({ component_id }) => component_id)
+            );
           }
         );
       }
@@ -333,8 +363,9 @@ const CVConstructorSection = ({ cvID }) => {
                 role='presentation'>
                 <a
                   href={`#tabs-${key}`}
-                  className={`${key === currentSection && 'active bg-blue-50 shadow'
-                    } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
+                  className={`${
+                    key === currentSection && 'active bg-blue-50 shadow'
+                  } nav-link block rounded-t border-transparent px-6 py-3 text-xs font-medium uppercase leading-tight hover:border-transparent hover:bg-gray-100 focus:border-transparent`}
                   id={`tabs-${key}-tab`}
                   data-bs-toggle='pill'
                   data-bs-target={`#tabs-${key}`}
@@ -391,12 +422,8 @@ const CVConstructorSection = ({ cvID }) => {
                         editSectionCallback={editCVSectionBuilderHandler}
                         id={elem.id}
                         currentSection={currentSection}
-                        currentDescriptionDatabase={
-                          elem.description
-                        }
-                        currentFieldValuesDatabase={JSON.parse(
-                          elem.json
-                        )}
+                        currentDescriptionDatabase={elem.description}
+                        currentFieldValuesDatabase={JSON.parse(elem.json)}
                       />
                     </div>
                   </div>
@@ -406,9 +433,8 @@ const CVConstructorSection = ({ cvID }) => {
         </div>
         <div>
           <h2 className='font-medium tracking-tight'>Unused Components</h2>
-          {components.filter(
-            (elem) => elem.section === currentSection
-          ).length === 0 ? (
+          {components.filter((elem) => elem.section === currentSection)
+            .length === 0 ? (
             <div
               className='mb-3 rounded-lg bg-yellow-100 py-5 px-4 text-base text-yellow-700'
               role='alert'>
@@ -441,10 +467,7 @@ const CVConstructorSection = ({ cvID }) => {
                       </thead>
                       <tbody>
                         {components
-                          .filter(
-                            (elem) =>
-                              elem.section === currentSection
-                          )
+                          .filter((elem) => elem.section === currentSection)
                           .map((elem) => (
                             <Fragment key={elem.id}>
                               <tr className='border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100'>

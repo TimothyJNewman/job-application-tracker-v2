@@ -25,9 +25,13 @@ const LetterConstructorSection = ({ id }) => {
     attached: '',
     telephone: '',
     email: '',
-  }
-  const coverLetterJson = JSON.parse(appsData.find((elem) => elem.id === id).letter_json) ?? {};
-  const [letterFormValues, setLetterFormValues] = useState({ ...defaultLetterForm, ...coverLetterJson });
+  };
+  const coverLetterJson =
+    JSON.parse(appsData.find((elem) => elem.id === id).letter_json) ?? {};
+  const [letterFormValues, setLetterFormValues] = useState({
+    ...defaultLetterForm,
+    ...coverLetterJson,
+  });
 
   const handleInputChange = (event) => {
     setLetterFormValues({
@@ -48,7 +52,7 @@ const LetterConstructorSection = ({ id }) => {
     const getPdfPromise = window.electron.getPdf('generate-pdf', 'letter', {
       name: String(id),
       detailsObject: letterFormValues,
-      dateString: new Date().toISOString().split(/[:.-]/).join('_')
+      dateString: new Date().toISOString().split(/[:.-]/).join('_'),
     });
     // getPdfPromise
     //   .then((relativeLetterUrl) => {
@@ -74,7 +78,7 @@ const LetterConstructorSection = ({ id }) => {
     //   });
     getPdfPromise
       .then((savedRelativeUrl) => {
-        const applicationID = `Application ${id}`
+        const applicationID = `Application ${id}`;
         createDatabaseEntry(
           `
           INSERT INTO letter_list (name, letter_url, is_uploaded)
@@ -84,20 +88,28 @@ const LetterConstructorSection = ({ id }) => {
           `,
           [applicationID, savedRelativeUrl, 0],
           ({ error }) => {
-            if (error) console.error(error);
-            else {
-              readDatabaseEntry(
-                "SELECT id FROM letter_list WHERE name=? AND letter_url=?",
-                [applicationID, savedRelativeUrl],
-                ({ error, result }) => {
-                  if (error) console.error(error);
-                  else {
-                    updateDatabaseEntry(
-                      'UPDATE applications SET letter_id=? where id=?', [result[0].id, id], ({ error }) => {
-                        if (error) console.error(error);
-                        else {
-                          readDatabaseEntry(
-                            `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
+            if (error) {
+              console.error(error);
+              return;
+            }
+            readDatabaseEntry(
+              'SELECT id FROM letter_list WHERE name=? AND letter_url=?',
+              [applicationID, savedRelativeUrl],
+              ({ error, result }) => {
+                if (error) {
+                  console.error(error);
+                  return;
+                }
+                updateDatabaseEntry(
+                  'UPDATE applications SET letter_id=? where id=?',
+                  [result[0].id, id],
+                  ({ error }) => {
+                    if (error) {
+                      console.error(error);
+                      return;
+                    }
+                    readDatabaseEntry(
+                      `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
                           FROM applications 
                           LEFT JOIN seasons 
                           ON applications.season_id = seasons.id 
@@ -105,21 +117,19 @@ const LetterConstructorSection = ({ id }) => {
                           ON applications.cv_id = cv_list.id 
                           LEFT JOIN letter_list 
                           ON applications.letter_id = letter_list.id`,
-                            null,
-                            ({ error, result }) => {
-                              if (error) console.error(error);
-                              else {
-                                console.log(result)
-                                setAppsData(result);
-                              }
-                            }
-                          );
+                      null,
+                      ({ error, result }) => {
+                        if (error) {
+                          console.error(error);
+                          return;
                         }
-                      })
+                        setAppsData(result);
+                      }
+                    );
                   }
-                }
-              )
-            }
+                );
+              }
+            );
           }
         );
       })

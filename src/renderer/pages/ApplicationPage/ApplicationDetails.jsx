@@ -39,7 +39,10 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
       `UPDATE applications SET ${field}=? WHERE id=?`,
       [appDetails[field], id],
       ({ error }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
       }
     );
   };
@@ -60,7 +63,10 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
       `UPDATE applications SET season_id=? WHERE id=?`,
       [seasonID, id],
       ({ error }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
       }
     );
   };

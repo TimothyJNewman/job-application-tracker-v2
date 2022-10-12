@@ -32,9 +32,7 @@ const LetterSection = ({ id }) => {
         </div>
         <div>
           {appDetails.cover_letter_url !== null ? (
-            <PdfDisplay
-              url={`atom://${userPath}${appDetails.letter_url}`}
-            />
+            <PdfDisplay url={`atom://${userPath}${appDetails.letter_url}`} />
           ) : (
             <div
               className='mb-3 w-[500px] rounded-lg bg-yellow-100 py-5 px-6 text-base text-yellow-700'

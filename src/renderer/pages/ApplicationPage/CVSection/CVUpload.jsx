@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { Button, FilePicker } from '../../../components/microComponents';
 import { toast } from 'react-hot-toast';
-import { readDatabaseEntry, createDatabaseEntry, updateDatabaseEntry } from '../../../util/CRUD';
+import {
+  readDatabaseEntry,
+  createDatabaseEntry,
+  updateDatabaseEntry,
+} from '../../../util/CRUD';
 import { GlobalContext } from '../../../context/GlobalContext';
 import { Folder2Open } from 'react-bootstrap-icons';
 
@@ -20,7 +24,7 @@ const CVUpload = ({ id }) => {
     });
     saveCVPdfPromise
       .then((savedRelativeUrl) => {
-        const applicationID = `Application ${id}`
+        const applicationID = `Application ${id}`;
         createDatabaseEntry(
           `
           INSERT INTO cv_list (name, cv_url, is_uploaded)
@@ -30,20 +34,28 @@ const CVUpload = ({ id }) => {
           `,
           [applicationID, savedRelativeUrl, 1],
           ({ error }) => {
-            if (error) console.error(error);
-            else {
-              readDatabaseEntry(
-                "SELECT id FROM cv_list WHERE name=? AND cv_url=?",
-                [applicationID, savedRelativeUrl],
-                ({ error, result }) => {
-                  if (error) console.error(error);
-                  else {
-                    updateDatabaseEntry(
-                      'UPDATE applications SET cv_id=? where id=?', [result[0].id, id], ({ error }) => {
-                        if (error) console.error(error);
-                        else {
-                          readDatabaseEntry(
-                            `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
+            if (error) {
+              console.error(error);
+              return;
+            }
+            readDatabaseEntry(
+              'SELECT id FROM cv_list WHERE name=? AND cv_url=?',
+              [applicationID, savedRelativeUrl],
+              ({ error, result }) => {
+                if (error) {
+                  console.error(error);
+                  return;
+                }
+                updateDatabaseEntry(
+                  'UPDATE applications SET cv_id=? where id=?',
+                  [result[0].id, id],
+                  ({ error }) => {
+                    if (error) {
+                      console.error(error);
+                      return;
+                    }
+                    readDatabaseEntry(
+                      `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
                           FROM applications 
                           LEFT JOIN seasons 
                           ON applications.season_id = seasons.id 
@@ -51,18 +63,19 @@ const CVUpload = ({ id }) => {
                           ON applications.cv_id = cv_list.id 
                           LEFT JOIN letter_list 
                           ON applications.letter_id = letter_list.id`,
-                            null,
-                            ({ error, result }) => {
-                              if (error){ console.error(error);return}
-                                                              setAppsData(result);
-                                        }
-                          );
+                      null,
+                      ({ error, result }) => {
+                        if (error) {
+                          console.error(error);
+                          return;
                         }
-                      })
+                        setAppsData(result);
+                      }
+                    );
                   }
-                }
-              )
-            }
+                );
+              }
+            );
           }
         );
       })

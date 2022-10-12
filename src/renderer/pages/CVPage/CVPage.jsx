@@ -7,38 +7,57 @@ import { Button, Selector } from '../../components/microComponents';
 
 const CVPage = () => {
   const { appsData, userPath } = useContext(GlobalContext);
-  const [cvList, setCVList] = useState([])
-  const [cvName, setCVName] = useState("")
-  const [selectedCV, setSelectedCV] = useState({ cv_url: "", id: null })
+  const [cvList, setCVList] = useState([]);
+  const [cvName, setCVName] = useState('');
+  const [selectedCV, setSelectedCV] = useState({ cv_url: '', id: null });
 
   useEffect(() => {
-    readDatabaseEntry("SELECT * FROM cv_list WHERE is_uploaded=0", null, ({ result, error }) => {
-      if (error) { console.error(error); return; }
-      setCVList(result)
-      if (selectedCV.id===null) setSelectedCV({ cv_url: result[0].cv_url, id: result[0].id })
-    })
-  }, [selectedCV])
+    readDatabaseEntry(
+      'SELECT * FROM cv_list WHERE is_uploaded=0',
+      null,
+      ({ result, error }) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        setCVList(result);
+        if (selectedCV.id === null)
+          setSelectedCV({ cv_url: result[0].cv_url, id: result[0].id });
+      }
+    );
+  }, [selectedCV]);
 
   const selectCVHandler = (event) => {
-    const cvID = event.target.value
-    const cv_url = cvList.find(({ id }) => id === cvID)
-    setSelectedCV({ cv_url, id: cvID })
-  }
+    const cvID = Number(event.target.value);
+    const cv_url = cvList.find(({ id }) => id === cvID).cv_url;
+    setSelectedCV({ cv_url, id: cvID });
+  };
 
   const newCV = () => {
-    createDatabaseEntry('INSERT INTO cv_list (name, is_uploaded) VALUES (?,?)', [cvName, 0], ({ error, result }) => {
-      if (error) {
-        console.error(error);
-        return
+    createDatabaseEntry(
+      'INSERT INTO cv_list (name, is_uploaded) VALUES (?,?)',
+      [cvName, 0],
+      ({ error, result }) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        readDatabaseEntry(
+          'SELECT * FROM cv_list WHERE is_uploaded=0',
+          null,
+          ({ result, error }) => {
+            if (error) {
+              console.error(error);
+              return;
+            }
+            setCVList(result);
+            const cvID = result.find(({ name }) => name === cvName).id;
+            setSelectedCV({ ...selectedCV, id: cvID });
+          }
+        );
       }
-      readDatabaseEntry("SELECT * FROM cv_list WHERE is_uploaded=0", null, ({ result, error }) => {
-        if (error) { console.error(error); return; }
-        setCVList(result)
-        const cvID = result.find(({ name }) => name === cvName).id
-        setSelectedCV({ ...selectedCV, id: cvID })
-      })
-    })
-  }
+    );
+  };
 
   return (
     <div className='p-4'>
@@ -63,13 +82,14 @@ const CVPage = () => {
         />
       </div>
       <div className='mb-2'>
-        <Selector options={cvList.map(({ id, name }) => ({ k: id, v: name }))}
+        <Selector
+          options={cvList.map(({ id, name }) => ({ k: id, v: name }))}
           selected={selectedCV.id}
           onChange={selectCVHandler}
-          title="Select CV"
+          title='Select CV'
         />
       </div>
-      <Button onClick={newCV} value="New CV" />
+      <Button onClick={newCV} value='New CV' />
       <div className='flex flex-col gap-y-4 overflow-x-auto md:flex-row md:gap-x-4'>
         <div className='grow'>
           <CVConstructorSection cvID={selectedCV.id} />
