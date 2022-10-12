@@ -38,9 +38,8 @@ const databaseInit = () => {
       job_description TEXT,
       is_open INTEGER NOT NULL DEFAULT 0 CHECK(is_open IN (0,1)),
       status VARCHAR(63) NOT NULL DEFAULT "To apply",
-      cv_url TEXT,
-      cover_letter_url TEXT,
-      cover_letter_json TEXT,
+      cv_id INTEGER,
+      letter_id INTEGER,
       job_description_url TEXT,
       location TEXT,
       deadline DATE,
@@ -49,6 +48,8 @@ const databaseInit = () => {
       date_created DATE,
       date_modified DATE,
       season_id INTEGER NOT NULL,
+      FOREIGN KEY (cv_id) REFERENCES cv_list (id),
+      FOREIGN KEY (letter_id) REFERENCES letter_list (id),
       FOREIGN KEY (season_id) REFERENCES seasons (id)
     )
   `
@@ -66,24 +67,43 @@ const databaseInit = () => {
     ).run();
     db.prepare(
       `
-    CREATE TABLE IF NOT EXISTS cv_component_in_application (
+    CREATE TABLE IF NOT EXISTS cv_components (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      application_id INTEGER NOT NULL,
-      component_id INTEGER NOT NULL,
-      FOREIGN KEY (application_id) REFERENCES applications (id),
-      FOREIGN KEY (component_id) REFERENCES cv_components (id)
+      section VARCHAR(127) NOT NULL,
+      json TEXT,
+      description TEXT
     )
   `
     ).run();
     db.prepare(
       `
-    CREATE TABLE IF NOT EXISTS cv_components (
+    CREATE TABLE IF NOT EXISTS cv_component_link (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      cv_component_section VARCHAR(127) NOT NULL,
-      cv_component_text TEXT,
-      cv_component_description TEXT,
-      date_created DATE,
-      date_modified DATE
+      component_id INTEGER NOT NULL,
+      cv_id INTEGER NOT NULL,
+      FOREIGN KEY (component_id) REFERENCES cv_components (id),
+      FOREIGN KEY (cv_id) REFERENCES cv_list (id)
+    )
+  `
+    ).run();
+    db.prepare(
+      `
+    CREATE TABLE IF NOT EXISTS cv_list (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name VARCHAR(511) NOT NULL UNIQUE,
+      cv_url TEXT,
+      is_uploaded INTEGER NOT NULL DEFAULT 1 CHECK(is_uploaded IN (0,1))
+    )
+  `
+    ).run();
+    db.prepare(
+      `
+    CREATE TABLE IF NOT EXISTS letter_list (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name VARCHAR(511) NOT NULL UNIQUE,
+      letter_url TEXT,
+      letter_json TEXT,
+      is_uploaded INTEGER NOT NULL DEFAULT 0 CHECK(is_uploaded IN (0,1))
     )
   `
     ).run();

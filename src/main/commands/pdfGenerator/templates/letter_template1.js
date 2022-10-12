@@ -101,4 +101,4 @@ ${attached !== '' ? String.raw`\encl{${attached}}` : ''} % Attached documents
 \end{document}
 `;
 
-module.exports = getLetterLatex;
+module.exports = { getLetterLatex };

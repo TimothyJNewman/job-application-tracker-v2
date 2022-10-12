@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import schema from '../../../../constants/template2_schema';
+import schema from '../../../constants/template2_schema';
 import { XCircleFill } from 'react-bootstrap-icons';
 import FormElements from './FormElements';
-import { genericSuccessNotification } from '../../../../components/Notifications';
+import { genericSuccessNotification } from '../../../components/Notifications';
 
 const EditCVSectionForm = ({
   elementToggleClickHandler,

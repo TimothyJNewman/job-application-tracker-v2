@@ -52,18 +52,22 @@ const SettingsPage = () => {
             'INSERT INTO seasons (season) VALUES (?)',
             [currentSeasonLocal],
             ({ error }) => {
-              if (error) console.error(error);
-              else {
-                genericSuccessNotification('New season created successfully!');
-                readDatabaseEntry(
-                  'SELECT * FROM seasons',
-                  null,
-                  ({ error, result }) => {
-                    if (error) console.error(error);
-                    else setSeasonValues(result);
-                  }
-                );
+              if (error) {
+                console.error(error);
+                return;
               }
+              genericSuccessNotification('New season created successfully!');
+              readDatabaseEntry(
+                'SELECT * FROM seasons',
+                null,
+                ({ error, result }) => {
+                  if (error) {
+                    console.error(error);
+                    return;
+                  }
+                  setSeasonValues(result);
+                }
+              );
             }
           );
         }
