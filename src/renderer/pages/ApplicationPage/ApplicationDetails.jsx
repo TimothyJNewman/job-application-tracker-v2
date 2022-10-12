@@ -75,58 +75,62 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
     <div className='flex flex-col items-start gap-x-4 sm:flex-row'>
       <div className='flex w-fit justify-center pt-6 pb-2'>
         <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-gray-50'>
-          <div className='hidden w-full flex-col items-center justify-center gap-y-2 object-cover p-4 sm:flex'>
-            {appDetails.status === 'Rejected' ? (
-              <EmojiFrown className='h-36 w-36' />
-            ) : appDetails.status === 'Offer' ? (
-              <EmojiSmile className='h-36 w-36' />
-            ) : appDetails.status === 'To apply' ? (
-              <EmojiSunglasses className='h-36 w-36' />
-            ) : (
-              <EmojiNeutral className='h-36 w-36' />
-            )}
-          </div>
           <div className='flex flex-col justify-start p-6'>
-            <input
-              className='bg-inherit p-1 text-xl font-medium text-gray-900 outline-blue-500'
-              type='text'
-              title='Company'
-              placeholder='Company'
-              value={appDetails.company}
-              onChange={(event) => updateValue(event.target.value, 'company')}
-              onBlur={() => saveValue('company')}
-            />
-            <input
+            <div className='flex items-center'>{appDetails.status === 'Rejected' ? (
+              <EmojiFrown className='h-5 w-5' />
+            ) : appDetails.status === 'Offer' ? (
+              <EmojiSmile className='h-5 w-5' />
+            ) : appDetails.status === 'To apply' ? (
+              <EmojiSunglasses className='h-5 w-5' />
+            ) : (
+              <EmojiNeutral className='h-5 w-5' />
+            )}<input
+                className='bg-inherit p-1 text-xl font-medium text-gray-900 outline-blue-500'
+                type='text'
+                title='Company'
+                placeholder='Company'
+                value={appDetails.company}
+                onChange={(event) => updateValue(event.target.value, 'company')}
+                onBlur={() => saveValue('company')}
+              /></div>
+            <div className='flex items-center'><label htmlFor='role' className='w-24 font-medium'>Role</label><input
               className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
               type='text'
               title='Role'
               placeholder='Role'
+              id="role"
               value={appDetails.role}
               onChange={(event) => updateValue(event.target.value, 'role')}
               onBlur={() => saveValue('role')}
-            />
-            <input
-              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
-              type='text'
-              title='Location'
-              placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
-              value={appDetails.location}
-              onChange={(event) => updateValue(event.target.value, 'location')}
-              onBlur={() => saveValue('location')}
-            />
-            <input
-              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
-              type='date'
-              title='Deadline'
-              value={appDetails.deadline}
-              onChange={(event) => updateValue(event.target.value, 'deadline')}
-              onBlur={() => saveValue('deadline')}
-            />
-            <div className='flex items-center gap-x-2'>
+            /></div>
+            <div className='flex items-center'><label htmlFor='location' className='w-24 font-medium'>Location</label>
+              <input
+                className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+                type='text'
+                title='Location'
+                id="location"
+                placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
+                value={appDetails.location}
+                onChange={(event) => updateValue(event.target.value, 'location')}
+                onBlur={() => saveValue('location')}
+              /></div>
+            <div className='flex items-center'><label htmlFor='deadline' className='w-24 font-medium'>Deadline</label>
+              <input
+                className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+                type='date'
+                title='Deadline'
+                id="deadline"
+                value={appDetails.deadline}
+                onChange={(event) => updateValue(event.target.value, 'deadline')}
+                onBlur={() => saveValue('deadline')}
+              /></div>
+            <div className='flex items-center'>
+              <label htmlFor='link' className='w-24 font-medium'>Link</label>
               <input
                 className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
                 type='text'
                 title='Link'
+                id="link"
                 placeholder='Link'
                 value={appDetails.link}
                 onChange={(event) => updateValue(event.target.value, 'link')}
@@ -137,12 +141,13 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 href={appDetails.link}
                 data-mdb-ripple='true'
                 data-mdb-ripple-color='light'
-                className='flex rounded bg-purple-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
+                className='flex rounded ml-2 bg-purple-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
                 <ArrowUpRightSquare className='mr-1' />
                 Open
               </a>
             </div>
-            <div>
+            <div className='flex items-center'>
+            <label className='w-24 font-medium'>Status</label>
               <Selector
                 options={[
                   { k: 'To apply', v: 'To apply' },
@@ -164,7 +169,8 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 onBlur={() => saveValue('status')}
               />
             </div>
-            <div>
+            <div className='flex items-center'>
+            <label className='w-24 font-medium'>Priority</label>
               <Selector
                 options={[
                   { k: 'low', v: 'Low' },
@@ -185,7 +191,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 onBlur={() => saveValue('priority')}
               />
             </div>
-            <div className='mt-1 min-w-[12rem] px-1 text-xs text-gray-600'>
+            <div className='mt-1 min-w-[12rem] text-xs text-gray-600'>
               Season:{' '}
               <select
                 onChange={(event) => updateSeason(event.target.value)}
