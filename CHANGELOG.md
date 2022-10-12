@@ -59,3 +59,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - Cursor in CV component form was jumping to the end when typing. This was because the form was regenerated on every input change. Fixed this by creating a separate form component.
+
+## [0.2.0] - 13/10/2022
+
+## Added
+- New simple letter template
+- Deadline field in application summary table
+
+## Changed
+- Moved CV builder into separate page
+
+## Fixed
+- Application summary table width exceeded width of screen and caused scroll issue. This has been solved.

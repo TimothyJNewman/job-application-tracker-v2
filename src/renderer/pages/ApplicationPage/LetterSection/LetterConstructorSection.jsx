@@ -10,8 +10,8 @@ import {
 import { Folder2Open } from 'react-bootstrap-icons';
 
 const LetterConstructorSection = ({ id }) => {
-  const { setAppsData, userPath } = useContext(GlobalContext);
-  const [letterFormValues, setLetterFormValues] = useState({
+  const { appsData, setAppsData, userPath } = useContext(GlobalContext);
+  const defaultLetterForm = {
     content: '',
     salutation: '',
     date: '',
@@ -23,7 +23,16 @@ const LetterConstructorSection = ({ id }) => {
     senderAddress1: '',
     senderAddress2: '',
     attached: '',
+    telephone: '',
+    email: '',
+  };
+  const coverLetterJson =
+    JSON.parse(appsData.find((elem) => elem.id === id).letter_json) ?? {};
+  const [letterFormValues, setLetterFormValues] = useState({
+    ...defaultLetterForm,
+    ...coverLetterJson,
   });
+
   const handleInputChange = (event) => {
     setLetterFormValues({
       ...letterFormValues,
@@ -41,31 +50,69 @@ const LetterConstructorSection = ({ id }) => {
      * Generate pdf in the background
      */
     const getPdfPromise = window.electron.getPdf('generate-pdf', 'letter', {
-      id,
       name: String(id),
       detailsObject: letterFormValues,
+      dateString: new Date().toISOString().split(/[:.-]/).join('_'),
     });
     getPdfPromise
-      .then((relativeLetterUrl) => {
-        updateDatabaseEntry(
-          'UPDATE applications SET cover_letter_url=?, cover_letter_json=? WHERE id=?',
-          [relativeLetterUrl, JSON.stringify(letterFormValues), id],
+      .then((savedRelativeUrl) => {
+        const applicationID = `Application ${id}`;
+        createDatabaseEntry(
+          `
+          INSERT INTO letter_list (name, letter_url, letter_json, is_uploaded)
+          VALUES(?,?,?,?) 
+          ON CONFLICT(name) 
+          DO UPDATE SET letter_url=excluded.letter_url, letter_json=excluded.letter_json, is_uploaded=excluded.is_uploaded;
+          `,
+          [applicationID, savedRelativeUrl, JSON.stringify(letterFormValues), 0],
           ({ error }) => {
-            if (error) console.error(error);
+            if (error) {
+              console.error(error);
+              return;
+            }
             readDatabaseEntry(
-              'SELECT * FROM applications',
-              null,
+              'SELECT id FROM letter_list WHERE name=? AND letter_url=?',
+              [applicationID, savedRelativeUrl],
               ({ error, result }) => {
-                if (error) console.error(error);
-                setAppsData(result);
+                if (error) {
+                  console.error(error);
+                  return;
+                }
+                updateDatabaseEntry(
+                  'UPDATE applications SET letter_id=? where id=?',
+                  [result[0].id, id],
+                  ({ error }) => {
+                    if (error) {
+                      console.error(error);
+                      return;
+                    }
+                    readDatabaseEntry(
+                      `SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json 
+                          FROM applications 
+                          LEFT JOIN seasons 
+                          ON applications.season_id = seasons.id 
+                          LEFT JOIN cv_list 
+                          ON applications.cv_id = cv_list.id 
+                          LEFT JOIN letter_list 
+                          ON applications.letter_id = letter_list.id`,
+                      null,
+                      ({ error, result }) => {
+                        if (error) {
+                          console.error(error);
+                          return;
+                        }
+                        setAppsData(result);
+                      }
+                    );
+                  }
+                );
               }
             );
           }
         );
-        console.log('New Letter PDF url: ', relativeLetterUrl);
       })
       .catch((error) => {
-        console.error(`PDF error: ${error}`);
+        console.error(error);
       });
     toast.promise(
       getPdfPromise,
@@ -199,6 +246,38 @@ const LetterConstructorSection = ({ id }) => {
           name='receiverAddress2'
           id='receiverAddress2'
           value={letterFormValues.receiverAddress2}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </div>
+      <div className='mb-4'>
+        <label
+          htmlFor='email'
+          className='form-label mb-2 inline-block capitalize text-gray-700'>
+          Email
+        </label>
+        <input
+          type='text'
+          className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+          placeholder='john.doe@yahoo.com'
+          name='email'
+          id='email'
+          value={letterFormValues.email}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </div>
+      <div className='mb-4'>
+        <label
+          htmlFor='telephone'
+          className='form-label mb-2 inline-block capitalize text-gray-700'>
+          Telephone
+        </label>
+        <input
+          type='text'
+          className=' form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none'
+          placeholder='(000) 000-0000'
+          name='telephone'
+          id='telephone'
+          value={letterFormValues.telephone}
           onChange={(event) => handleInputChange(event)}
         />
       </div>

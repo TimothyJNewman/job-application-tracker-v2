@@ -71,6 +71,10 @@ const columns = [
     header: 'Role',
   },
   {
+    accessorKey: 'deadline',
+    header: 'Deadline',
+  },
+  {
     accessorKey: 'status',
     header: 'Status',
     cell: (info) => {
@@ -171,10 +175,13 @@ const ApplicationSummaryPage = () => {
 
   useEffect(() => {
     readDatabaseEntry(
-      'SELECT applications.*, seasons.season FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id',
+      'SELECT applications.*, seasons.season, cv_list.cv_url, letter_list.letter_url, letter_list.letter_json FROM applications LEFT JOIN seasons ON applications.season_id = seasons.id LEFT JOIN cv_list ON applications.cv_id = cv_list.id LEFT JOIN letter_list ON applications.letter_id = letter_list.id',
       null,
       ({ error, result }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
         setAppsData(result);
       }
     );
@@ -204,18 +211,14 @@ const ApplicationSummaryPage = () => {
 
   const handleDeleteConfirmationCallback = () => {
     deleteDatabaseEntry(
-      'DELETE FROM cv_component_in_application WHERE application_id=?',
+      'DELETE FROM applications WHERE id=?',
       deleteItemDetails.id,
       ({ error }) => {
-        if (error) console.error(error);
-        deleteDatabaseEntry(
-          'DELETE FROM applications WHERE id=?',
-          deleteItemDetails.id,
-          ({ error }) => {
-            if (error) console.error(error);
-            setNoItemsChanged(noItemsChanged + 1);
-          }
-        );
+        if (error) {
+          console.error(error);
+          return;
+        }
+        setNoItemsChanged(noItemsChanged + 1);
       }
     );
   };
@@ -245,15 +248,20 @@ const ApplicationSummaryPage = () => {
         seasonID,
       ],
       ({ error }) => {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          return;
+        }
         setNoItemsChanged(noItemsChanged + 1);
       }
     );
   };
 
   const exportClickHandler = () => {
+    // only select a few columns from database in export
+    const exportDataArray = appsData.map(({ company, role, location, link, status, priority }) => ({ company, role, location, link, status, priority }))
     const exportCsvPromise = window.electron
-      .exportToCsv('export-to-csv', appsData)
+      .exportToCsv('export-to-csv', exportDataArray)
       .catch((error) => {
         console.error(error);
       });
@@ -286,7 +294,6 @@ const ApplicationSummaryPage = () => {
   };
 
   const openFileExplorer = (path) => {
-    console.log(path);
     window.electron.openFolder(path);
   };
 
@@ -317,8 +324,8 @@ const ApplicationSummaryPage = () => {
         ''
       )}
       <div className='flex flex-col'>
-        <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
-          <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
+        <div className='overflow-x-auto'>
+          <div className='inline-block min-w-full py-2'>
             <div className='overflow-hidden'>
               <table className='min-w-full'>
                 <thead className='border-b bg-white'>
@@ -329,10 +336,9 @@ const ApplicationSummaryPage = () => {
                           key={header.id}
                           colSpan={header.colSpan}
                           scope='col'
-                          className={`px-4 py-2 text-left font-medium text-gray-900 ${
-                            header.column.columnDef.headerCellProps
-                              ?.className ?? ''
-                          }`}>
+                          className={`px-4 py-2 text-left font-medium text-gray-900 ${header.column.columnDef.headerCellProps
+                            ?.className ?? ''
+                            }`}>
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
@@ -365,17 +371,15 @@ const ApplicationSummaryPage = () => {
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className={`${
-                        deleteMode && 'cursor-pointer'
-                      } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
+                      className={`${deleteMode && 'cursor-pointer'
+                        } group border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100`}
                       onClick={() => handleApplicationClick(row.original.id)}
                       {...bsToggleContent}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${
-                            cell.column.columnDef.bodyCellProps?.className ?? ''
-                          }`}>
+                          className={`whitespace-nowrap px-4 py-2 font-light text-gray-900 ${cell.column.columnDef.bodyCellProps?.className ?? ''
+                            }`}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

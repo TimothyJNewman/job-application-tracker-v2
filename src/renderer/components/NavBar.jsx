@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const navLinks = [
   { name: 'Home', url: '/' },
   { name: 'Applications', url: '/applications' },
+  // { name: 'Curriculum Vitae', url: '/cv' },
   { name: 'Settings', url: '/settings' },
 ];
 
