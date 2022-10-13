@@ -44,7 +44,10 @@ const App = () => {
       setUserPath(path);
     });
     readDatabaseEntry('SELECT * FROM seasons', null, ({ error, result }) => {
-      if (error) { console.error(error); return }
+      if (error) {
+        console.error(error);
+        return;
+      }
       setSeasonValues(result);
       window.electron
         .modifySettings('settings', 'season')

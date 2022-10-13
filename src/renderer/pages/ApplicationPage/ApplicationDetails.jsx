@@ -73,64 +73,86 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
 
   return (
     <div className='flex flex-col items-start gap-x-4 sm:flex-row'>
-      <div className='flex w-fit justify-center pt-6 pb-2'>
-        <div className='flex max-w-xl flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-gray-50'>
-          <div className='flex flex-col justify-start p-6'>
-            <div className='flex items-center'>{appDetails.status === 'Rejected' ? (
-              <EmojiFrown className='h-5 w-5' />
-            ) : appDetails.status === 'Offer' ? (
-              <EmojiSmile className='h-5 w-5' />
-            ) : appDetails.status === 'To apply' ? (
-              <EmojiSunglasses className='h-5 w-5' />
-            ) : (
-              <EmojiNeutral className='h-5 w-5' />
-            )}<input
-                className='bg-inherit p-1 text-xl font-medium text-gray-900 outline-blue-500'
+      <div className='flex w-full justify-center pt-6 pb-2'>
+        <div className='flex w-full flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-gray-50'>
+          <div className='flex w-full flex-col justify-start p-6 '>
+            <div className='flex items-center'>
+              {appDetails.status === 'Rejected' ? (
+                <EmojiFrown className='h-5 w-5' />
+              ) : appDetails.status === 'Offer' ? (
+                <EmojiSmile className='h-5 w-5' />
+              ) : appDetails.status === 'To apply' ? (
+                <EmojiSunglasses className='h-5 w-5' />
+              ) : (
+                <EmojiNeutral className='h-5 w-5' />
+              )}
+              <input
+                className='flex-grow bg-inherit p-1 text-xl font-medium text-gray-900 outline-blue-500'
                 type='text'
                 title='Company'
                 placeholder='Company'
                 value={appDetails.company}
                 onChange={(event) => updateValue(event.target.value, 'company')}
                 onBlur={() => saveValue('company')}
-              /></div>
-            <div className='flex items-center'><label htmlFor='role' className='w-24 font-medium'>Role</label><input
-              className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
-              type='text'
-              title='Role'
-              placeholder='Role'
-              id="role"
-              value={appDetails.role}
-              onChange={(event) => updateValue(event.target.value, 'role')}
-              onBlur={() => saveValue('role')}
-            /></div>
-            <div className='flex items-center'><label htmlFor='location' className='w-24 font-medium'>Location</label>
+              />
+            </div>
+            <div className='flex items-center'>
+              <label htmlFor='role' className='w-24 font-medium'>
+                Role
+              </label>
               <input
-                className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+                className='flex-grow bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+                type='text'
+                title='Role'
+                placeholder='Role'
+                id='role'
+                value={appDetails.role}
+                onChange={(event) => updateValue(event.target.value, 'role')}
+                onBlur={() => saveValue('role')}
+              />
+            </div>
+            <div className='flex items-center'>
+              <label htmlFor='location' className='w-24 font-medium'>
+                Location
+              </label>
+              <input
+                className='flex-grow bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
                 type='text'
                 title='Location'
-                id="location"
+                id='location'
                 placeholder='1600 Pennsylvania Ave., NW Washington, DC 20500'
                 value={appDetails.location}
-                onChange={(event) => updateValue(event.target.value, 'location')}
+                onChange={(event) =>
+                  updateValue(event.target.value, 'location')
+                }
                 onBlur={() => saveValue('location')}
-              /></div>
-            <div className='flex items-center'><label htmlFor='deadline' className='w-24 font-medium'>Deadline</label>
+              />
+            </div>
+            <div className='flex items-center'>
+              <label htmlFor='deadline' className='w-24 font-medium'>
+                Deadline
+              </label>
               <input
-                className='bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
+                className='flex-grow bg-inherit p-1 text-base text-gray-700 outline-blue-500 hover:outline-blue-500'
                 type='date'
                 title='Deadline'
-                id="deadline"
+                id='deadline'
                 value={appDetails.deadline}
-                onChange={(event) => updateValue(event.target.value, 'deadline')}
+                onChange={(event) =>
+                  updateValue(event.target.value, 'deadline')
+                }
                 onBlur={() => saveValue('deadline')}
-              /></div>
+              />
+            </div>
             <div className='flex items-center'>
-              <label htmlFor='link' className='w-24 font-medium'>Link</label>
+              <label htmlFor='link' className='w-24 font-medium'>
+                Link
+              </label>
               <input
-                className='bg-inherit p-1 text-base text-gray-700 outline-blue-500'
+                className='flex-grow bg-inherit p-1 text-base text-gray-700 outline-blue-500'
                 type='text'
                 title='Link'
-                id="link"
+                id='link'
                 placeholder='Link'
                 value={appDetails.link}
                 onChange={(event) => updateValue(event.target.value, 'link')}
@@ -141,13 +163,13 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
                 href={appDetails.link}
                 data-mdb-ripple='true'
                 data-mdb-ripple-color='light'
-                className='flex rounded ml-2 bg-purple-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
+                className='ml-2 flex rounded bg-purple-600 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg'>
                 <ArrowUpRightSquare className='mr-1' />
                 Open
               </a>
             </div>
             <div className='flex items-center'>
-            <label className='w-24 font-medium'>Status</label>
+              <label className='w-24 font-medium'>Status</label>
               <Selector
                 options={[
                   { k: 'To apply', v: 'To apply' },
@@ -170,7 +192,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               />
             </div>
             <div className='flex items-center'>
-            <label className='w-24 font-medium'>Priority</label>
+              <label className='w-24 font-medium'>Priority</label>
               <Selector
                 options={[
                   { k: 'low', v: 'Low' },
