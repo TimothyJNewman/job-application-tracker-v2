@@ -51,23 +51,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show file in folder button in notification for generating CV, letter or job description or exporting to CSV.
 - Dismiss button in error and success messages.
 
-## Changed
+### Changed
 
 - Min width of 500px to job description text area.
 - Renamed .js files containing jsx to .jsx for better semantics.
 
-## Fixed
+### Fixed
 
 - Cursor in CV component form was jumping to the end when typing. This was because the form was regenerated on every input change. Fixed this by creating a separate form component.
 
 ## [0.2.0] - 13/10/2022
 
-## Added
+### Added
 - New simple letter template
 - Deadline field in application summary table
 
-## Changed
+### Changed
 - Moved CV builder into separate page
 
-## Fixed
+### Fixed
 - Application summary table width exceeded width of screen and caused scroll issue. This has been solved.
+
+## [0.2.1] - 14/10/2022
+
+### Added 
+- Show number of applications for each status category in home page
+
+### Changed
+- Changed layout of application details in application page

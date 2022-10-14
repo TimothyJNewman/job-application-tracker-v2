@@ -64,7 +64,12 @@ const LetterConstructorSection = ({ id }) => {
           ON CONFLICT(name) 
           DO UPDATE SET letter_url=excluded.letter_url, letter_json=excluded.letter_json, is_uploaded=excluded.is_uploaded;
           `,
-          [applicationID, savedRelativeUrl, JSON.stringify(letterFormValues), 0],
+          [
+            applicationID,
+            savedRelativeUrl,
+            JSON.stringify(letterFormValues),
+            0,
+          ],
           ({ error }) => {
             if (error) {
               console.error(error);
