@@ -77,7 +77,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
         <div className='flex w-full flex-row rounded bg-blue-50 shadow transition-colors duration-100 hover:bg-gray-50'>
           <div className='flex w-full flex-col justify-start p-6 '>
             <div className='flex items-center'>
-              {appDetails.status === 'Rejected' ? (
+              {appDetails.status === 'Rejected' || appDetails.status === 'Expired' ? (
                 <EmojiFrown className='h-5 w-5' />
               ) : appDetails.status === 'Offer' ? (
                 <EmojiSmile className='h-5 w-5' />
@@ -173,6 +173,7 @@ const ApplicationDetails = ({ id, appsData, setAppsData }) => {
               <Selector
                 options={[
                   { k: 'To apply', v: 'To apply' },
+                  { k: 'Expired', v: 'Expired'},
                   { k: 'Applied', v: 'Applied' },
                   { k: 'Assessment', v: 'Assessment' },
                   { k: 'Interview', v: 'Interview' },
