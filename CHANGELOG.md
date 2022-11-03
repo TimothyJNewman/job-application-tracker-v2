@@ -79,3 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Changed layout of application details in application page
+
+## [0.2.2] - 03/11/2022
+
+### Added
+- Added expired option for status
