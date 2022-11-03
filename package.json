@@ -1,7 +1,7 @@
 {
   "name": "job-application-tracker-v2",
   "productName": "Job Application Tracker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Simple job application tracker and CV generator",
   "main": ".webpack/main",
   "scripts": {
